@@ -26,7 +26,7 @@ export default config => {
         mainLessFile: outFile, //     themeVariables: ['@primary-color'],
         indexFileName: 'index.html',
         generateOne: true,
-        lessUrl: 'https://gw.alipayobjects.com/os/lib/less.js/3.8.1/less.min.js',
+        // lessUrl: 'https://gw.alipayobjects.com/os/lib/less.js/3.8.1/less.min.js',
       },
     ]);
   }

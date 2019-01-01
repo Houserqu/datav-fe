@@ -1,4 +1,4 @@
-import { query as queryUsers, queryCurrent } from '@/services/user';
+import { query as queryUsers, queryCurrent, queryMenuAuthority } from '@/services/user';
 
 export default {
   namespace: 'user',
@@ -6,6 +6,7 @@ export default {
   state: {
     list: [],
     currentUser: {},
+    authority: [], // 权限列表
   },
 
   effects: {
@@ -23,6 +24,13 @@ export default {
         payload: response,
       });
     },
+    *fetchAuthority(_, { call, put }) {
+      const response = yield call(queryMenuAuthority, { type: 'menu'});
+      yield put({
+        type: 'saveAuthority',
+        payload: response.data,
+      });
+    },
   },
 
   reducers: {
@@ -36,6 +44,12 @@ export default {
       return {
         ...state,
         currentUser: action.payload || {},
+      };
+    },
+    saveAuthority(state, action) {
+      return {
+        ...state,
+        authority: action.payload || [],
       };
     },
     changeNotifyCount(state, action) {

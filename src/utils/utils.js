@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
+import pathToRegexp from 'path-to-regexp';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -177,7 +178,7 @@ export function formatWan(val) {
   return result;
 }
 
-// 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
-export function isAntdPro() {
-  return window.location.hostname === 'preview.pro.ant.design';
-}
+export const matchParamsPath = (pathname, breadcrumbNameMap) => {
+  const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
+  return breadcrumbNameMap[pathKey];
+};

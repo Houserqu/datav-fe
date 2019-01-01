@@ -255,7 +255,7 @@ class Register extends Component {
                 size="large"
                 value={prefix}
                 onChange={this.changePrefix}
-                style={{ width: '20%' }}
+                style={{ width: '30%' }}
               >
                 <Option value="86">+86</Option>
                 <Option value="87">+87</Option>
@@ -274,7 +274,7 @@ class Register extends Component {
               })(
                 <Input
                   size="large"
-                  style={{ width: '80%' }}
+                  style={{ width: '70%' }}
                   placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
                 />
               )}

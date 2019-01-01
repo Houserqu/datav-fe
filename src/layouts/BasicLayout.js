@@ -6,10 +6,9 @@ import memoizeOne from 'memoize-one';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
-import pathToRegexp from 'path-to-regexp';
 import Media from 'react-media';
 import { formatMessage } from 'umi/locale';
-import Authorized from '@/utils/Authorized';
+import Authorized from '@/BusinessComponent/Authority';
 import logo from '../assets/logo.svg';
 import Footer from './Footer';
 import Header from './Header';
@@ -17,6 +16,7 @@ import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
+import { matchParamsPath } from '@/utils/utils';
 
 import styles from './BasicLayout.less';
 
@@ -54,7 +54,7 @@ class BasicLayout extends React.PureComponent {
   constructor(props) {
     super(props);
     this.getPageTitle = memoizeOne(this.getPageTitle);
-    this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
+    this.matchParamsPath = memoizeOne(matchParamsPath, isEqual);
   }
 
   componentDidMount() {
@@ -111,10 +111,10 @@ class BasicLayout extends React.PureComponent {
     return routerMap;
   }
 
-  matchParamsPath = (pathname, breadcrumbNameMap) => {
-    const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
-    return breadcrumbNameMap[pathKey];
-  };
+  // matchParamsPath = (pathname, breadcrumbNameMap) => {
+  //   const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
+  //   return breadcrumbNameMap[pathKey];
+  // };
 
   getPageTitle = (pathname, breadcrumbNameMap) => {
     const currRouterData = this.matchParamsPath(pathname, breadcrumbNameMap);
@@ -127,7 +127,7 @@ class BasicLayout extends React.PureComponent {
       defaultMessage: currRouterData.name,
     });
 
-    return `${pageName} - Ant Design Pro`;
+    return `${pageName} - DataV 数据可视化`;
   };
 
   getLayoutStyle = () => {

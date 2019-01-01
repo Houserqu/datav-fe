@@ -73,31 +73,21 @@ export default {
     },
   ],
   'POST /api/login/account': (req, res) => {
-    const { password, userName, type } = req.body;
-    if (password === 'ant.design' && userName === 'admin') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
-      });
-      return;
-    }
-    if (password === 'ant.design' && userName === 'user') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'user',
-      });
-      return;
-    }
     res.send({
-      status: 'error',
-      type,
-      currentAuthority: 'guest',
+      success: true,
+      msg: 'ok',
+      data: null,
     });
   },
   'POST /api/register': (req, res) => {
-    res.send({ status: 'ok', currentAuthority: 'user' });
+    res.send({ success: true, msg: '注册成功', currentAuthority: 'user' });
+  },
+  'GET /api/authority': (req, res) => {
+    res.send({
+      success: true,
+      msg: 'ok',
+      data: ['center', 'admin']
+    })
   },
   'GET /api/500': (req, res) => {
     res.status(500).send({
