@@ -74,13 +74,20 @@ export default {
   ],
   'POST /api/login/account': (req, res) => {
     res.send({
-      success: false,
+      success: true,
       msg: 'ok',
       data: null,
     });
   },
   'POST /api/register': (req, res) => {
-    res.send({ status: 'ok', currentAuthority: 'user' });
+    res.send({ success: true, msg: '注册成功', currentAuthority: 'user' });
+  },
+  'GET /api/authority': (req, res) => {
+    res.send({
+      success: true,
+      msg: 'ok',
+      data: ['center', 'admin']
+    })
   },
   'GET /api/500': (req, res) => {
     res.status(500).send({

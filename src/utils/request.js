@@ -2,6 +2,7 @@ import fetch from 'dva/fetch';
 import { notification, message } from 'antd';
 import router from 'umi/router';
 import hash from 'hash.js';
+import { stringify } from 'qs';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -39,7 +40,11 @@ const checkStatus = response => {
 
 const checkSuccess = (result, ignoreError = false) => {
   if (!ignoreError) {
-    message.error(result.msg);
+    if (result.success) {
+      message.success(result.msg || '操作成功')
+    } else {
+      message.error(result.msg || '未知错误')
+    }
   }
   
   return result;
@@ -71,7 +76,7 @@ const cachedSave = (response, hashcode) => {
  * @param  {object} [option] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, option, config = {}) {
+export default function request(url, option = {}, config = {}) {
   /**
    * Produce fingerprints based on url and parameters
    * Maybe url has the same parameters
@@ -82,9 +87,11 @@ export default function request(url, option, config = {}) {
     .update(fingerprint)
     .digest('hex');
 
+
   const defaultOptions = {
     credentials: 'include',
   };
+  
   const newOptions = { ...defaultOptions, ...option };
   if (
     newOptions.method === 'POST' ||

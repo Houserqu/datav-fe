@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
+import pathToRegexp from 'path-to-regexp';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -176,3 +177,8 @@ export function formatWan(val) {
   }
   return result;
 }
+
+export const matchParamsPath = (pathname, breadcrumbNameMap) => {
+  const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
+  return breadcrumbNameMap[pathKey];
+};

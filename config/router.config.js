@@ -10,14 +10,17 @@ export default [
       { path: '/user/register-result', component: './User/RegisterResult' },
     ],
   },
-  // app
+  // app design
   {
     path: '/app',
     name: 'app',
     hideChildrenInMenu: true,
+    component: '../layouts/DesignLayout',
+    Routes: ['src/pages/Authorized'],
     routes: [
       {
         path: '/app/design',  // 设计页面
+        authority: ['design'],
         name: 'design',
         component: './App/Design',
       },
@@ -26,8 +29,6 @@ export default [
   {
     path: '/',
     component: '../layouts/BasicLayout',
-    Routes: ['src/pages/Authorized'],
-    authority: ['admin', 'user'],
     routes: [
       // dashboard
       { path: '/', redirect: '/user-center/workplace' },
@@ -51,6 +52,8 @@ export default [
       {
         path: '/user-manage',
         name: 'user-manage',
+        Routes: ['src/pages/Authorized'],
+        authority: ['center', 'admin'],
         icon: 'user',
         routes: [
           {

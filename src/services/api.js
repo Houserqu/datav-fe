@@ -107,7 +107,7 @@ export async function fakeAccountLogin(params) {
   return request('/api/login/account', {
     method: 'POST',
     body: params,
-  },{ ignoreError: true });
+  });
 }
 
 export async function fakeRegister(params) {

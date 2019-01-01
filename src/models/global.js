@@ -6,6 +6,7 @@ export default {
   state: {
     collapsed: false,
     notices: [],
+    permission: ['center', 'admin', 'design']
   },
 
   effects: {

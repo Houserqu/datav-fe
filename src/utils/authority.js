@@ -1,19 +1,15 @@
+import { queryMenuAuthority } from '@/services/user'
 // use localStorage to store the authority info, which might be sent from server in actual project.
-export function getAuthority(str) {
-  // return localStorage.getItem('antd-pro-authority') || ['admin', 'user'];
-  const authorityString =
-    typeof str === 'undefined' ? localStorage.getItem('antd-pro-authority') : str;
-  // authorityString could be admin, "admin", ["admin"]
-  let authority;
-  try {
-    authority = JSON.parse(authorityString);
-  } catch (e) {
-    authority = authorityString;
-  }
-  if (typeof authority === 'string') {
-    return [authority];
-  }
-  return authority || ['admin'];
+
+async function fetchAuthority() {
+  const res = await queryMenuAuthority();
+  return res.data;
+}
+
+export async function getAuthority(str) {
+  const authority =
+    typeof str === 'undefined' ? await fetchAuthority() : str;
+  return authority || ['center', 'admin'];
 }
 
 export function setAuthority(authority) {
