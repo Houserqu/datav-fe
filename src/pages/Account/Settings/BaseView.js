@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Upload, Select, Button } from 'antd';
+import { Form, Input, Upload, Select, Button, message } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
 import GeographicView from './GeographicView';
@@ -82,61 +82,64 @@ class BaseView extends Component {
     this.view = ref;
   };
 
+  handleSubmit = e => {
+    e.preventDefault();
+    const { dispatch, form, currentUser } = this.props;
+    form.validateFields(
+      ['nickName', 'email', 'userRemark', 'userAddress', 'account', 'phone'],
+      (err, values) => {
+        if (!err) {
+          dispatch({
+            type: 'user/updateUserInfo',
+            payload: { ...values, id: currentUser.id },
+            callback: res => {
+              if (res.statusCode === 200) {
+                message.success('修改成功');
+              }
+            },
+          });
+        }
+      }
+    );
+  };
+
   render() {
     const {
       form: { getFieldDecorator },
+      currentUser,
     } = this.props;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
           <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
-              {getFieldDecorator('email', {
+            <FormItem label="账号">
+              {getFieldDecorator('account', {
+                initialValue: currentUser.account,
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}),
                   },
                 ],
+              })(<Input disabled />)}
+            </FormItem>
+            <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
+              {getFieldDecorator('email', {
+                initialValue: currentUser.email,
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.nickname' })}>
-              {getFieldDecorator('name', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.nickname-message' }, {}),
-                  },
-                ],
+              {getFieldDecorator('nickName', {
+                initialValue: currentUser.nickName,
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
-              {getFieldDecorator('profile', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.profile-message' }, {}),
-                  },
-                ],
+              {getFieldDecorator('userRemark', {
+                initialValue: currentUser.userRemark,
               })(
                 <Input.TextArea
                   placeholder={formatMessage({ id: 'app.settings.basic.profile-placeholder' })}
                   rows={4}
                 />
-              )}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.country' })}>
-              {getFieldDecorator('country', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.country-message' }, {}),
-                  },
-                ],
-              })(
-                <Select style={{ maxWidth: 220 }}>
-                  <Option value="China">中国</Option>
-                </Select>
               )}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.geographic' })}>
@@ -153,27 +156,16 @@ class BaseView extends Component {
               })(<GeographicView />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('address', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.address-message' }, {}),
-                  },
-                ],
+              {getFieldDecorator('userAddress', {
+                initialValue: currentUser.userAddress,
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>
               {getFieldDecorator('phone', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.phone-message' }, {}),
-                  },
-                  { validator: validatorPhone },
-                ],
-              })(<PhoneView />)}
+                initialValue: currentUser.phone,
+              })(<Input />)}
             </FormItem>
-            <Button type="primary">
+            <Button type="primary" htmlType="submit">
               <FormattedMessage
                 id="app.settings.basic.update"
                 defaultMessage="Update Information"
@@ -181,9 +173,9 @@ class BaseView extends Component {
             </Button>
           </Form>
         </div>
-        <div className={styles.right}>
+        {/* <div className={styles.right}>
           <AvatarView avatar={this.getAvatarURL()} />
-        </div>
+        </div> */}
       </div>
     );
   }

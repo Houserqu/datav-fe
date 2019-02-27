@@ -1,43 +1,28 @@
 import { queryProvince, queryCity } from '@/services/geographic';
+import province from '@/utils/geographic/province';
+import city from '@/utils/geographic/city';
 
 export default {
   namespace: 'geographic',
 
   state: {
-    province: [],
+    province,
     city: [],
     isLoading: false,
   },
 
   effects: {
     *fetchProvince(_, { call, put }) {
-      yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
-      const response = yield call(queryProvince);
+      const response = require('@/utils/geographic/province');
       yield put({
         type: 'setProvince',
         payload: response,
       });
-      yield put({
-        type: 'changeLoading',
-        payload: false,
-      });
     },
     *fetchCity({ payload }, { call, put }) {
       yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
-      const response = yield call(queryCity, payload);
-      yield put({
         type: 'setCity',
-        payload: response,
-      });
-      yield put({
-        type: 'changeLoading',
-        payload: false,
+        payload: city[payload],
       });
     },
   },

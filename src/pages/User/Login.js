@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
-import { Checkbox, Alert, Icon } from 'antd';
+import { Checkbox, Alert, Icon, Input } from 'antd';
 import Login from '@/components/Login';
 import styles from './Login.less';
+import { API_DOMAIN } from '@/constant';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
+
+const getCaptchaSrc = () => {
+  return `${API_DOMAIN}/api/auth/captcha?${Math.floor(Math.random() * 100)}`;
+};
 
 @connect(({ login, loading }) => ({
   login,
@@ -16,6 +21,7 @@ class LoginPage extends Component {
   state = {
     type: 'account',
     autoLogin: true,
+    captchaSrc: getCaptchaSrc(),
   };
 
   onTabChange = type => {
@@ -24,14 +30,15 @@ class LoginPage extends Component {
 
   onGetCaptcha = () =>
     new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
+      this.loginForm.validateFields(['phone'], {}, (err, values) => {
         if (err) {
           reject(err);
         } else {
           const { dispatch } = this.props;
+
           dispatch({
             type: 'login/getCaptcha',
-            payload: values.mobile,
+            payload: { phone: values.phone },
           })
             .then(resolve)
             .catch(reject);
@@ -40,16 +47,24 @@ class LoginPage extends Component {
     });
 
   handleSubmit = (err, values) => {
+    // 登录类型 账号 、手机
     const { type } = this.state;
+    const { dispatch } = this.props;
+
     if (!err) {
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'login/login',
-        payload: {
-          ...values,
-          type,
-        },
-      });
+      if (type === 'mobile') {
+        dispatch({
+          type: 'login/phoneLogin',
+          payload: values,
+        });
+      }
+
+      if (type === 'account') {
+        dispatch({
+          type: 'login/login',
+          payload: { ...values, captcha: '123' },
+        });
+      }
     }
   };
 
@@ -63,9 +78,14 @@ class LoginPage extends Component {
     <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
   );
 
+  // 刷新验证码图片
+  refreshCaptcha = () => {
+    this.setState({ captchaSrc: getCaptchaSrc() });
+  };
+
   render() {
     const { login, submitting } = this.props;
-    const { type, autoLogin } = this.state;
+    const { type, autoLogin, captchaSrc } = this.state;
     return (
       <div className={styles.main}>
         <Login
@@ -77,33 +97,45 @@ class LoginPage extends Component {
           }}
         >
           <Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>
-            {!login.status &&
-              login.type === 'account' &&
-              !submitting &&
-              this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
             <UserName
-              name="email"
-              placeholder={`${formatMessage({ id: 'app.login.email' })}`}
+              name="mail"
+              placeholder="用户名"
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.email.required' }),
+                  message: '请输入用户名',
                 },
               ]}
+              type="email"
+              defaultValue="houserqu@qq.com"
             />
             <Password
               name="password"
-              placeholder={`${formatMessage({ id: 'app.login.password' })}: ant.design`}
+              placeholder={formatMessage({ id: 'app.login.password' })}
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.password.required' }),
+                  message: '请输入密码',
                 },
               ]}
+              defaultValue="382027881"
               onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
             />
+            {/* <UserName
+              name="captcha"
+              placeholder='验证码'
+              rules={[
+                {
+                  required: true,
+                  message: '请输入验证码',
+                },
+              ]}
+            />
+            <div className="captcha" style={{ margin: '0 2px 24px' }}>
+              <img alt="" id="captcha" onClick={this.refreshCaptcha} style={{ width: '120px', height: '35px' }} src={captchaSrc} />
+            </div> */}
           </Tab>
-          {/* <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
+          <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
             {login.status === 'error' &&
               login.type === 'mobile' &&
               !submitting &&
@@ -111,7 +143,7 @@ class LoginPage extends Component {
                 formatMessage({ id: 'app.login.message-invalid-verification-code' })
               )}
             <Mobile
-              name="mobile"
+              name="phone"
               placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
               rules={[
                 {
@@ -125,7 +157,7 @@ class LoginPage extends Component {
               ]}
             />
             <Captcha
-              name="captcha"
+              name="checkCode"
               placeholder={formatMessage({ id: 'form.verification-code.placeholder' })}
               countDown={120}
               onGetCaptcha={this.onGetCaptcha}
@@ -138,23 +170,23 @@ class LoginPage extends Component {
                 },
               ]}
             />
-          </Tab> */}
-          <div>
+          </Tab>
+          {/* <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="app.login.remember-me" />
             </Checkbox>
             <a style={{ float: 'right' }} href="">
               <FormattedMessage id="app.login.forgot-password" />
             </a>
-          </div>
+          </div> */}
           <Submit loading={submitting}>
             <FormattedMessage id="app.login.login" />
           </Submit>
           <div className={styles.other}>
-            <FormattedMessage id="app.login.sign-in-with" />
-            <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
+            {/* <FormattedMessage id="app.login.sign-in-with" /> */}
+            {/* <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
-            <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
+            <Icon type="weibo-circle" className={styles.icon} theme="outlined" /> */}
             <Link className={styles.register} to="/user/register">
               <FormattedMessage id="app.login.signup" />
             </Link>

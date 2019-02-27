@@ -3,6 +3,7 @@ import os from 'os';
 import pageRoutes from './router.config';
 import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
+import slash from 'slash2';
 
 const plugins = [
   [
@@ -12,9 +13,6 @@ const plugins = [
       dva: {
         hmr: true,
       },
-      targets: {
-        ie: 11,
-      },
       locale: {
         enable: true, // default false
         default: 'zh-CN', // default zh-CN
@@ -22,6 +20,7 @@ const plugins = [
       },
       dynamicImport: {
         loadingComponent: './components/PageLoading/index',
+        webpackChunkName: true,
       },
       pwa: {
         workboxPluginMode: 'InjectManifest',
@@ -35,32 +34,25 @@ const plugins = [
               include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
               exclude: ['@babel/runtime'],
             },
-            hardSource: true,
+            hardSource: false,
           }
         : {}),
     },
   ],
 ];
 
-// 针对 preview.pro.ant.design 的 GA 统计代码
-// 业务上不需要这个
-if (process.env.APP_TYPE === 'site') {
-  plugins.push([
-    'umi-plugin-ga',
-    {
-      code: 'UA-72788897-6',
-    },
-  ]);
-}
-
 export default {
   // add for transfer to umi
+  history: 'hash',
   plugins,
-  targets: {
-    ie: 11,
-  },
   define: {
     APP_TYPE: process.env.APP_TYPE || '',
+  },
+  base: '/admin/',
+  publicPath: '/admin/',
+  treeShaking: true,
+  targets: {
+    ie: 11,
   },
   // 路由配置
   routes: pageRoutes,
@@ -69,9 +61,12 @@ export default {
   theme: {
     'primary-color': defaultSettings.primaryColor,
   },
-  externals: {
-    '@antv/data-set': 'DataSet',
-  },
+  // externals: {
+  //   'BMap':'BMap',
+  // },
+  // externals: {
+  //   '@antv/data-set': 'DataSet',
+  // },
   // proxy: {
   //   '/server/api/': {
   //     target: 'https://preview.pro.ant.design/',
@@ -97,7 +92,7 @@ export default {
       const match = context.resourcePath.match(/src(.*)/);
       if (match && match[1]) {
         const antdProPath = match[1].replace('.less', '');
-        const arr = antdProPath
+        const arr = slash(antdProPath)
           .split('/')
           .map(a => a.replace(/([A-Z])/g, '-$1'))
           .map(a => a.toLowerCase());

@@ -1,14 +1,17 @@
-import request from '@/utils/request';
-import { stringify } from 'qs';
+import { post, get } from '@/utils/http';
 
-export async function query() {
-  return request('/api/users');
+// 用户所有权限
+export async function getGlobalUserInfoI() {
+  return get('/api/user/my-info');
 }
 
-export async function queryCurrent() {
-  return request('/api/currentUser');
+export async function loginOutI() {
+  return get('/api/logout');
 }
 
-export async function queryMenuAuthority(params) {
-  return request(`/api/authority?${stringify(params)}`);
+export async function loginI(params) {
+  return post('/api/login', params, {
+    alertSuccess: true,
+    alertError: true,
+  });
 }

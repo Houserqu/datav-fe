@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { List } from 'antd';
+import { connect } from 'dva';
+import ChangePDModal from './ChangePDModal';
 // import { getTimeDistance } from '@/utils/utils';
 
 const passwordStrength = {
@@ -22,7 +24,18 @@ const passwordStrength = {
   ),
 };
 
+@connect(({ user }) => ({
+  user,
+}))
 class SecurityView extends Component {
+  state = {
+    changePDVisible: false,
+  };
+
+  showChangePD = () => {
+    this.setState({ changePDVisible: !this.state.changePDVisible });
+  };
+
   getData = () => [
     {
       title: formatMessage({ id: 'app.settings.security.password' }, {}),
@@ -33,56 +46,68 @@ class SecurityView extends Component {
         </Fragment>
       ),
       actions: [
-        <a>
+        <a onClick={this.showChangePD}>
           <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" />
         </a>,
       ],
     },
     {
       title: formatMessage({ id: 'app.settings.security.phone' }, {}),
-      description: `${formatMessage(
-        { id: 'app.settings.security.phone-description' },
-        {}
-      )}：138****8293`,
+      description: `${formatMessage({ id: 'app.settings.security.phone-description' }, {})}：${
+        this.props.user.currentUser.phone
+      }`,
       actions: [
         <a>
-          <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" />
+          {/* <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" /> */}
         </a>,
       ],
     },
-    {
-      title: formatMessage({ id: 'app.settings.security.question' }, {}),
-      description: formatMessage({ id: 'app.settings.security.question-description' }, {}),
-      actions: [
-        <a>
-          <FormattedMessage id="app.settings.security.set" defaultMessage="Set" />
-        </a>,
-      ],
-    },
-    {
-      title: formatMessage({ id: 'app.settings.security.email' }, {}),
-      description: `${formatMessage(
-        { id: 'app.settings.security.email-description' },
-        {}
-      )}：ant***sign.com`,
-      actions: [
-        <a>
-          <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" />
-        </a>,
-      ],
-    },
-    {
-      title: formatMessage({ id: 'app.settings.security.mfa' }, {}),
-      description: formatMessage({ id: 'app.settings.security.mfa-description' }, {}),
-      actions: [
-        <a>
-          <FormattedMessage id="app.settings.security.bind" defaultMessage="Bind" />
-        </a>,
-      ],
-    },
+    // {
+    //   title: formatMessage({ id: 'app.settings.security.question' }, {}),
+    //   description: formatMessage({ id: 'app.settings.security.question-description' }, {}),
+    //   actions: [
+    //     <a>
+    //       <FormattedMessage id="app.settings.security.set" defaultMessage="Set" />
+    //     </a>,
+    //   ],
+    // },
+    // {
+    //   title: formatMessage({ id: 'app.settings.security.email' }, {}),
+    //   description: `${formatMessage(
+    //     { id: 'app.settings.security.email-description' },
+    //     {}
+    //   )}：ant***sign.com`,
+    //   actions: [
+    //     <a>
+    //       <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" />
+    //     </a>,
+    //   ],
+    // },
+    // {
+    //   title: formatMessage({ id: 'app.settings.security.mfa' }, {}),
+    //   description: formatMessage({ id: 'app.settings.security.mfa-description' }, {}),
+    //   actions: [
+    //     <a>
+    //       <FormattedMessage id="app.settings.security.bind" defaultMessage="Bind" />
+    //     </a>,
+    //   ],
+    // },
   ];
 
+  handleSubmitChangePD = params => {
+    this.props.dispatch({
+      type: 'user/changePwdDoSet',
+      payload: params,
+      callback: res => {
+        if (res.statusCode === 200) {
+          this.setState({ changePDVisible: false });
+        }
+      },
+    });
+  };
+
   render() {
+    const { changePDVisible } = this.state;
     return (
       <Fragment>
         <List
@@ -93,6 +118,12 @@ class SecurityView extends Component {
               <List.Item.Meta title={item.title} description={item.description} />
             </List.Item>
           )}
+        />
+
+        <ChangePDModal
+          visible={changePDVisible}
+          submit={this.handleSubmitChangePD}
+          onCancel={() => this.setState({ changePDVisible: false })}
         />
       </Fragment>
     );
