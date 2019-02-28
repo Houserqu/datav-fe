@@ -5,7 +5,6 @@ import Link from 'umi/link';
 import router from 'umi/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress, message } from 'antd';
 import styles from './Register.less';
-import { registSendSmsCheckCode } from '@/services/api';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -151,9 +150,10 @@ class Register extends Component {
   onGetCaptcha = async () => {
     this.props.form.validateFields(['phone'], async (err, values) => {
       if (!err) {
-        const res = await registSendSmsCheckCode({ phone: values.phone });
+        // const res = await registSendSmsCheckCode({ phone: values.phone });
 
-        if (res.statusCode === 200) {
+        // if (res.statusCode === 200) {
+        if (1) {
           message.success(res.message);
 
           let count = 59;

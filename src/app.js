@@ -38,6 +38,6 @@ export function patchRoutes(routes) {
 // }
 
 export function render(oldRender) {
-  authRoutes = { '/form/advanced-form': { authority: ['admin', 'user'] } };
+  authRoutes = { '/form/advanced-form': { authority: [] } };
   oldRender();
 }

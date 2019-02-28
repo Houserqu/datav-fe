@@ -1,4 +1,4 @@
-import { fakeRegister, register } from '@/services/api';
+import { registerI } from '@/services/user';
 import { setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
 import md5 from 'blueimp-md5';
@@ -16,7 +16,7 @@ export default {
       // const md5Password = md5(PASSWORD_SALT + payload.password);
       const newPayload = { ...payload, password2: payload.password, smsVerfyId: 123 };
 
-      const response = yield call(register, newPayload);
+      const response = yield call(registerI, newPayload);
       yield put({
         type: 'registerHandle',
         payload: response,

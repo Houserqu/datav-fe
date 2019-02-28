@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 import router from 'umi/router';
-import { message } from 'antd';
+import { message, notification } from 'antd';
 import { API_DOMAIN } from '@/constant';
 
 const codeMessage = {
@@ -21,52 +21,13 @@ const codeMessage = {
   504: '网关超时。',
 };
 
-/**
- * 状态码错误名称
- * @param {int} statusCode
- */
-function checkCode(statusCode, reMessage) {
-  if (statusCode === 200) {
-    return { code: statusCode, message: reMessage };
-  }
-
-  // 返回码判断
-  switch (statusCode) {
-    case 300:
-      return { code: statusCode, message: reMessage };
-    case 401:
-      return { code: statusCode, message: reMessage };
-    case 301:
-      router.push('/user/login');
-      return { code: statusCode, message: reMessage };
-    case 500:
-      return { code: statusCode, message: reMessage };
-    default:
-      return { code: statusCode, message: reMessage };
-  }
-}
-
 /** 检查 http 状态码 */
 const checkStatus = response => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  }
-
-  if (response.status === 403) {
+  if (response.status === 401) {
     router.push('/user/login');
-    return { code: statusCode, message: reMessage };
   }
 
-  const errortext = codeMessage[response.status] || response.statusText;
-  notification.info({
-    message: `请求错误 ${response.status}: ${response.url}`,
-    description: errortext,
-  });
-
-  const error = new Error(errortext);
-  error.name = response.status;
-  error.response = response;
-  throw error;
+  return response;
 };
 
 function serialize(obj) {
@@ -79,10 +40,48 @@ function serialize(obj) {
 }
 
 /**
+ * 基本请求封装
+ */
+export const request = (url, userFetchOptions, LogicOptions = {}) => {
+  const fetchOptions = {
+    mode: 'cors',
+    credentials: 'include',
+    ...userFetchOptions,
+  };
+
+  return new Promise((resolve, reject) => {
+    fetch(`${LogicOptions.noDomain ? '' : API_DOMAIN}${url}`, fetchOptions)
+      .then(checkStatus)
+      .then(response => {
+        return response.json();
+      })
+      .then(responseData => {
+        if (!responseData.success && LogicOptions.alertSuccess) {
+          // 弹出提示框
+          message.warning(responseData.message || '未知错误');
+        }
+
+        if (responseData.success && LogicOptions.alertSuccess) {
+          message.success(responseData.msg);
+        }
+
+        resolve(responseData);
+      })
+      .catch(err => {
+        notification.error({
+          message: '网络错误',
+          description: err.message,
+        });
+        reject(err);
+      });
+  });
+};
+
+/**
  * get 请求
  */
 export const get = async (url, params = '', options = {}, fetchOptions) => {
-  const newUrl = url;
+  let newUrl = url;
   // 构造参数 url
   if (params) {
     const paramsArray = [];
@@ -120,38 +119,4 @@ export const post = async (url, params = '', options = {}, fetchOptions) => {
     },
     options
   );
-};
-
-/**
- * 基本请求封装
- */
-export const request = (url, userFetchOptions, LogicOptions = {}) => {
-  const fetchOptions = {
-    mode: 'cors',
-    credentials: 'include',
-    ...userFetchOptions,
-  };
-
-  return new Promise((resolve, reject) => {
-    fetch(`${LogicOptions.noDomain ? '' : API_DOMAIN}${url}`, fetchOptions)
-      .then(response => {
-        return response.json();
-      })
-      .then(responseData => {
-        if (!responseData.success && LogicOptions.alertSuccess) {
-          // 弹出提示框
-          message.warning(responseData.message || '未知错误');
-        }
-
-        if (responseData.success && LogicOptions.alertSuccess) {
-          message.success(responseData.msg);
-        }
-
-        resolve(responseData);
-      })
-      .catch(err => {
-        console.log(err);
-        reject(err);
-      });
-  });
 };

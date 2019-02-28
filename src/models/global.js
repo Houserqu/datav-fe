@@ -9,6 +9,9 @@ export default {
     notices: [],
     loadedAllNotices: false,
     permission: [],
+    userInfo: {
+      title: 'hahah',
+    },
   },
 
   effects: {

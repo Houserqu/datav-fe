@@ -15,3 +15,10 @@ export async function loginI(params) {
     alertError: true,
   });
 }
+
+export async function registerI(params) {
+  return post('/api/login', params, {
+    alertSuccess: true,
+    alertError: true,
+  });
+}

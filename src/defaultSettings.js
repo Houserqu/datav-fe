@@ -6,5 +6,5 @@ module.exports = {
   fixedHeader: false, // sticky header
   autoHideHeader: false, // auto hide header
   fixSiderbar: false, // sticky siderbar
-  title: '舜网会务',
+  title: '数据视觉-DataV',
 };
