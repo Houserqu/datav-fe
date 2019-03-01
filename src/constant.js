@@ -6,16 +6,20 @@ export const PASSWORD_SALT = 'zhtframework_94DABGioQOq2tTUO0AXYow';
 
 export const PAGE_SIZE = 20;
 
-// 0待发布，1报名中，2报名结束，3会议进行中，4会议结束，5取消-1移除
+// 1=所有人可以访问、2=密码访问、3=登录访问
 
-export const activityStatus = {
-  '-1': '已删除',
-  '0': '待发布',
-  '1': '报名中',
-  '2': '报名结束',
-  '3': '进行中',
-  '4': '已结束',
-  '5': '取消',
+export const appAccessStatus = {
+  '1': '所有人可以访问',
+  '2': '密码访问',
+  '3': '登录访问',
+};
+
+// 1=在线，2=下线，3=删除
+
+export const appStatus = {
+  '1': '在线',
+  '2': '下线',
+  '3': '删除',
 };
 
 export const activityStatusTagColor = {

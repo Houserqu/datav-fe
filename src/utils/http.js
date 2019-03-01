@@ -58,7 +58,7 @@ export const request = (url, userFetchOptions, LogicOptions = {}) => {
       .then(responseData => {
         if (!responseData.success && LogicOptions.alertSuccess) {
           // 弹出提示框
-          message.warning(responseData.message || '未知错误');
+          message.warning(responseData.msg || '未知错误');
         }
 
         if (responseData.success && LogicOptions.alertSuccess) {

@@ -20,8 +20,8 @@ export default [
       { path: '/app/user/info', component: './Dashboard/Index' },
       { path: '/app/design/:id', component: './Dashboard/Index' },
       {
-        path: '/admin/dashboard',
-        name: 'dashboard',
+        path: '/app/application',
+        name: 'application',
         icon: 'dashboard',
         routes: [
           {
@@ -31,12 +31,12 @@ export default [
           },
           {
             path: '/app/application/detail/:id',
-            name: 'workplace',
-            component: './Dashboard/Index',
+            name: 'detail',
+            component: './AppDetail',
             // authority: ['workplace'],
           },
           {
-            path: '/app/application/edit',
+            path: '/app/application/edit/:id',
             name: 'workplace',
             component: './Dashboard/Index',
             // authority: ['workplace'],

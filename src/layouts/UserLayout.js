@@ -27,7 +27,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2019山东舜网传媒股份有限公司
+    Copyright <Icon type="copyright" /> 瞿浩
   </Fragment>
 );
 

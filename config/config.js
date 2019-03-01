@@ -48,8 +48,8 @@ export default {
   define: {
     APP_TYPE: process.env.APP_TYPE || '',
   },
-  base: '/admin/',
-  publicPath: '/admin/',
+  // base: '/admin/',
+  // publicPath: '/admin/',
   treeShaking: true,
   targets: {
     ie: 11,
