@@ -15,15 +15,22 @@ export async function setStatusI(params) {
   });
 }
 
-export async function registerI(params) {
-  return post('/api/login', params, {
+export async function deleteAppI(params) {
+  return post('/api/app/delete', params, {
     alertSuccess: true,
     alertError: true,
   });
 }
 
-export async function deleteAppI(params) {
-  return post('/api/app/delete', params, {
+export async function createAppI(params) {
+  return post('/api/app/create', params, {
+    alertSuccess: true,
+    alertError: true,
+  });
+}
+
+export async function updateAppI(params) {
+  return post('/api/app/update', params, {
     alertSuccess: true,
     alertError: true,
   });

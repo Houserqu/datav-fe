@@ -15,7 +15,7 @@ export default [
     path: '/app',
     component: '../layouts/AppLayout',
     routes: [
-      { path: '/', redirect: '/app/dashboard' },
+      { path: '/app/', redirect: '/app/dashboard' },
       { path: '/app/dashboard', component: './UserDashboard/Index' },
       { path: '/app/user/info', component: './Dashboard/Index' },
       { path: '/app/design/:id', component: './Dashboard/Index' },
@@ -36,9 +36,15 @@ export default [
             // authority: ['workplace'],
           },
           {
+            path: '/app/application/create',
+            name: 'workplace',
+            component: './AppCreate',
+            // authority: ['workplace'],
+          },
+          {
             path: '/app/application/edit/:id',
             name: 'workplace',
-            component: './Dashboard/Index',
+            component: './AppEdit',
             // authority: ['workplace'],
           },
         ],

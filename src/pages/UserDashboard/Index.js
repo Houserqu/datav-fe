@@ -1,12 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
 import Link from 'umi/link';
-import { Row, Col, Card, List, Avatar } from 'antd';
-
+import { Row, Col, Card, List, Avatar, Button, Tag, Icon } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
 import styles from './Index.less';
+import { appStatusColor, appStatus } from '@/constant';
 
 @connect(({ app, global, loading }) => ({
   app,
@@ -117,7 +116,7 @@ class Workplace extends PureComponent {
         extraContent={extraContent}
       >
         <Row gutter={24}>
-          <Col xl={16} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={18} lg={24} md={24} sm={24} xs={24}>
             <Card
               className={styles.projectList}
               style={{ marginBottom: 24 }}
@@ -129,7 +128,23 @@ class Workplace extends PureComponent {
             >
               {appList.map(item => (
                 <Card.Grid className={styles.projectGrid} key={item.id}>
-                  <Card bodyStyle={{ padding: 0 }} bordered={false}>
+                  <Card
+                    bodyStyle={{ padding: 0, height: 100 }}
+                    bordered={false}
+                    actions={[
+                      <Tag color={appStatusColor[item.status]}>{appStatus[item.status]}</Tag>,
+                      <Fragment>
+                        <Link to={`/app/application/edit/${item.id}`}>
+                          <Icon type="edit" />
+                          编辑
+                        </Link>
+                      </Fragment>,
+                      <Fragment>
+                        <Icon type="setting" />
+                        设置
+                      </Fragment>,
+                    ]}
+                  >
                     <Card.Meta
                       title={
                         <div className={styles.cardTitle}>
@@ -151,6 +166,7 @@ class Workplace extends PureComponent {
                 </Card.Grid>
               ))}
             </Card>
+
             {/* <Card
               bodyStyle={{ padding: 0 }}
               bordered={false}
@@ -162,6 +178,22 @@ class Workplace extends PureComponent {
                 <div className={styles.activitiesList}>{this.renderActivities()}</div>
               </List>
             </Card> */}
+          </Col>
+          <Col xl={6} lg={6} md={6} sm={24} xs={24}>
+            <Card
+              className={styles.projectList}
+              style={{ marginBottom: 24 }}
+              title="操作"
+              bordered={false}
+              loading={appLoading}
+              bodyStyle={{ padding: 20 }}
+            >
+              <Link to="/app/application/create">
+                <Button style={{ width: '100%' }} type="primary">
+                  新建应用
+                </Button>
+              </Link>
+            </Card>
           </Col>
         </Row>
       </PageHeaderWrapper>

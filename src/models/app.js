@@ -1,4 +1,11 @@
-import { getUserAppListI, getAppDetailI, setStatusI, deleteAppI } from '@/services/app';
+import {
+  getUserAppListI,
+  getAppDetailI,
+  setStatusI,
+  deleteAppI,
+  createAppI,
+  updateAppI,
+} from '@/services/app';
 // import { reloadAuthorized } from '@/utils/Authorized'
 
 export default {
@@ -8,6 +15,16 @@ export default {
     total: 0,
     list: [],
     curApp: {},
+    pageThemes: [
+      { id: 1, name: '黑暗', options: { background: '#000000' } },
+      { id: 2, name: '科技', options: { background: 'blue' } },
+      { id: 3, name: '春节', options: { background: 'red' } },
+    ],
+    componentThemes: [
+      { id: 1, name: '黑暗', options: { background: '#000000' } },
+      { id: 2, name: '科技', options: { background: 'blue' } },
+      { id: 3, name: '春节', options: { background: 'red' } },
+    ],
   },
 
   effects: {
@@ -21,7 +38,7 @@ export default {
         });
       }
     },
-    *fetchAppDetail({ payload }, { call, put }) {
+    *fetchAppDetail({ payload, callback }, { call, put }) {
       const res = yield call(getAppDetailI, payload);
 
       if (res.success) {
@@ -29,6 +46,10 @@ export default {
           type: 'saveCurApp',
           payload: res.data[0],
         });
+
+        if (typeof callback === 'function') {
+          callback(res.data[0]);
+        }
       }
     },
     // 切换在线状态
@@ -44,6 +65,20 @@ export default {
     },
     *deleteApp({ payload, callback }, { call }) {
       const res = yield call(deleteAppI, payload);
+
+      if (typeof callback === 'function') {
+        callback(res);
+      }
+    },
+    *createApp({ payload, callback }, { call }) {
+      const res = yield call(createAppI, payload);
+
+      if (typeof callback === 'function') {
+        callback(res);
+      }
+    },
+    *updateApp({ payload, callback }, { call }) {
+      const res = yield call(updateAppI, payload);
 
       if (typeof callback === 'function') {
         callback(res);

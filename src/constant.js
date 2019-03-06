@@ -22,6 +22,12 @@ export const appStatus = {
   '3': '删除',
 };
 
+export const appStatusColor = {
+  '1': '#87d068',
+  '2': '#bebebe',
+  '3': '#f50',
+};
+
 export const activityStatusTagColor = {
   '-1': '#bebebe',
   '0': 'purple',
