@@ -6,9 +6,11 @@ import memoizeOne from 'memoize-one';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
+import pathToRegexp from 'path-to-regexp';
 import Media from 'react-media';
 import { formatMessage } from 'umi/locale';
-import Authorized from '@/BusinessComponent/Authority';
+// import Authorized from '@/BusinessComponent/Authority';
+import Authorized from '@/utils/Authorized';
 import logo from '../assets/logo.svg';
 import Footer from './Footer';
 import Header from './Header';
@@ -16,8 +18,7 @@ import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
-import { matchParamsPath } from '@/utils/utils';
-
+import { title } from '../defaultSettings';
 import styles from './BasicLayout.less';
 
 // lazy load SettingDrawer
@@ -54,7 +55,7 @@ class BasicLayout extends React.PureComponent {
   constructor(props) {
     super(props);
     this.getPageTitle = memoizeOne(this.getPageTitle);
-    this.matchParamsPath = memoizeOne(matchParamsPath, isEqual);
+    this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
   }
 
   componentDidMount() {
@@ -66,7 +67,7 @@ class BasicLayout extends React.PureComponent {
       type: 'user/fetchCurrent',
     });
     dispatch({
-      type: 'setting/getSetting',
+      type: 'global/getPermission',
     });
     dispatch({
       type: 'menu/getMenuData',
@@ -91,43 +92,39 @@ class BasicLayout extends React.PureComponent {
     };
   }
 
-  /**
-   * 获取面包屑映射
-   * @param {Object} menuData 菜单配置
-   */
-  getBreadcrumbNameMap() {
-    const routerMap = {};
-    const { menuData } = this.props;
-    const flattenMenuData = data => {
-      data.forEach(menuItem => {
-        if (menuItem.children) {
-          flattenMenuData(menuItem.children);
-        }
-        // Reduce memory usage
-        routerMap[menuItem.path] = menuItem;
-      });
-    };
-    flattenMenuData(menuData);
-    return routerMap;
-  }
+  matchParamsPath = (pathname, breadcrumbNameMap) => {
+    const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
+    return breadcrumbNameMap[pathKey];
+  };
 
-  // matchParamsPath = (pathname, breadcrumbNameMap) => {
-  //   const pathKey = Object.keys(breadcrumbNameMap).find(key => pathToRegexp(key).test(pathname));
-  //   return breadcrumbNameMap[pathKey];
-  // };
+  getRouterAuthority = (pathname, routeData) => {
+    let routeAuthority = ['noAuthority'];
+    const getAuthority = (key, routes) => {
+      routes.forEach(route => {
+        if (route.path && pathToRegexp(route.path).test(key)) {
+          routeAuthority = route.authority;
+        } else if (route.routes) {
+          routeAuthority = getAuthority(key, route.routes);
+        }
+        return route;
+      });
+      return routeAuthority;
+    };
+    return getAuthority(pathname, routeData);
+  };
 
   getPageTitle = (pathname, breadcrumbNameMap) => {
     const currRouterData = this.matchParamsPath(pathname, breadcrumbNameMap);
 
     if (!currRouterData) {
-      return 'Ant Design Pro';
+      return title;
     }
     const pageName = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
 
-    return `${pageName} - DataV 数据可视化`;
+    return `${pageName} - ${title}`;
   };
 
   getLayoutStyle = () => {
@@ -166,11 +163,12 @@ class BasicLayout extends React.PureComponent {
       isMobile,
       menuData,
       breadcrumbNameMap,
+      route: { routes },
       fixedHeader,
     } = this.props;
 
     const isTop = PropsLayout === 'topmenu';
-    const routerConfig = this.matchParamsPath(pathname, breadcrumbNameMap);
+    const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
     const layout = (
       <Layout>
@@ -198,10 +196,7 @@ class BasicLayout extends React.PureComponent {
             {...this.props}
           />
           <Content className={styles.content} style={contentStyle}>
-            <Authorized
-              authority={routerConfig && routerConfig.authority}
-              noMatch={<Exception403 />}
-            >
+            <Authorized authority={routerConfig} noMatch={<Exception403 />}>
               {children}
             </Authorized>
           </Content>

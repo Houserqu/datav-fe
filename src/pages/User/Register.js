@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Popover, Progress, message } from 'antd';
 import styles from './Register.less';
 
 const FormItem = Form.Item;
@@ -46,6 +46,7 @@ class Register extends Component {
     visible: false,
     help: '',
     prefix: '86',
+    smsVerfyId: null,
   };
 
   componentDidUpdate() {
@@ -65,18 +66,6 @@ class Register extends Component {
     clearInterval(this.interval);
   }
 
-  onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-      }
-    }, 1000);
-  };
-
   getPasswordStatus = () => {
     const { form } = this.props;
     const value = form.getFieldValue('password');
@@ -93,13 +82,15 @@ class Register extends Component {
     e.preventDefault();
     const { form, dispatch } = this.props;
     form.validateFields({ force: true }, (err, values) => {
+      console.log(values);
       if (!err) {
-        const { prefix } = this.state;
         dispatch({
           type: 'register/submit',
           payload: {
             ...values,
-            prefix,
+          },
+          callback: res => {
+            router.push('/user/login');
           },
         });
       }
@@ -156,6 +147,29 @@ class Register extends Component {
     });
   };
 
+  onGetCaptcha = async () => {
+    this.props.form.validateFields(['phone'], async (err, values) => {
+      if (!err) {
+        // const res = await registSendSmsCheckCode({ phone: values.phone });
+
+        // if (res.statusCode === 200) {
+        if (1) {
+          message.success(res.message);
+
+          let count = 59;
+          this.setState({ count });
+          this.interval = setInterval(() => {
+            count -= 1;
+            this.setState({ count });
+            if (count === 0) {
+              clearInterval(this.interval);
+            }
+          }, 1000);
+        }
+      }
+    });
+  };
+
   renderPasswordProgress = () => {
     const { form } = this.props;
     const value = form.getFieldValue('password');
@@ -184,7 +198,7 @@ class Register extends Component {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
@@ -198,6 +212,26 @@ class Register extends Component {
             })(
               <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
             )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('account', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.email.required' }),
+                },
+              ],
+            })(<Input size="large" placeholder="登录账号" />)}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('nickName', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.email.required' }),
+                },
+              ],
+            })(<Input size="large" placeholder="昵称" />)}
           </FormItem>
           <FormItem help={help}>
             <Popover
@@ -231,36 +265,8 @@ class Register extends Component {
             </Popover>
           </FormItem>
           <FormItem>
-            {getFieldDecorator('confirm', {
-              rules: [
-                {
-                  required: true,
-                  message: formatMessage({ id: 'validation.confirm-password.required' }),
-                },
-                {
-                  validator: this.checkConfirm,
-                },
-              ],
-            })(
-              <Input
-                size="large"
-                type="password"
-                placeholder={formatMessage({ id: 'form.confirm-password.placeholder' })}
-              />
-            )}
-          </FormItem>
-          <FormItem>
             <InputGroup compact>
-              <Select
-                size="large"
-                value={prefix}
-                onChange={this.changePrefix}
-                style={{ width: '30%' }}
-              >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-              </Select>
-              {getFieldDecorator('mobile', {
+              {getFieldDecorator('phone', {
                 rules: [
                   {
                     required: true,
@@ -274,7 +280,6 @@ class Register extends Component {
               })(
                 <Input
                   size="large"
-                  style={{ width: '70%' }}
                   placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
                 />
               )}
@@ -283,7 +288,7 @@ class Register extends Component {
           <FormItem>
             <Row gutter={8}>
               <Col span={16}>
-                {getFieldDecorator('captcha', {
+                {getFieldDecorator('checkCode', {
                   rules: [
                     {
                       required: true,

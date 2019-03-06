@@ -2,14 +2,14 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import RenderAuthorized from '@/components/Authorized';
 
-@connect(({global}) => ({global}))
+@connect(({ global }) => ({ global }))
 class Authorized extends PureComponent {
   render() {
-    const { global: { permission } } = this.props;
-    const AuthorizedComponent = RenderAuthorized(permission);
-    return (
-      <AuthorizedComponent {...this.props} />
-    )
+    const {
+      global: { permission },
+    } = this.props;
+    // const AuthorizedComponent = RenderAuthorized(permission);
+    return <RenderAuthorized permission={permission} {...this.props} />;
   }
 }
 

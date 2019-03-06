@@ -26,6 +26,15 @@ const checkStatus = response => {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
+
+  if (response.status === 403) {
+    message.info(result.msg || '请登录');
+    window.g_app._store.dispatch({
+      type: 'login/logout',
+    });
+    return;
+  }
+
   const errortext = codeMessage[response.status] || response.statusText;
   notification.info({
     message: `请求错误 ${response.status}: ${response.url}`,
@@ -41,12 +50,12 @@ const checkStatus = response => {
 const checkSuccess = (result, ignoreError = false) => {
   if (!ignoreError) {
     if (result.success) {
-      message.success(result.msg || '操作成功')
+      message.success(result.msg || '操作成功');
     } else {
-      message.error(result.msg || '未知错误')
+      message.error(result.msg || '未知错误');
     }
   }
-  
+
   return result;
 };
 
@@ -87,12 +96,17 @@ export default function request(url, option = {}, config = {}) {
     .update(fingerprint)
     .digest('hex');
 
-
   const defaultOptions = {
     credentials: 'include',
+    mode: 'cors',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+    },
   };
-  
+
   const newOptions = { ...defaultOptions, ...option };
+
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||
@@ -101,7 +115,6 @@ export default function request(url, option = {}, config = {}) {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
         Accept: 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
       };
       newOptions.body = JSON.stringify(newOptions.body);
@@ -120,26 +133,9 @@ export default function request(url, option = {}, config = {}) {
     .then(response => response.json())
     .then(result => checkSuccess(result, config.ignoreError))
     .catch(e => {
-      const status = e.name;
-      if (status === 401) {
-        // @HACK
-        /* eslint-disable no-underscore-dangle */
-        window.g_app._store.dispatch({
-          type: 'login/logout',
-        });
-        return;
-      }
-      // environment should not be used
-      if (status === 403) {
-        router.push('/exception/403');
-        return;
-      }
-      if (status <= 504 && status >= 500) {
-        router.push('/exception/500');
-        return;
-      }
-      if (status >= 404 && status < 422) {
-        router.push('/exception/404');
-      }
+      notification.info({
+        message: `请求错误`,
+        description: e.message,
+      });
     });
 }

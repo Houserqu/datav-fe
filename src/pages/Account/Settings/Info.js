@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { FormattedMessage } from 'umi/locale';
-import { Menu } from 'antd';
+import { Menu, Alert } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Info.less';
 
@@ -20,15 +20,15 @@ class Info extends Component {
       security: (
         <FormattedMessage id="app.settings.menuMap.security" defaultMessage="Security Settings" />
       ),
-      binding: (
-        <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Account Binding" />
-      ),
-      notification: (
-        <FormattedMessage
-          id="app.settings.menuMap.notification"
-          defaultMessage="New Message Notification"
-        />
-      ),
+      // binding: (
+      //   <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Account Binding" />
+      // ),
+      // notification: (
+      //   <FormattedMessage
+      //     id="app.settings.menuMap.notification"
+      //     defaultMessage="New Message Notification"
+      //   />
+      // ),
     };
     const key = location.pathname.replace(`${match.path}/`, '');
     this.state = {
@@ -79,6 +79,9 @@ class Info extends Component {
       return;
     }
     requestAnimationFrame(() => {
+      if (!this.main) {
+        return;
+      }
       let mode = 'inline';
       const { offsetWidth } = this.main;
       if (this.main.offsetWidth < 641 && offsetWidth > 400) {
@@ -95,8 +98,8 @@ class Info extends Component {
 
   render() {
     const { children, currentUser } = this.props;
-    if (!currentUser.userid) {
-      return '';
+    if (!currentUser.id) {
+      return <Alert message="获取个人信息失败" type="error" style={{ width: 300 }} showIcon />;
     }
     const { mode, selectKey } = this.state;
     return (
