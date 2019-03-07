@@ -35,3 +35,7 @@ export async function updateAppI(params) {
     alertError: true,
   });
 }
+
+export async function getCategoryWithComponent(params) {
+  return get('/api/app/category/list_com', params);
+}

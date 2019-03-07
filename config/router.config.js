@@ -12,13 +12,17 @@ export default [
   },
   // 用户
   {
+    path: '/app/design',
+    component: '../layouts/DesignLayout',
+    routes: [{ path: '/app/design/:id', component: './Design' }],
+  },
+  {
     path: '/app',
     component: '../layouts/AppLayout',
     routes: [
       { path: '/app/', redirect: '/app/dashboard' },
       { path: '/app/dashboard', component: './UserDashboard/Index' },
       { path: '/app/user/info', component: './Dashboard/Index' },
-      { path: '/app/design/:id', component: './Dashboard/Index' },
       {
         path: '/app/application',
         name: 'application',
