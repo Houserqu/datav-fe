@@ -15,19 +15,8 @@ class ChartSelector extends Component {
     collapsed: false,
   };
 
-  renderSub = props => {
-    console.log(props);
-    return (
-      <Card title="Card Title">
-        <Card.Grid style={gridStyle}>Content</Card.Grid>
-        <Card.Grid style={gridStyle}>Content</Card.Grid>
-        <Card.Grid style={gridStyle}>Content</Card.Grid>
-        <Card.Grid style={gridStyle}>Content</Card.Grid>
-        <Card.Grid style={gridStyle}>Content</Card.Grid>
-        <Card.Grid style={gridStyle}>Content</Card.Grid>
-        <Card.Grid style={gridStyle}>Content</Card.Grid>
-      </Card>
-    );
+  handleSelectCom = id => {
+    this.props.onComClick(id);
   };
 
   render() {
@@ -52,15 +41,20 @@ class ChartSelector extends Component {
               </span>
             }
           >
-            {
-              // c.components.map(v =>(
-              //   <Menu.Item style={{ height: 180 }} key={v.id}>
-              //     <img className={styles.menuItemThumb} src={v.thumb} alt="" />
-              //     <span className={styles.menuItemName}>{v.name}</span>
-              //   </Menu.Item>
-              // ))
-            }
-            <Menu.Item style={{ height: 'fit-content' }}>{this.renderSub()}</Menu.Item>
+            <Menu.Item style={{ height: 'fit-content' }}>
+              <Card>
+                {c.components.map(v => (
+                  <Card.Grid
+                    className={styles.categoryCom}
+                    key={v.id}
+                    onClick={() => this.handleSelectCom(v.id)}
+                  >
+                    <img style={{ width: 240 }} alt="example" src={v.thumb} />
+                    <p>{v.name}</p>
+                  </Card.Grid>
+                ))}
+              </Card>
+            </Menu.Item>
           </SubMenu>
         ))}
       </Menu>

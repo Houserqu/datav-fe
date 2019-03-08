@@ -26,7 +26,7 @@ class DesignLayout extends PureComponent {
     return (
       <div>
         <Layout className={styles.layout}>
-          <Sider className={styles.sider}>
+          <Sider className={styles.sider} style={{ width: '150px' }}>
             <div className={styles.logo}>
               <span className={styles.title}>设计面板</span>
               <Icon type="menu-fold" className={styles.close} />
@@ -35,7 +35,7 @@ class DesignLayout extends PureComponent {
           </Sider>
           <Layout>
             <Header className={styles.header}>Header</Header>
-            <Content>{children}</Content>
+            <Content className={styles.content}>{children}</Content>
           </Layout>
         </Layout>
       </div>

@@ -40,6 +40,7 @@
     "chalk": "^2.4.2",
     "classnames": "^2.2.6",
     "dva": "^2.4.0",
+    "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.15-beta.0",
     "enquire-js": "^0.2.1",
     "hash.js": "^1.1.5",
@@ -60,6 +61,7 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.6.3",
     "react-fittext": "^1.0.0",
+    "react-grid-layout": "^0.16.6",
     "react-media": "^1.8.0",
     "react-router-dom": "^4.3.1",
     "whatwg-fetch": "^3.0.0"
