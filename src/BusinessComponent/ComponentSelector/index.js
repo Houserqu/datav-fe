@@ -28,8 +28,8 @@ class ChartSelector extends Component {
         mode="vertical"
         // openKeys={this.state.openKeys}
         // onOpenChange={this.onOpenChange}
-        style={{ width: 200 }}
         loading={loading.toString()}
+        // collapsed="true"
       >
         {data.map(c => (
           <SubMenu

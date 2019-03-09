@@ -21,15 +21,12 @@ class DesignLayout extends PureComponent {
       children,
     } = this.props;
 
-    console.log('aaa');
-
     return (
       <div>
         <Layout className={styles.layout}>
-          <Sider className={styles.sider} style={{ width: '150px' }}>
+          <Sider className={styles.sider} style={{ width: '150px' }} collapsed>
             <div className={styles.logo}>
-              <span className={styles.title}>设计面板</span>
-              <Icon type="menu-fold" className={styles.close} />
+              <img src="/icons/logo.png" alt="datav" />
             </div>
             <ComponentSelector data={categoryComponents} loading={categoryLoading} />
           </Sider>

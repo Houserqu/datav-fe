@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
+import * as R from 'ramda';
+import GridLayout from 'react-grid-layout';
+import PropsEditor from '@/BusinessComponent/PropsEditor';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import GridLayout from 'react-grid-layout';
 import styles from './index.less';
 import Com from '@/BusinessComponent/Com';
 
@@ -13,54 +15,7 @@ import Com from '@/BusinessComponent/Com';
 }))
 class Design extends Component {
   state = {
-    appOpt: {
-      components: [
-        {
-          layout: { i: 'b', x: 1, y: 0, w: 8, h: 5 }, // grid 布局配置
-          echartOpt: {
-            xAxis: {
-              type: 'category',
-              boundaryGap: false,
-              data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            },
-            yAxis: {
-              type: 'value',
-            },
-            series: [
-              {
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-                type: 'line',
-                areaStyle: {},
-              },
-            ],
-          }, // echart 配置
-          source: {}, // 数据源
-        },
-        {
-          layout: { i: 'c', x: 10, y: 0, w: 8, h: 5 }, // grid 布局配置
-          echartOpt: {
-            tooltip: {
-              formatter: '{a} <br/>{b} : {c}%',
-            },
-            toolbox: {
-              feature: {
-                restore: {},
-                saveAsImage: {},
-              },
-            },
-            series: [
-              {
-                name: '业务指标',
-                type: 'gauge',
-                detail: { formatter: '{value}%' },
-                data: [{ value: 50, name: '完成率' }],
-              },
-            ],
-          }, // echart 配
-          source: {}, // 数据源
-        },
-      ],
-    },
+    curComId: null,
   };
 
   componentDidMount() {
@@ -70,56 +25,75 @@ class Design extends Component {
         params: { id },
       },
     } = this.props;
-    dispatch({
-      type: 'design/fetchAppDetail',
-      payload: { id },
-    });
 
     dispatch({
-      type: 'design/fetchCategoryComponents',
+      type: 'design/init',
       payload: { id },
     });
   }
 
-  handleEdit = layout => {
+  // 布局发生改变
+  onLayoutChange = layout => {
     console.log(layout);
+  };
+
+  // 点击组件  激活当前组件为编辑状态
+  handleCurCom = id => {
+    console.log('cur com ', id);
+    this.setState({ curComId: id });
+  };
+
+  clickPage = () => {
+    this.setState({ curComId: '$PAGE$' });
   };
 
   render() {
     const {
-      design: { appDetail = null },
+      design: { curAppDesign = null },
     } = this.props;
 
-    const {
-      appOpt: { components },
-    } = this.state;
+    const { curComId } = this.state;
 
-    const layout = components.map(v => ({ ...v.layout, minW: 8, minH: 5 }));
+    const components = curAppDesign && curAppDesign.components;
+    const componentsLayout = curAppDesign && curAppDesign.componentsLayout;
 
-    console.log(layout);
+    const layout = R.values(componentsLayout);
 
     return (
       <div className={styles.container}>
         <div className={styles.pageContainer}>
-          <div className={styles.page} style={{ width: 1080, minHeight: 900 }}>
-            <GridLayout
-              className="layout"
-              layout={layout}
-              rowHeight={45}
-              width={1080}
-              breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-              cols={24}
-              onLayoutChange={this.handleEdit}
-            >
-              {components.map(v => (
-                <div key={v.layout.i}>
-                  <Com layoutOpt={v.layout} echartOpt={v.echartOpt} />
-                </div>
-              ))}
-            </GridLayout>
+          <div
+            className={styles.page}
+            style={{ width: 1080, minHeight: 900 }}
+            onClick={this.clickPage}
+          >
+            {curAppDesign && (
+              <GridLayout
+                className="layout"
+                layout={layout}
+                rowHeight={45}
+                width={1080}
+                breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+                cols={24}
+                onLayoutChange={this.onLayoutChange}
+              >
+                {Object.keys(components).map(v => (
+                  <div key={v}>
+                    <Com
+                      layoutOpt={componentsLayout[v]}
+                      echartOpt={components[v].echartOpt}
+                      id={v}
+                      onClick={this.handleCurCom}
+                    />
+                  </div>
+                ))}
+              </GridLayout>
+            )}
           </div>
         </div>
-        <div className={styles.propsEditor}>123</div>
+        {curAppDesign && (
+          <PropsEditor data={curComId === '$PAGE$' ? curAppDesign.page : components[curComId]} />
+        )}
       </div>
     );
   }

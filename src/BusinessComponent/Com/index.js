@@ -5,11 +5,18 @@ import styles from './index.less';
 class Com extends Component {
   state = {};
 
+  handleClick = e => {
+    e.stopPropagation();
+
+    const { onClick, id } = this.props;
+    onClick(id);
+  };
+
   render() {
-    const { layoutOpt = {}, echartOpt = {} } = this.props;
+    const { echartOpt = {}, id } = this.props;
 
     return (
-      <div className={styles.comBox} key={layoutOpt.i}>
+      <div className={styles.comBox} key={id} onClick={this.handleClick}>
         <ReactEcharts
           option={echartOpt}
           // notMerge={true}
