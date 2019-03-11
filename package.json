@@ -65,6 +65,7 @@
     "react-grid-layout": "^0.16.6",
     "react-media": "^1.8.0",
     "react-router-dom": "^4.3.1",
+    "uuid": "^3.3.2",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {

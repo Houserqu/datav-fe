@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Layout, Icon } from 'antd';
 import { connect } from 'dva';
 import ComponentSelector from '@/BusinessComponent/ComponentSelector';
+import DesignTopBar from '@/BusinessComponent/DesignTopBar';
 import styles from './DesignLayout.less';
 
 const { Header, Sider, Content } = Layout;
@@ -13,6 +14,14 @@ const { Header, Sider, Content } = Layout;
 }))
 class DesignLayout extends PureComponent {
   state = { a: 2 };
+
+  handleAddCom = id => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'design/addCom',
+      payload: { id },
+    });
+  };
 
   render() {
     const {
@@ -28,10 +37,16 @@ class DesignLayout extends PureComponent {
             <div className={styles.logo}>
               <img src="/icons/logo.png" alt="datav" />
             </div>
-            <ComponentSelector data={categoryComponents} loading={categoryLoading} />
+            <ComponentSelector
+              data={categoryComponents}
+              loading={categoryLoading}
+              onAddCom={this.handleAddCom}
+            />
           </Sider>
           <Layout>
-            <Header className={styles.header}>Header</Header>
+            <Header className={styles.header}>
+              <DesignTopBar />
+            </Header>
             <Content className={styles.content}>{children}</Content>
           </Layout>
         </Layout>

@@ -16,7 +16,7 @@ class ChartSelector extends Component {
   };
 
   handleSelectCom = id => {
-    this.props.onComClick(id);
+    this.props.onAddCom(id);
   };
 
   render() {

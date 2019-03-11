@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
+import classnames from 'classnames';
 import styles from './index.less';
 
 class Com extends Component {
@@ -13,10 +14,14 @@ class Com extends Component {
   };
 
   render() {
-    const { echartOpt = {}, id } = this.props;
+    const { echartOpt = {}, id, active } = this.props;
 
     return (
-      <div className={styles.comBox} key={id} onClick={this.handleClick}>
+      <div
+        className={classnames(styles.comBox, { [styles.comBoxActive]: active })}
+        key={id}
+        onClick={this.handleClick}
+      >
         <ReactEcharts
           option={echartOpt}
           // notMerge={true}
