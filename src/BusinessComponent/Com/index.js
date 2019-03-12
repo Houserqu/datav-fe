@@ -9,12 +9,12 @@ class Com extends Component {
   handleClick = e => {
     e.stopPropagation();
 
-    const { onClick, id } = this.props;
-    onClick(id);
+    const { onClick, id, data } = this.props;
+    onClick(id, data);
   };
 
   render() {
-    const { echartOpt = {}, id, active } = this.props;
+    const { echartOpt = {}, id, active, style = {} } = this.props;
 
     return (
       <div
@@ -24,6 +24,7 @@ class Com extends Component {
       >
         <ReactEcharts
           option={echartOpt}
+          style={{ width: style.width || '100%', height: style.height || '100%' }}
           // notMerge={true}
           // lazyUpdate={true}
           // theme={"theme_name"}

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Row, Col, Spin } from 'antd';
+import { Button, Spin, Icon } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
+
+const { Group } = Button;
 
 @connect(({ design, loading }) => ({
   design,
@@ -24,11 +26,24 @@ class DesignTopBar extends Component {
     });
   };
 
+  handleDelCom = () => {
+    const {
+      dispatch,
+      design: { activeCom },
+    } = this.props;
+
+    dispatch({ type: 'design/delCom', payload: { id: activeCom.id } });
+  };
+
   render() {
     const {
       detailLoading,
-      design: { appDetail = {} },
+      design: { appDetail = {}, activeCom },
     } = this.props;
+
+    // 图表组件工具激活状态
+    const chartToolActive = activeCom && activeCom.type === 'chart';
+
     return (
       <div>
         {detailLoading ? (
@@ -36,13 +51,19 @@ class DesignTopBar extends Component {
         ) : (
           appDetail && (
             <div className={styles.toolbox}>
-              <div>{appDetail.name}</div>
-              <div>
+              {/* <div>{appDetail.name}</div> */}
+
+              <div className={styles.tools}>
+                <Group>
+                  <Button disabled={!chartToolActive} onClick={this.handleDelCom}>
+                    <Icon type="delete" />
+                  </Button>
+                </Group>
+              </div>
+              <div className={styles.action}>
                 <Button type="primary" onClick={this.handleSave}>
                   保存
                 </Button>
-              </div>
-              <div>
                 <Button onClick={this.handleReset}>重置</Button>
               </div>
             </div>

@@ -11,6 +11,7 @@ export default {
     categoryComponents: [], // 分类组件库
     appDetail: null, // 当前应用信息
     components: [], // 组件库
+    activeCom: null, // 当前编辑状态的组件
   },
 
   effects: {
@@ -87,10 +88,9 @@ export default {
         components,
       };
     },
-    // 保存组件库信息
-    changePropsOpt(state, { payload }) {
-      console.log(payload);
-      const { comId, fields } = payload;
+    // 修改组件下的二级属性
+    changeSecondProps(state, { payload }) {
+      const { comId, fields, type } = payload;
       return {
         ...state,
         curAppDesign: {
@@ -99,9 +99,23 @@ export default {
             ...state.curAppDesign.components,
             [comId]: {
               ...state.curAppDesign.components[comId],
-              ...fields,
+              [type]: {
+                ...state.curAppDesign.components[comId][type],
+                ...fields,
+              },
             },
           },
+        },
+      };
+    },
+    // 删除组件
+    delCom(state, { payload }) {
+      return {
+        ...state,
+        curAppDesign: {
+          ...state.curAppDesign,
+          components: R.dissoc(payload.id, state.curAppDesign.components),
+          activeCurCom: null,
         },
       };
     },
@@ -137,6 +151,30 @@ export default {
               y: 1,
               i: designComId,
               static: false,
+            },
+          },
+        },
+      };
+    },
+    // 激活当前编辑状态组件
+    activeCurCom(state, { payload }) {
+      return {
+        ...state,
+        activeCom: payload.activeCom,
+      };
+    },
+    // 更新组价 echart 配置
+    changeEchartOpt(state, { payload }) {
+      const { echartOpt, comId } = payload;
+      return {
+        ...state,
+        curAppDesign: {
+          ...state.curAppDesign,
+          components: {
+            ...state.curAppDesign.components,
+            [comId]: {
+              ...state.curAppDesign.components[comId],
+              echartOpt,
             },
           },
         },

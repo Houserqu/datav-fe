@@ -57,25 +57,34 @@ class Design extends Component {
     const fields = {};
     Object.keys(values).forEach(v => {
       fields[v] = values[v].value;
-    });
-
-    dispatch({
-      type: 'design/changePropsOpt',
-      payload: {
-        fields,
-        comId,
-      },
+      if (values[v].type) {
+        dispatch({
+          type: 'design/changeSecondProps',
+          payload: {
+            fields,
+            type: values[v].type,
+            comId,
+          },
+        });
+      }
     });
   };
 
   // 点击组件  激活当前组件为编辑状态
-  handleCurCom = id => {
-    console.log('cur com ', id);
+  handleCurCom = (id, data) => {
     this.setState({ curComId: id });
+    this.props.dispatch({
+      type: 'design/activeCurCom',
+      payload: { activeCom: data },
+    });
   };
 
   clickPage = () => {
     this.setState({ curComId: '$PAGE$' });
+    this.props.dispatch({
+      type: 'design/activeCurCom',
+      payload: { activeCom: null },
+    });
   };
 
   render() {
@@ -89,8 +98,7 @@ class Design extends Component {
     const componentsLayout = curAppDesign && curAppDesign.componentsLayout;
 
     const curPropsEditCom = components[curComId] || {};
-
-    console.log(curPropsEditCom);
+    const curPropsEditComLayout = componentsLayout && (componentsLayout[curComId] || {});
 
     const layout = R.values(componentsLayout);
 
@@ -120,6 +128,8 @@ class Design extends Component {
                       id={v}
                       onClick={this.handleCurCom}
                       active={v === curComId}
+                      style={components[v].style}
+                      data={components[v]}
                     />
                   </div>
                 ))}
@@ -129,8 +139,9 @@ class Design extends Component {
         </div>
         {curAppDesign && curComId && (
           <PropsEditor
-            width={curPropsEditCom.width || ''}
-            height={curPropsEditCom.height || ''}
+            layout={curPropsEditComLayout || {}}
+            style={curPropsEditCom.style || {}}
+            info={curPropsEditCom.info || {}}
             onFiledChange={this.handleFiledChange}
             comId={curComId}
             data={curComId === '$PAGE$' ? curAppDesign.page : components[curComId]}
