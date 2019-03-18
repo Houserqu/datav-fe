@@ -53,6 +53,31 @@ export default [
           },
         ],
       },
+      {
+        path: '/app/data',
+        name: 'data',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/app/data/detail/:id',
+            name: 'detail',
+            component: './Data/Detail',
+            // authority: ['workplace'],
+          },
+          {
+            path: '/app/data/create',
+            name: 'create',
+            component: './Data/Create',
+            // authority: ['workplace'],
+          },
+          {
+            path: '/app/data/edit/:id',
+            name: 'edit',
+            component: './Data/Edit',
+            // authority: ['workplace'],
+          },
+        ],
+      },
     ],
   },
   // 管理员

@@ -43,3 +43,10 @@ export const memberStatus = {
   '1': '正常',
   '0': '禁用',
 };
+
+export const dataType = {
+  '1': '文本数据',
+  '2': '数据库',
+  '3': 'HTTP接口',
+  '4': '文件',
+};
