@@ -115,7 +115,7 @@ class Workplace extends PureComponent {
                   <AppCardList data={appList} />
                 </TabPane>
                 <TabPane tab="我的数据" key="data" style={{ padding: 10 }} loading={dataLoading}>
-                  <DataCardList data={dataList} />
+                  <DataCardList list={dataList} />
                 </TabPane>
               </Tabs>
             </Card>

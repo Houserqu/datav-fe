@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Form, Row, Col, InputNumber, Tabs } from 'antd';
+import { Input, Form, Row, Col, InputNumber, Tabs, message } from 'antd';
 import { connect } from 'dva';
 import ReactJson from 'react-json-view';
 import styles from './index.less';
 import EchartEdit from './EchartEdit';
+import DataEdit from './DataEdit';
 
 const { TabPane } = Tabs;
-const { TextArea } = Input;
 
 const typeName = {
   chart: '图表',
@@ -15,14 +15,20 @@ const typeName = {
 };
 
 const FormItem = ({ children, ...rest }) => (
-  <Form.Item {...rest} style={{ marginBottom: 10, height: 30 }}>
+  <Form.Item
+    {...rest}
+    style={{ marginBottom: 10, height: 30 }}
+    labelCol={{ span: 4 }}
+    wrapperCol={{ span: 20 }}
+  >
     {children}
   </Form.Item>
 );
 
-@connect(({ design, loading }) => ({
+@connect(({ design, loading, data }) => ({
   design,
   loading,
+  sourceData: data,
 }))
 @Form.create({
   mapPropsToFields: props => ({
@@ -38,8 +44,6 @@ const FormItem = ({ children, ...rest }) => (
 })
 class Com extends Component {
   handleSubmitEchartOpt = value => {
-    console.log(value);
-    // this.setState({})
     const { dispatch, comId } = this.props;
     dispatch({
       type: 'design/changeEchartOpt',
@@ -50,12 +54,27 @@ class Com extends Component {
     });
   };
 
+  handleSubmitData = v => {
+    const { dispatch, comId } = this.props;
+    dispatch({
+      type: 'design/changeDataOpt',
+      payload: {
+        comId,
+        source: v,
+        callback: () => {
+          message.success('数据保存成功');
+        },
+      },
+    });
+  };
+
   render() {
     const {
       data,
       form: { getFieldDecorator },
       comId,
       layout,
+      sourceData: { list },
     } = this.props;
 
     return (
@@ -67,21 +86,11 @@ class Com extends Component {
                 <TabPane tab="样式" key="1">
                   <div className={styles.block}>
                     <h3>信息</h3>
-                    <FormItem
-                      style={{ marginBottom: 10, height: 40 }}
-                      label="id"
-                      labelCol={{ span: 4 }}
-                      wrapperCol={{ span: 20 }}
-                    >
+                    <FormItem label="id">
                       <Input size="small" disabled value={comId} />
                     </FormItem>
 
-                    <FormItem
-                      style={{ marginBottom: 10, height: 40 }}
-                      label="名称"
-                      labelCol={{ span: 4 }}
-                      wrapperCol={{ span: 20 }}
-                    >
+                    <FormItem label="名称">
                       {getFieldDecorator('name', {})(<Input size="small" />)}
                     </FormItem>
                   </div>
@@ -89,24 +98,14 @@ class Com extends Component {
                     <h3>样式</h3>
                     <Row gutter={5}>
                       <Col span={12}>
-                        <FormItem
-                          style={{ marginBottom: 10, height: 30 }}
-                          label="宽度"
-                          labelCol={{ span: 8 }}
-                          wrapperCol={{ span: 16 }}
-                        >
+                        <FormItem label="宽度">
                           {getFieldDecorator('width', {})(
                             <InputNumber disabled min={1} style={{ width: '100%' }} size="small" />
                           )}
                         </FormItem>
                       </Col>
                       <Col span={12}>
-                        <FormItem
-                          style={{ marginBottom: 10, height: 40 }}
-                          label="高度"
-                          labelCol={{ span: 8 }}
-                          wrapperCol={{ span: 16 }}
-                        >
+                        <FormItem label="高度">
                           {getFieldDecorator('height', {})(
                             <InputNumber disabled min={1} style={{ width: '100%' }} size="small" />
                           )}
@@ -116,12 +115,7 @@ class Com extends Component {
 
                     <Row gutter={5}>
                       <Col span={12}>
-                        <FormItem
-                          style={{ marginBottom: 10, height: 30 }}
-                          label="X"
-                          labelCol={{ span: 8 }}
-                          wrapperCol={{ span: 16 }}
-                        >
+                        <FormItem label="X">
                           {getFieldDecorator('x', {})(
                             <InputNumber
                               disabled
@@ -134,12 +128,7 @@ class Com extends Component {
                         </FormItem>
                       </Col>
                       <Col span={12}>
-                        <FormItem
-                          style={{ marginBottom: 10, height: 40 }}
-                          label="Y"
-                          labelCol={{ span: 8 }}
-                          wrapperCol={{ span: 16 }}
-                        >
+                        <FormItem label="Y">
                           {getFieldDecorator('y', {})(
                             <InputNumber
                               disabled
@@ -190,7 +179,12 @@ class Com extends Component {
                   />
                 </TabPane>
                 <TabPane tab="数据源" key="3">
-                  Content of Tab Pane 3
+                  <DataEdit
+                    userData={list}
+                    sourceId={data.source}
+                    comId={comId}
+                    onSubmit={this.handleSubmitData}
+                  />
                 </TabPane>
                 <TabPane tab="属性树" key="4" style={{ overflowY: 'scroll' }}>
                   <ReactJson

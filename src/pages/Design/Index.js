@@ -34,6 +34,10 @@ class Design extends Component {
     dispatch({
       type: 'design/fetchCategoryComponents',
     });
+
+    dispatch({
+      type: 'data/fetchUserDataList',
+    });
   }
 
   // 布局发生改变

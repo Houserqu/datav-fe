@@ -5,6 +5,8 @@ import brace from 'brace';
 import 'brace/theme/xcode';
 import 'brace/mode/json';
 
+const { TextArea } = Input;
+
 const formItemLayout = {
   labelCol: {
     span: 6,
@@ -71,6 +73,18 @@ class JSONForm extends Component {
           })(<Input disabled={!modify} />)}
         </Form.Item>
 
+        <Form.Item label="密码" {...layout}>
+          {getFieldDecorator('password', {
+            initialValue: detail.password || '',
+            rules: [
+              {
+                required: true,
+                message: '请输入密码',
+              },
+            ],
+          })(<Input type="password" disabled={!modify} />)}
+        </Form.Item>
+
         <Form.Item label="数据库" {...layout}>
           {getFieldDecorator('database', {
             initialValue: detail.database || '',
@@ -83,16 +97,16 @@ class JSONForm extends Component {
           })(<Input disabled={!modify} />)}
         </Form.Item>
 
-        <Form.Item label="密码" {...layout}>
-          {getFieldDecorator('password', {
-            initialValue: detail.password || '',
+        <Form.Item label="SQL" {...layout}>
+          {getFieldDecorator('sql', {
+            initialValue: detail.database || '',
             rules: [
               {
                 required: true,
-                message: '请输入密码',
+                message: '请输入 SQL',
               },
             ],
-          })(<Input type="password" disabled={!modify} />)}
+          })(<TextArea disabled={!modify} />)}
         </Form.Item>
       </Fragment>
     );

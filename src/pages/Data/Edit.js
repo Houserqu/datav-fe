@@ -8,13 +8,13 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './index.less';
 import { appAccessStatus, appStatus } from '@/constant';
 import router from 'umi/router';
-import AppCreateFrom from '@/BusinessComponent/AppCreateForm';
+import BaseForm from '@/BusinessComponent/DataForm/BaseForm';
 
 @connect(({ app, loading }) => ({
   app,
   loading,
 }))
-class AppCreate extends PureComponent {
+class DataEdit extends PureComponent {
   state = {
     detail: {},
   };
@@ -28,7 +28,7 @@ class AppCreate extends PureComponent {
     } = this.props;
 
     dispatch({
-      type: 'app/fetchAppDetail',
+      type: 'data/fetchDataDetail',
       payload: { id },
       callback: res => {
         this.setState({ detail: res });
@@ -43,24 +43,12 @@ class AppCreate extends PureComponent {
         params: { id },
       },
     } = this.props;
-    console.log(value);
     dispatch({
-      type: 'app/updateApp',
+      type: 'data/updateData',
       payload: { ...value, id },
       callback: res => {
         if (res.success) {
-          Modal.confirm({
-            title: '更新成功！',
-            content: '是否进入设计面板',
-            okText: '进入设计面板',
-            cancelText: '返回',
-            onOk: () => {
-              router.push(`/app/design/${res.data}`);
-            },
-            onCancel: () => {
-              router.goBack();
-            },
-          });
+          router.push('/app/dashboard');
         }
       },
     });
@@ -69,20 +57,13 @@ class AppCreate extends PureComponent {
   render() {
     const { detail } = this.state;
     return (
-      <PageHeaderWrapper title="编辑应用">
-        <Card
-          title={`编辑：${detail.name}`}
-          extra={
-            <Button onClick={() => router.push(`/app/design/${detail.id}`)} type="primary">
-              进入设计面板
-            </Button>
-          }
-        >
-          <AppCreateFrom onSubmit={this.handleUpdate} detail={detail} />
+      <PageHeaderWrapper title="编辑数据">
+        <Card>
+          <BaseForm detail={detail} onSubmit={this.handleUpdate} />
         </Card>
       </PageHeaderWrapper>
     );
   }
 }
 
-export default AppCreate;
+export default DataEdit;

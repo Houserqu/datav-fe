@@ -17,7 +17,7 @@ class AppCreate extends PureComponent {
       type: 'data/createData',
       payload: value,
       callback: res => {
-        if (res.statusCode === 200) {
+        if (res.success) {
           router.push('/app/dashboard');
         }
       },

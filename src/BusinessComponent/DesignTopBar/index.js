@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Spin, Icon } from 'antd';
 import { connect } from 'dva';
+import router from 'umi/router';
 import styles from './index.less';
 
 const { Group } = Button;
@@ -24,6 +25,10 @@ class DesignTopBar extends Component {
     dispatch({
       type: 'design/resetDesign',
     });
+  };
+
+  handleBack = () => {
+    router.goBack();
   };
 
   handleDelCom = () => {
@@ -61,10 +66,15 @@ class DesignTopBar extends Component {
                 </Group>
               </div>
               <div className={styles.action}>
-                <Button type="primary" onClick={this.handleSave}>
+                <Button style={{ marginRight: 15 }} type="primary" onClick={this.handleSave}>
                   保存
                 </Button>
-                <Button onClick={this.handleReset}>重置</Button>
+                <Button style={{ marginRight: 15 }} onClick={this.handleBack}>
+                  返回
+                </Button>
+                <Button type="danger" onClick={this.handleReset}>
+                  重置
+                </Button>
               </div>
             </div>
           )

@@ -1,4 +1,5 @@
 export default [
+  { path: '/', redirect: '/app/dashboard' },
   // 登录注册
   {
     path: '/user',

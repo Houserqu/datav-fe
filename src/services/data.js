@@ -15,8 +15,8 @@ export async function setStatusI(params) {
   });
 }
 
-export async function deleteAppI(params) {
-  return post('/api/app/delete', params, {
+export async function deleteDataI(params) {
+  return post('/api/source/delete', params, {
     alertSuccess: true,
     alertError: true,
   });
@@ -29,8 +29,8 @@ export async function createDataI(params) {
   });
 }
 
-export async function updateAppI(params) {
-  return post('/api/app/update', params, {
+export async function updateDataI(params) {
+  return post('/api/source/update', params, {
     alertSuccess: true,
     alertError: true,
   });

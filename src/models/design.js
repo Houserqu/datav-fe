@@ -180,5 +180,25 @@ export default {
         },
       };
     },
+    // 更新组价 数据源 配置
+    changeDataOpt(state, { payload, callback }) {
+      const { source, comId } = payload;
+
+      if (typeof callback === 'function') callback();
+
+      return {
+        ...state,
+        curAppDesign: {
+          ...state.curAppDesign,
+          components: {
+            ...state.curAppDesign.components,
+            [comId]: {
+              ...state.curAppDesign.components[comId],
+              source,
+            },
+          },
+        },
+      };
+    },
   },
 };

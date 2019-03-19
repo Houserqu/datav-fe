@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Form, Input, DatePicker, Select, Upload, Button, Icon, InputNumber } from 'antd';
 import { connect } from 'dva';
 import { dataType } from '@/constant';
@@ -37,16 +37,16 @@ class AppCreateFrom extends Component {
 
   renderContentForm = type => {
     switch (type) {
-      case '1':
+      case 1:
         return <JSONForm />;
-      case '2':
+      case 2:
         return <DatabaseForm />;
-      case '3':
+      case 3:
         return <JSONForm />;
-      case '4':
+      case 4:
         return <JSONForm />;
       default:
-        return null;
+        return <Fragment />;
     }
   };
 
@@ -78,7 +78,7 @@ class AppCreateFrom extends Component {
 
         <Form.Item label="数据类型" {...formItemLayout}>
           {getFieldDecorator('type', {
-            initialValue: detail.page_theme_id || '1',
+            initialValue: detail.type || 1,
             rules: [
               {
                 required: true,
@@ -88,7 +88,7 @@ class AppCreateFrom extends Component {
           })(
             <Select>
               {Object.keys(dataType).map(k => (
-                <Option key={k} value={k}>
+                <Option key={k} value={Number(k)}>
                   {dataType[k]}
                 </Option>
               ))}

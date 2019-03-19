@@ -51,14 +51,8 @@ export default class EchartEdit extends PureComponent {
           name="UNIQUE_ID_OF_DIV"
           value={tmpEchartOptString}
           style={{ height: 600 }}
-          editorProps={{ $blockScrolling: true }}
-          // setOptions={{
-          //   enableBasicAutocompletion: false,
-          //   enableLiveAutocompletion: false,
-          //   enableSnippets: false,
-          //   showLineNumbers: true,
-          //   tabSize: 2,
-          // }}
+          editorProps={{ $blockScrolling: Infinity }}
+          tabSize={2}
         />
       </div>
     );

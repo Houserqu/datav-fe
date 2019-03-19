@@ -35,7 +35,7 @@ class JSONForm extends Component {
             tabSize={2}
             readOnly={!modify}
             style={{ height: 600, width: '100%', border: '#dedede solid 1px' }}
-            editorProps={{ $blockScrolling: true }}
+            editorProps={{ $blockScrolling: Infinity }}
           />
         </Form.Item>
       </Fragment>

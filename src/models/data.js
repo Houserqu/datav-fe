@@ -1,4 +1,10 @@
-import { getUserDataListI, getDataDetailI, createDataI } from '@/services/data';
+import {
+  getUserDataListI,
+  getDataDetailI,
+  createDataI,
+  updateDataI,
+  deleteDataI,
+} from '@/services/data';
 // import { reloadAuthorized } from '@/utils/Authorized'
 
 export default {
@@ -46,13 +52,13 @@ export default {
     //     });
     //   }
     // },
-    // *deleteApp({ payload, callback }, { call }) {
-    //   const res = yield call(deleteAppI, payload);
+    *deleteData({ payload, callback }, { call }) {
+      const res = yield call(deleteDataI, payload);
 
-    //   if (typeof callback === 'function') {
-    //     callback(res);
-    //   }
-    // },
+      if (typeof callback === 'function') {
+        callback(res);
+      }
+    },
     *createData({ payload, callback }, { call }) {
       const res = yield call(createDataI, payload);
 
@@ -60,13 +66,13 @@ export default {
         callback(res);
       }
     },
-    // *updateApp({ payload, callback }, { call }) {
-    //   const res = yield call(updateAppI, payload);
+    *updateData({ payload, callback }, { call }) {
+      const res = yield call(updateDataI, payload);
 
-    //   if (typeof callback === 'function') {
-    //     callback(res);
-    //   }
-    // },
+      if (typeof callback === 'function') {
+        callback(res);
+      }
+    },
   },
 
   reducers: {
