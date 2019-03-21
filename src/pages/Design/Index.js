@@ -8,8 +8,10 @@ import 'react-resizable/css/styles.css';
 import styles from './index.less';
 import Com from '@/BusinessComponent/Com';
 
-@connect(({ design, loading }) => ({
+@connect(({ design, loading, data }) => ({
   design,
+  userData: data,
+  userDataLoading: loading.effects['data/fetchUserDataList'],
   categoryLoading: loading.effects['design/fetchCategoryComponents'],
   detailLoading: loading.effects['design/fetchAppDetail'],
 }))
@@ -54,6 +56,15 @@ class Design extends Component {
     });
   };
 
+  // 点击组件  激活当前组件为编辑状态
+  handleCurCom = (id, data) => {
+    this.setState({ curComId: id });
+    this.props.dispatch({
+      type: 'design/activeCurCom',
+      payload: { activeCom: data },
+    });
+  };
+
   // 右侧属性编辑器 form 发送改变
   handleFiledChange = (comId, values) => {
     const { dispatch } = this.props;
@@ -74,15 +85,6 @@ class Design extends Component {
     });
   };
 
-  // 点击组件  激活当前组件为编辑状态
-  handleCurCom = (id, data) => {
-    this.setState({ curComId: id });
-    this.props.dispatch({
-      type: 'design/activeCurCom',
-      payload: { activeCom: data },
-    });
-  };
-
   clickPage = () => {
     this.setState({ curComId: '$PAGE$' });
     this.props.dispatch({
@@ -94,6 +96,8 @@ class Design extends Component {
   render() {
     const {
       design: { curAppDesign = null },
+      userData: { list: userDataList },
+      userDataLoading,
     } = this.props;
 
     const { curComId } = this.state;
@@ -114,7 +118,7 @@ class Design extends Component {
             style={{ width: 1080, minHeight: 900 }}
             onClick={this.clickPage}
           >
-            {curAppDesign && (
+            {curAppDesign && !userDataLoading && (
               <GridLayout
                 className="layout"
                 layout={layout}
@@ -133,7 +137,9 @@ class Design extends Component {
                       onClick={this.handleCurCom}
                       active={v === curComId}
                       style={components[v].style}
+                      source={components[v].source}
                       data={components[v]}
+                      // source={this.getSourceData(components[v].type, components[v].source)}
                     />
                   </div>
                 ))}
