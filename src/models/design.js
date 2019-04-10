@@ -12,6 +12,8 @@ export default {
     appDetail: null, // 当前应用信息
     components: [], // 组件库
     activeCom: null, // 当前编辑状态的组件
+    dataManagerShow: false,
+    comEditorShow: false,
   },
 
   effects: {
@@ -125,7 +127,7 @@ export default {
       const comDetail = R.find(R.propEq('id', payload.id))(state.components);
 
       // 组件 默认 echarts 配置
-      const comOpt = JSON.parse(comDetail.json_str);
+      const comOpt = comDetail.json_str ? JSON.parse(comDetail.json_str) : {};
 
       // 生成组件 id
       const designComId = uuidv1();
@@ -139,7 +141,7 @@ export default {
               id: designComId,
               type: comDetail.type,
               echartOpt: comOpt,
-              source: {},
+              source: -1, // 用户数据 id -1 代表在 echart配置中自定义数据
             },
           },
           componentsLayout: {
@@ -154,6 +156,21 @@ export default {
             },
           },
         },
+      };
+    },
+    // 切换数据管理弹窗
+    toggleDataManager(state, { payload }) {
+      return {
+        ...state,
+        dataManagerShow: payload,
+      };
+    },
+    // 切换组件配置弹窗
+    toggleComEditor(state, { payload }) {
+      return {
+        ...state,
+        comEditorShow: payload.show,
+        activeCom: payload.activeCom,
       };
     },
     // 激活当前编辑状态组件

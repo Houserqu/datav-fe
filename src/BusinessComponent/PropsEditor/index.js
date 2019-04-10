@@ -1,12 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Form, Row, Col, InputNumber, Tabs, message } from 'antd';
+import { Input, Form, Row, Col, InputNumber, Button } from 'antd';
 import { connect } from 'dva';
-import ReactJson from 'react-json-view';
 import styles from './index.less';
-import EchartEdit from './EchartEdit';
-import DataEdit from './DataEdit';
-
-const { TabPane } = Tabs;
+import ComEditor from '@/BusinessComponent/ComEditor';
 
 const typeName = {
   chart: '图表',
@@ -18,8 +14,8 @@ const FormItem = ({ children, ...rest }) => (
   <Form.Item
     {...rest}
     style={{ marginBottom: 10, height: 30 }}
-    labelCol={{ span: 4 }}
-    wrapperCol={{ span: 20 }}
+    labelCol={{ span: 6 }}
+    wrapperCol={{ span: 18 }}
   >
     {children}
   </Form.Item>
@@ -43,28 +39,32 @@ const FormItem = ({ children, ...rest }) => (
   },
 })
 class Com extends Component {
-  handleSubmitEchartOpt = value => {
+  handleSubmitEchartOpt = (echartOpt, source) => {
     const { dispatch, comId } = this.props;
     dispatch({
       type: 'design/changeEchartOpt',
       payload: {
         comId,
-        echartOpt: value,
+        echartOpt,
       },
     });
-  };
 
-  handleSubmitData = v => {
-    const { dispatch, comId } = this.props;
     dispatch({
       type: 'design/changeDataOpt',
       payload: {
         comId,
-        source: v,
-        callback: () => {
-          message.success('数据保存成功');
-        },
+        source,
       },
+    });
+  };
+
+  // 打开 配置弹窗
+  handleComEditor = (id, data) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'design/toggleComEditor',
+      payload: { show: true },
     });
   };
 
@@ -82,111 +82,99 @@ class Com extends Component {
         {data && (
           <Fragment>
             <Form>
-              <Tabs defaultActiveKey="1" size="small">
-                <TabPane tab="样式" key="1">
-                  <div className={styles.block}>
-                    <h3>信息</h3>
-                    <FormItem label="id">
-                      <Input size="small" disabled value={comId} />
-                    </FormItem>
+              <div className={styles.block}>
+                <h3>信息</h3>
+                <FormItem label="id">
+                  <Input size="small" disabled value={comId} />
+                </FormItem>
 
-                    <FormItem label="名称">
-                      {getFieldDecorator('name', {})(<Input size="small" />)}
+                <FormItem label="名称">
+                  {getFieldDecorator('name', {})(<Input size="small" />)}
+                </FormItem>
+              </div>
+              <div className={styles.block}>
+                <h3>配置</h3>
+                <Button style={{ width: '100%' }} type="primary" onClick={this.handleComEditor}>
+                  组件配置
+                </Button>
+              </div>
+              <div className={styles.block}>
+                <h3>样式</h3>
+                <Row gutter={5}>
+                  <Col span={12}>
+                    <FormItem label="宽度">
+                      {getFieldDecorator('width', {})(
+                        <InputNumber disabled min={1} style={{ width: '80%' }} size="small" />
+                      )}
                     </FormItem>
-                  </div>
-                  <div className={styles.block}>
-                    <h3>样式</h3>
-                    <Row gutter={5}>
-                      <Col span={12}>
-                        <FormItem label="宽度">
-                          {getFieldDecorator('width', {})(
-                            <InputNumber disabled min={1} style={{ width: '100%' }} size="small" />
-                          )}
-                        </FormItem>
-                      </Col>
-                      <Col span={12}>
-                        <FormItem label="高度">
-                          {getFieldDecorator('height', {})(
-                            <InputNumber disabled min={1} style={{ width: '100%' }} size="small" />
-                          )}
-                        </FormItem>
-                      </Col>
-                    </Row>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem label="高度">
+                      {getFieldDecorator('height', {})(
+                        <InputNumber disabled min={1} style={{ width: '80%' }} size="small" />
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
 
-                    <Row gutter={5}>
-                      <Col span={12}>
-                        <FormItem label="X">
-                          {getFieldDecorator('x', {})(
-                            <InputNumber
-                              disabled
-                              max={24}
-                              min={0}
-                              style={{ width: '100%' }}
-                              size="small"
-                            />
-                          )}
-                        </FormItem>
-                      </Col>
-                      <Col span={12}>
-                        <FormItem label="Y">
-                          {getFieldDecorator('y', {})(
-                            <InputNumber
-                              disabled
-                              max={24}
-                              min={0}
-                              style={{ width: '100%' }}
-                              size="small"
-                            />
-                          )}
-                        </FormItem>
-                      </Col>
-                    </Row>
-                  </div>
-                  <div className={styles.block}>
-                    <h3>组件属性表</h3>
-                    <table className={styles.propsTable}>
-                      <thead>
-                        <tr>
-                          <th>key</th>
-                          <th>value</th>
+                <Row gutter={5}>
+                  <Col span={12}>
+                    <FormItem label="X">
+                      {getFieldDecorator('x', {})(
+                        <InputNumber
+                          disabled
+                          max={24}
+                          min={0}
+                          style={{ width: '100%' }}
+                          size="small"
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem label="Y">
+                      {getFieldDecorator('y', {})(
+                        <InputNumber
+                          disabled
+                          max={24}
+                          min={0}
+                          style={{ width: '100%' }}
+                          size="small"
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
+              </div>
+              <div className={styles.block}>
+                <h3>组件属性表</h3>
+                <table className={styles.propsTable}>
+                  <thead>
+                    <tr>
+                      <th>key</th>
+                      <th>value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {layout &&
+                      Object.keys(layout).map(key => (
+                        <tr key={key}>
+                          <td>{key}</td>
+                          <td>{layout[key]}</td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {layout &&
-                          Object.keys(layout).map(key => (
-                            <tr key={key}>
-                              <td>{key}</td>
-                              <td>{layout[key]}</td>
-                            </tr>
-                          ))}
-                        {data &&
-                          data.style &&
-                          Object.keys(data.style).map(key => (
-                            <tr key={key}>
-                              <td>{key}</td>
-                              <td>{layout[key]}</td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </TabPane>
-                <TabPane tab="图表" key="2">
-                  <EchartEdit
-                    data={data.echartOpt}
-                    comId={comId}
-                    onSubmit={this.handleSubmitEchartOpt}
-                  />
-                </TabPane>
-                <TabPane tab="数据源" key="3">
-                  <DataEdit
-                    userData={list}
-                    sourceId={data.source}
-                    comId={comId}
-                    onSubmit={this.handleSubmitData}
-                  />
-                </TabPane>
-                <TabPane tab="属性树" key="4" style={{ overflowY: 'scroll' }}>
+                      ))}
+                    {data &&
+                      data.style &&
+                      Object.keys(data.style).map(key => (
+                        <tr key={key}>
+                          <td>{key}</td>
+                          <td>{layout[key]}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* <TabPane tab="属性树" key="4" style={{ overflowY: 'scroll' }}>
                   <ReactJson
                     name={false}
                     src={data}
@@ -194,9 +182,17 @@ class Com extends Component {
                     collapsed={3}
                     displayDataTypes={false}
                   />
-                </TabPane>
-              </Tabs>
+                </TabPane> */}
             </Form>
+
+            <ComEditor
+              echartOpt={data.echartOpt}
+              comId={comId}
+              source={data.source}
+              data={data}
+              onSubmit={this.handleSubmitEchartOpt}
+              userDataList={list}
+            />
           </Fragment>
         )}
       </div>

@@ -40,6 +40,13 @@ class DesignTopBar extends Component {
     dispatch({ type: 'design/delCom', payload: { id: activeCom.id } });
   };
 
+  handleOpenDataManager = () => {
+    this.props.dispatch({
+      type: 'design/toggleDataManager',
+      payload: true,
+    });
+  };
+
   render() {
     const {
       detailLoading,
@@ -66,6 +73,13 @@ class DesignTopBar extends Component {
                 </Group>
               </div>
               <div className={styles.action}>
+                <Button
+                  style={{ marginRight: 15 }}
+                  type="primary"
+                  onClick={this.handleOpenDataManager}
+                >
+                  数据管理
+                </Button>
                 <Button style={{ marginRight: 15 }} type="primary" onClick={this.handleSave}>
                   保存
                 </Button>

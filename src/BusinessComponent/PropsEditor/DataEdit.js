@@ -9,8 +9,8 @@ const FormItem = ({ children, ...rest }) => (
   <Form.Item
     {...rest}
     style={{ marginBottom: 10, height: 30 }}
-    labelCol={{ span: 4 }}
-    wrapperCol={{ span: 20 }}
+    labelCol={{ span: 2 }}
+    wrapperCol={{ span: 22 }}
   >
     {children}
   </Form.Item>
@@ -43,22 +43,31 @@ export default class DataEdit extends Component {
   };
 
   render() {
-    const { userData = [], sourceId = '' } = this.props;
-    const data = R.find(R.propEq('id', sourceId))(userData);
+    const { userData = [], source = '' } = this.props;
+
+    const data = source === -1 ? { type: -1 } : R.find(R.propEq('id', source))(userData);
 
     return (
       <div style={{ padding: 5 }}>
         <FormItem label="数据">
-          <Select size="small" value={sourceId} onChange={this.handleSelectData}>
+          <Select
+            size="small"
+            value={source}
+            onChange={this.handleSelectData}
+            style={{ width: 200 }}
+          >
             {userData.map(v => (
               <Option key={v.id} value={v.id}>
                 {v.name}
               </Option>
             ))}
+            <Option key={-1} value={-1}>
+              组件自定义
+            </Option>
           </Select>
         </FormItem>
 
-        {sourceId && (
+        {source && (
           <FormItem label="内容">
             <DataEditInfo data={data} type={data.type} />
           </FormItem>

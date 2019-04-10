@@ -5,7 +5,12 @@ import 'brace/theme/xcode';
 import 'brace/mode/json';
 
 export default function DataEditInfo({ data, type }) {
-  const contentObj = JSON.parse(data.content);
+  let contentObj;
+  try {
+    contentObj = JSON.parse(data.content);
+  } catch (error) {
+    contentObj = [];
+  }
 
   switch (type) {
     case 2:
@@ -33,10 +38,16 @@ export default function DataEditInfo({ data, type }) {
             readOnly
             name="UNIQUE_ID_OF_DIV"
             value={data.content}
-            style={{ height: 600 }}
+            style={{ height: 400, width: '100%' }}
             editorProps={{ $blockScrolling: Infinity }}
             tabSize={2}
           />
+        </div>
+      );
+    case -1:
+      return (
+        <div className={styles.contentInfo}>
+          <p key="refresh">自定义数据直接在 echart 配置项中配置</p>
         </div>
       );
     default:

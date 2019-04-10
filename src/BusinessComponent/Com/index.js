@@ -16,37 +16,45 @@ class Com extends Component {
   state = {};
 
   componentDidMount() {
-    this.setEchartDataset();
-  }
-
-  // 设置组件数据
-  setEchartDataset = () => {
     const {
       source,
       data: { type },
+      echartOpt,
     } = this.props;
+    if (source !== -1) {
+      this.setEchartDataset(source, type, echartOpt);
+    }
+  }
 
-    // 根据 source id 查找对应完整数据配置
-    const sourceData = this.getSourceData(type, source);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.source !== this.props.source) {
+      this.setEchartDataset(nextProps.source, nextProps.data.type, nextProps.echartOpt);
+    }
+  }
 
-    let dataset = null;
+  // 设置组件数据
+  setEchartDataset = (source, type, echartOpt) => {
+    let newOptions = {};
+    if (source === -1) {
+      newOptions = echartOpt;
+    } else {
+      const sourceData = this.getSourceData(type, source);
 
-    // 静态数据
-    if (sourceData.type === 1) {
-      dataset = { source: JSON.parse(sourceData.content) };
+      // 静态数据
+      if (sourceData && sourceData.type === 1) {
+        newOptions.dataset = { source: JSON.parse(sourceData.content) };
+      }
     }
 
     // 设置 echart 数据
     const echartsInstance = this.echarts_react.getEchartsInstance();
-    echartsInstance.setOption({
-      dataset,
-    });
+    echartsInstance.setOption(newOptions);
   };
 
   // 根据组件数据源 id 获取数据配置信息
   getSourceData = memoizeOne((type, source) => {
     const {
-      userData: { list: userDataList },
+      userData: { list: userDataList = [] },
     } = this.props;
 
     return type === 'chart' ? R.find(R.propEq('id', source))(userDataList) : source;
@@ -56,7 +64,18 @@ class Com extends Component {
     e.stopPropagation();
 
     const { onClick, id, data } = this.props;
-    onClick(id, data);
+    if (typeof onClick === 'function') {
+      onClick(id, data);
+    }
+  };
+
+  handleDoubleClick = e => {
+    e.stopPropagation();
+
+    const { onDoubleClick, id, data } = this.props;
+    if (typeof onDoubleClick === 'function') {
+      onDoubleClick(id, data);
+    }
   };
 
   render() {
@@ -67,6 +86,7 @@ class Com extends Component {
         className={classnames(styles.comBox, { [styles.comBoxActive]: active })}
         key={id}
         onClick={this.handleClick}
+        onDoubleClick={this.handleDoubleClick}
       >
         <ComErrorBoundary>
           {echartOpt && (

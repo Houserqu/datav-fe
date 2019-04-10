@@ -5,8 +5,10 @@ import GridLayout from 'react-grid-layout';
 import PropsEditor from '@/BusinessComponent/PropsEditor';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import { Modal } from 'antd';
 import styles from './index.less';
 import Com from '@/BusinessComponent/Com';
+import DataManager from '@/BusinessComponent/DataManager';
 
 @connect(({ design, loading, data }) => ({
   design,
@@ -65,6 +67,15 @@ class Design extends Component {
     });
   };
 
+  // 双击组件 显示组件配置弹窗
+  handleShowComEditor = (id, data) => {
+    this.setState({ curComId: id });
+    this.props.dispatch({
+      type: 'design/toggleComEditor',
+      payload: { activeCom: data, show: true },
+    });
+  };
+
   // 右侧属性编辑器 form 发送改变
   handleFiledChange = (comId, values) => {
     const { dispatch } = this.props;
@@ -95,7 +106,7 @@ class Design extends Component {
 
   render() {
     const {
-      design: { curAppDesign = null },
+      design: { curAppDesign = null, dataManagerShow = false },
       userData: { list: userDataList },
       userDataLoading,
     } = this.props;
@@ -115,7 +126,7 @@ class Design extends Component {
         <div className={styles.pageContainer}>
           <div
             className={styles.page}
-            style={{ width: 1080, minHeight: 900 }}
+            style={{ width: 1200, minHeight: 900 }}
             onClick={this.clickPage}
           >
             {curAppDesign && !userDataLoading && (
@@ -123,7 +134,7 @@ class Design extends Component {
                 className="layout"
                 layout={layout}
                 rowHeight={45}
-                width={1080}
+                width={1200}
                 breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
                 cols={24}
                 onLayoutChange={this.onLayoutChange}
@@ -135,6 +146,7 @@ class Design extends Component {
                       echartOpt={components[v].echartOpt}
                       id={v}
                       onClick={this.handleCurCom}
+                      onDoubleClick={this.handleShowComEditor}
                       active={v === curComId}
                       style={components[v].style}
                       source={components[v].source}
@@ -157,6 +169,8 @@ class Design extends Component {
             data={curComId === '$PAGE$' ? curAppDesign.page : components[curComId]}
           />
         )}
+
+        <DataManager />
       </div>
     );
   }
