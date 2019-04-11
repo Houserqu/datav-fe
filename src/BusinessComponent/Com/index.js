@@ -13,8 +13,6 @@ import ComErrorBoundary from '../ComErrorBoundary';
   detailLoading: loading.effects['design/fetchAppDetail'],
 }))
 class Com extends Component {
-  state = {};
-
   componentDidMount() {
     const {
       source,
@@ -48,7 +46,7 @@ class Com extends Component {
 
     // 设置 echart 数据
     const echartsInstance = this.echarts_react.getEchartsInstance();
-    echartsInstance.setOption(newOptions);
+    echartsInstance.setOption(newOptions, true);
   };
 
   // 根据组件数据源 id 获取数据配置信息
@@ -78,8 +76,10 @@ class Com extends Component {
     }
   };
 
+  getEchartOpt = () => this.props.echartOpt || {};
+
   render() {
-    const { echartOpt = {}, id, active, style = {} } = this.props;
+    const { echartOpt, id, active, style = {}, notMerge = false } = this.props;
 
     return (
       <div
@@ -94,9 +94,9 @@ class Com extends Component {
               ref={e => {
                 this.echarts_react = e;
               }}
-              option={{ ...echartOpt }}
+              option={echartOpt}
               style={{ width: style.width || '100%', height: style.height || '100%' }}
-              // notMerge={true}
+              notMerge={notMerge}
               // lazyUpdate={true}
               // theme={"theme_name"}
               // onChartReady={this.onChartReadyCallback}

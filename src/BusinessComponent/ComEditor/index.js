@@ -135,6 +135,7 @@ class DataManager extends Component {
                 // style={components[v].style}
                 source={tmpDataSource}
                 data={data}
+                notMerge
                 // onDoubleClick={this.handleComEditor}
                 // source={this.getSourceData(data.type, dataSource)}
               />

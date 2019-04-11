@@ -96,6 +96,7 @@ class Design extends Component {
     });
   };
 
+  // 点击空白处
   clickPage = () => {
     this.setState({ curComId: '$PAGE$' });
     this.props.dispatch({
@@ -151,6 +152,7 @@ class Design extends Component {
                       style={components[v].style}
                       source={components[v].source}
                       data={components[v]}
+                      notMerge
                       // source={this.getSourceData(components[v].type, components[v].source)}
                     />
                   </div>
@@ -159,14 +161,14 @@ class Design extends Component {
             )}
           </div>
         </div>
-        {curAppDesign && curComId && (
+        {curAppDesign && (
           <PropsEditor
             layout={curPropsEditComLayout || {}}
             style={curPropsEditCom.style || {}}
             info={curPropsEditCom.info || {}}
             onFiledChange={this.handleFiledChange}
-            comId={curComId}
-            data={curComId === '$PAGE$' ? curAppDesign.page : components[curComId]}
+            comId={curComId || '$PAGE$'}
+            data={(curComId || '$PAGE$') !== '$PAGE$' ? components[curComId] : curAppDesign.page}
           />
         )}
 

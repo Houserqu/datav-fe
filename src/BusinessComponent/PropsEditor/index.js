@@ -77,6 +77,7 @@ class Com extends Component {
       sourceData: { list },
     } = this.props;
 
+    console.log(comId);
     return (
       <div className={styles.container}>
         {data && (
@@ -91,12 +92,6 @@ class Com extends Component {
                 <FormItem label="名称">
                   {getFieldDecorator('name', {})(<Input size="small" />)}
                 </FormItem>
-              </div>
-              <div className={styles.block}>
-                <h3>配置</h3>
-                <Button style={{ width: '100%' }} type="primary" onClick={this.handleComEditor}>
-                  组件配置
-                </Button>
               </div>
               <div className={styles.block}>
                 <h3>样式</h3>
@@ -117,37 +112,39 @@ class Com extends Component {
                   </Col>
                 </Row>
 
-                <Row gutter={5}>
-                  <Col span={12}>
-                    <FormItem label="X">
-                      {getFieldDecorator('x', {})(
-                        <InputNumber
-                          disabled
-                          max={24}
-                          min={0}
-                          style={{ width: '100%' }}
-                          size="small"
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem label="Y">
-                      {getFieldDecorator('y', {})(
-                        <InputNumber
-                          disabled
-                          max={24}
-                          min={0}
-                          style={{ width: '100%' }}
-                          size="small"
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
+                {comId !== '$PAGE$' && (
+                  <Row gutter={5}>
+                    <Col span={12}>
+                      <FormItem label="X">
+                        {getFieldDecorator('x', {})(
+                          <InputNumber
+                            disabled
+                            max={24}
+                            min={0}
+                            style={{ width: '100%' }}
+                            size="small"
+                          />
+                        )}
+                      </FormItem>
+                    </Col>
+                    <Col span={12}>
+                      <FormItem label="Y">
+                        {getFieldDecorator('y', {})(
+                          <InputNumber
+                            disabled
+                            max={24}
+                            min={0}
+                            style={{ width: '100%' }}
+                            size="small"
+                          />
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                )}
               </div>
               <div className={styles.block}>
-                <h3>组件属性表</h3>
+                <h3>属性表</h3>
                 <table className={styles.propsTable}>
                   <thead>
                     <tr>
