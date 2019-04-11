@@ -5,7 +5,6 @@ import GridLayout from 'react-grid-layout';
 import PropsEditor from '@/BusinessComponent/PropsEditor';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { Modal } from 'antd';
 import styles from './index.less';
 import Com from '@/BusinessComponent/Com';
 import DataManager from '@/BusinessComponent/DataManager';

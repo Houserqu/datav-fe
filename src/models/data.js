@@ -41,6 +41,20 @@ export default {
         }
       }
     },
+    *fetchDataDetailList({ payload, callback }, { call, put }) {
+      const res = yield call(getDataDetailI, payload);
+
+      if (res.success) {
+        yield put({
+          type: 'saveUserDataList',
+          payload: res.data,
+        });
+
+        if (typeof callback === 'function') {
+          callback(res.data);
+        }
+      }
+    },
     // // 切换在线状态
     // *toggleStatus({ payload }, { call, put }) {
     //   const res = yield call(setStatusI, payload);
@@ -83,6 +97,12 @@ export default {
       };
     },
     saveCurData(state, { payload }) {
+      return {
+        ...state,
+        curData: payload,
+      };
+    },
+    saveCurDataList(state, { payload }) {
       return {
         ...state,
         curData: payload,

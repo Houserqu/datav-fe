@@ -46,7 +46,7 @@ class Com extends Component {
 
     // 设置 echart 数据
     const echartsInstance = this.echarts_react.getEchartsInstance();
-    echartsInstance.setOption(newOptions, true);
+    echartsInstance.setOption(newOptions);
   };
 
   // 根据组件数据源 id 获取数据配置信息
@@ -54,6 +54,8 @@ class Com extends Component {
     const {
       userData: { list: userDataList = [] },
     } = this.props;
+
+    // debugger;
 
     return type === 'chart' ? R.find(R.propEq('id', source))(userDataList) : source;
   }, isEqual);
@@ -79,11 +81,15 @@ class Com extends Component {
   getEchartOpt = () => this.props.echartOpt || {};
 
   render() {
-    const { echartOpt, id, active, style = {}, notMerge = false } = this.props;
+    const { echartOpt, id, active, style = {}, notMerge = false, hover = true } = this.props;
 
     return (
       <div
-        className={classnames(styles.comBox, { [styles.comBoxActive]: active })}
+        className={classnames(
+          styles.comBox,
+          { [styles.comBoxActive]: active },
+          { [styles.hover]: hover }
+        )}
         key={id}
         onClick={this.handleClick}
         onDoubleClick={this.handleDoubleClick}

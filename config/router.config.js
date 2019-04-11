@@ -1,5 +1,13 @@
 export default [
-  { path: '/', redirect: '/app/dashboard' },
+  // 首页
+  {
+    path: '/',
+    redirect: '/index',
+  },
+  {
+    path: '/index',
+    routes: [{ path: '/index', component: './Index/Index' }],
+  },
   // 登录注册
   {
     path: '/user',
@@ -11,7 +19,13 @@ export default [
       { path: '/user/register-result', component: './User/RegisterResult' },
     ],
   },
-  // 用户
+  // 访客
+  {
+    path: '/visitor',
+    component: '../layouts/VisitorLayout',
+    routes: [{ path: '/visitor/app/:id', component: './Visitor/App' }],
+  },
+  // 租户
   {
     path: '/app/design',
     component: '../layouts/DesignLayout',

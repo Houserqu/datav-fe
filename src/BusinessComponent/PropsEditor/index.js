@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Form, Row, Col, InputNumber, Button } from 'antd';
+import { Input, Form, Row, Col, InputNumber } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 import ComEditor from '@/BusinessComponent/ComEditor';
@@ -77,7 +77,6 @@ class Com extends Component {
       sourceData: { list },
     } = this.props;
 
-    console.log(comId);
     return (
       <div className={styles.container}>
         {data && (
