@@ -50,3 +50,14 @@ export const dataType = {
   '3': 'HTTP接口',
   '4': '文件',
 };
+
+// 内置 主题
+export const echartThemes = [
+  'walden',
+  'essos',
+  'macarons',
+  'purple-passion',
+  'shine',
+  'westeros',
+  'wonderland',
+];

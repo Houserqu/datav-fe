@@ -81,8 +81,8 @@ class Com extends Component {
   getEchartOpt = () => this.props.echartOpt || {};
 
   render() {
-    const { echartOpt, id, active, style = {}, notMerge = false, hover = true } = this.props;
-
+    const { echartOpt, id, active, style = {}, notMerge = false, hover = true, page } = this.props;
+    const defaultTheme = page.component && page.component.defaultTheme;
     return (
       <div
         className={classnames(
@@ -103,6 +103,7 @@ class Com extends Component {
               option={echartOpt}
               style={{ width: style.width || '100%', height: style.height || '100%' }}
               notMerge={notMerge}
+              theme={style.theme || defaultTheme || ''}
               // lazyUpdate={true}
               // theme={"theme_name"}
               // onChartReady={this.onChartReadyCallback}

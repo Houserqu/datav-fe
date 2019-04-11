@@ -76,6 +76,8 @@ class DataManager extends Component {
       data,
       comId,
       userDataList,
+      page,
+      style,
     } = this.props;
 
     const { tmpEchartOptString, tmpDataSource } = this.state;
@@ -132,9 +134,10 @@ class DataManager extends Component {
                 id={comId}
                 onClick={this.handleCurCom}
                 active
-                // style={components[v].style}
+                style={style}
                 source={tmpDataSource}
                 data={data}
+                page={page}
                 notMerge
                 // onDoubleClick={this.handleComEditor}
                 // source={this.getSourceData(data.type, dataSource)}

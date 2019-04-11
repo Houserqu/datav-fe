@@ -110,6 +110,23 @@ export default {
         },
       };
     },
+    // 修改 Page 下的二级属性
+    changePageSecondProps(state, { payload }) {
+      const { fields, type } = payload;
+      return {
+        ...state,
+        curAppDesign: {
+          ...state.curAppDesign,
+          page: {
+            ...state.curAppDesign.page,
+            [type]: {
+              ...state.curAppDesign.page[type],
+              ...fields,
+            },
+          },
+        },
+      };
+    },
     // 删除组件
     delCom(state, { payload }) {
       return {
@@ -141,6 +158,7 @@ export default {
               id: designComId,
               type: comDetail.type,
               echartOpt: comOpt,
+              theme: '',
               source: -1, // 用户数据 id -1 代表在 echart配置中自定义数据
             },
           },

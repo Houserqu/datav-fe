@@ -1,5 +1,3 @@
-import fetch from 'dva/fetch';
-
 export const dva = {
   config: {
     onError(err) {

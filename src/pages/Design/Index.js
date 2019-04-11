@@ -78,21 +78,36 @@ class Design extends Component {
   // 右侧属性编辑器 form 发送改变
   handleFiledChange = (comId, values) => {
     const { dispatch } = this.props;
-
-    const fields = {};
-    Object.keys(values).forEach(v => {
-      fields[v] = values[v].value;
-      if (values[v].type) {
-        dispatch({
-          type: 'design/changeSecondProps',
-          payload: {
-            fields,
-            type: values[v].type,
-            comId,
-          },
-        });
-      }
-    });
+    if (comId === '$PAGE$') {
+      const fields = {};
+      Object.keys(values).forEach(v => {
+        fields[v] = values[v].value;
+        if (values[v].type) {
+          dispatch({
+            type: 'design/changePageSecondProps',
+            payload: {
+              fields,
+              type: values[v].type,
+            },
+          });
+        }
+      });
+    } else {
+      const fields = {};
+      Object.keys(values).forEach(v => {
+        fields[v] = values[v].value;
+        if (values[v].type) {
+          dispatch({
+            type: 'design/changeSecondProps',
+            payload: {
+              fields,
+              type: values[v].type,
+              comId,
+            },
+          });
+        }
+      });
+    }
   };
 
   // 点击空白处
@@ -113,6 +128,7 @@ class Design extends Component {
 
     const { curComId } = this.state;
 
+    const page = curAppDesign ? curAppDesign.page : {};
     const components = curAppDesign ? curAppDesign.components : {};
     const componentsLayout = curAppDesign && curAppDesign.componentsLayout;
 
@@ -126,7 +142,11 @@ class Design extends Component {
         <div className={styles.pageContainer}>
           <div
             className={styles.page}
-            style={{ width: 1200, minHeight: 900 }}
+            style={{
+              width: 1200,
+              minHeight: 900,
+              backgroundColor: (page.style && page.style.background) || '#ffffff',
+            }}
             onClick={this.clickPage}
           >
             {curAppDesign && !userDataLoading && (
@@ -151,6 +171,7 @@ class Design extends Component {
                       style={components[v].style}
                       source={components[v].source}
                       data={components[v]}
+                      page={page}
                       notMerge
                       // source={this.getSourceData(components[v].type, components[v].source)}
                     />
@@ -166,6 +187,7 @@ class Design extends Component {
             style={curPropsEditCom.style || {}}
             info={curPropsEditCom.info || {}}
             onFiledChange={this.handleFiledChange}
+            page={page}
             comId={curComId || '$PAGE$'}
             data={(curComId || '$PAGE$') !== '$PAGE$' ? components[curComId] : curAppDesign.page}
           />

@@ -53,6 +53,8 @@ class App extends Component {
               breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
               cols={24}
               onLayoutChange={this.onLayoutChange}
+              isDraggable={false}
+              isResizable={false}
             >
               {Object.keys(components).map(v => (
                 <div key={v}>
