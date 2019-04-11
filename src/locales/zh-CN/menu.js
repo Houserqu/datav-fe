@@ -35,4 +35,8 @@ export default {
   'menu.application': '应用',
   'menu.application.detail': '应用详情',
   'menu.application.workplace': '工作台',
+  'menu.data': '数据',
+  'menu.data.detail': '数据详情',
+  'menu.data.create': '新增数据',
+  'menu.data.edit': '编辑数据',
 };

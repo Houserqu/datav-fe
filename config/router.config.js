@@ -1,4 +1,13 @@
 export default [
+  // 首页
+  {
+    path: '/',
+    redirect: '/index',
+  },
+  {
+    path: '/index',
+    routes: [{ path: '/index', component: './Index/Index' }],
+  },
   // 登录注册
   {
     path: '/user',
@@ -10,7 +19,18 @@ export default [
       { path: '/user/register-result', component: './User/RegisterResult' },
     ],
   },
-  // 用户
+  // 访客
+  {
+    path: '/visitor',
+    component: '../layouts/VisitorLayout',
+    routes: [{ path: '/visitor/app/:id', component: './Visitor/App' }],
+  },
+  // 租户
+  {
+    path: '/app/design',
+    component: '../layouts/DesignLayout',
+    routes: [{ path: '/app/design/:id', component: './Design' }],
+  },
   {
     path: '/app',
     component: '../layouts/AppLayout',
@@ -18,7 +38,6 @@ export default [
       { path: '/app/', redirect: '/app/dashboard' },
       { path: '/app/dashboard', component: './UserDashboard/Index' },
       { path: '/app/user/info', component: './Dashboard/Index' },
-      { path: '/app/design/:id', component: './Dashboard/Index' },
       {
         path: '/app/application',
         name: 'application',
@@ -45,6 +64,31 @@ export default [
             path: '/app/application/edit/:id',
             name: 'workplace',
             component: './AppEdit',
+            // authority: ['workplace'],
+          },
+        ],
+      },
+      {
+        path: '/app/data',
+        name: 'data',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/app/data/detail/:id',
+            name: 'detail',
+            component: './Data/Detail',
+            // authority: ['workplace'],
+          },
+          {
+            path: '/app/data/create',
+            name: 'create',
+            component: './Data/Create',
+            // authority: ['workplace'],
+          },
+          {
+            path: '/app/data/edit/:id',
+            name: 'edit',
+            component: './Data/Edit',
             // authority: ['workplace'],
           },
         ],

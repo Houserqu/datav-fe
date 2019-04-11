@@ -127,15 +127,17 @@ export default function request(url, option = {}, config = {}) {
     }
   }
 
-  return fetch(url, newOptions)
-    .then(checkStatus)
-    .then(response => cachedSave(response, hashcode))
-    .then(response => response.json())
-    .then(result => checkSuccess(result, config.ignoreError))
-    .catch(e => {
-      notification.info({
-        message: `请求错误`,
-        description: e.message,
-      });
-    });
+  return (
+    fetch(url, newOptions)
+      .then(checkStatus)
+      // .then(response => cachedSave(response, hashcode))
+      .then(response => response.json())
+      .then(result => checkSuccess(result, config.ignoreError))
+      .catch(e => {
+        notification.info({
+          message: `请求错误`,
+          description: e.message,
+        });
+      })
+  );
 }

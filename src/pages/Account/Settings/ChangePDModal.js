@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Row, Col, Button, message } from 'antd';
+import { Modal, Form, Input, Row, Col, Button } from 'antd';
 import { formatMessage } from 'umi/locale';
-import { changePwdSendSmsCheckCode, changePwdDoSet } from '@/services/user';
 
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -13,23 +12,20 @@ class ChangePDModal extends Component {
   };
 
   onGetCaptcha = async () => {
-    let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-      }
-    }, 1000);
-
-    const { getFieldValue } = this.props.form;
-    const phone = getFieldValue('phone');
-    const res = await changePwdSendSmsCheckCode({ phone });
-
-    if (res.statusCode === 200) {
-      message.success(res.message);
-    }
+    // let count = 59;
+    // this.setState({ count });
+    // this.interval = setInterval(() => {
+    //   count -= 1;
+    //   this.setState({ count });
+    //   if (count === 0) {
+    //     clearInterval(this.interval);
+    //   }
+    // }, 1000);
+    // const { getFieldValue } = this.props.form;
+    // const phone = getFieldValue('phone');
+    // if (res.statusCode === 200) {
+    //   message.success(res.message);
+    // }
   };
 
   handleSubmit = () => {

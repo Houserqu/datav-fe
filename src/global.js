@@ -1,6 +1,13 @@
 import React from 'react';
 import { notification, Button, message } from 'antd';
 import { formatMessage } from 'umi/locale';
+import '@/echart-themes/walden';
+import '@/echart-themes/essos';
+import '@/echart-themes/macarons';
+import '@/echart-themes/purple-passion';
+import '@/echart-themes/shine';
+import '@/echart-themes/westeros';
+import '@/echart-themes/wonderland';
 
 // Notify user if offline now
 window.addEventListener('sw.offline', () => {
