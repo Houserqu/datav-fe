@@ -14,14 +14,14 @@ export default {
   effects: {
     *submit({ payload, callback }, { call, put }) {
       // const md5Password = md5(PASSWORD_SALT + payload.password);
-      const newPayload = { ...payload, password2: payload.password, smsVerfyId: 123 };
+      const newPayload = payload;
 
       const response = yield call(registerI, newPayload);
       yield put({
         type: 'registerHandle',
         payload: response,
       });
-      if (response.statusCode === 200 && typeof callback === 'function') {
+      if (response.success) {
         callback(response);
       }
     },
