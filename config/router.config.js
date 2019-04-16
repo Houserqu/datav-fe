@@ -6,6 +6,7 @@ export default [
   },
   {
     path: '/index',
+    component: '../layouts/IndexLayout',
     routes: [{ path: '/index', component: './Index/Index' }],
   },
   // 登录注册

@@ -33,6 +33,7 @@ class App extends Component {
     } = this.props;
 
     const components = appDesign ? appDesign.components : {};
+    const page = appDesign ? appDesign.page : {};
     const componentsLayout = appDesign && appDesign.componentsLayout;
 
     const layout = R.values(componentsLayout);
@@ -65,6 +66,7 @@ class App extends Component {
                     style={components[v].style}
                     source={components[v].source}
                     data={components[v]}
+                    page={page}
                     notMerge
                     hover={false}
                   />

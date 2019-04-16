@@ -1,6 +1,11 @@
 import { post, get } from '@/utils/http';
 
 export async function getUserAppListI() {
+  return get('/api/app/user-list');
+}
+
+// 获取所有 app
+export async function getAppListI() {
   return get('/api/app/list');
 }
 
