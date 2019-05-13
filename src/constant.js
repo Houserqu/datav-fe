@@ -61,3 +61,22 @@ export const echartThemes = [
   'westeros',
   'wonderland',
 ];
+
+// 内置 主题
+export const pageThemes = ['black', 'blue'];
+
+export const defaultDesignJson = {
+  page: {
+    type: 'page',
+    backgroundColor: '', // 页面默认背景色
+    pageTheme: '',
+    component: {
+      defaultTheme: '', // 组件默认主题
+    },
+    info: {}, // 页面信息
+    style: {}, // 样式
+  },
+  componentsLayout: {}, // 组件布局
+  components: {}, // 组件
+  activeCurCom: null, // 当前激活组件
+};

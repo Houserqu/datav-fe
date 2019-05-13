@@ -165,9 +165,9 @@ export default {
           componentsLayout: {
             ...state.curAppDesign.componentsLayout,
             [designComId]: {
-              w: 15,
-              h: 5,
-              x: 1,
+              w: 12,
+              h: comDetail.type === 'text' ? 1 : 5,
+              x: 0,
               y: 1,
               i: designComId,
               static: false,

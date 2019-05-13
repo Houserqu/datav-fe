@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Input, DatePicker, Select, Upload, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import { defaultDesignJson, echartThemes, pageThemes } from '@/constant';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -28,10 +29,13 @@ class AppCreateFrom extends Component {
     } = this.props;
     validateFields((err, values) => {
       if (!err) {
+        defaultDesignJson.page.pageThemes = values.page_theme;
+        defaultDesignJson.page.component.defaultTheme = values.page_theme;
         onSubmit({
           ...values,
           start_time: values.start_time ? values.start_time.valueOf() : '',
           end_time: values.end_time ? values.end_time.valueOf() : '',
+          design_json: JSON.stringify(defaultDesignJson),
         });
       }
     });
@@ -40,7 +44,6 @@ class AppCreateFrom extends Component {
   render() {
     const {
       form: { getFieldDecorator },
-      app: { pageThemes, componentThemes },
       detail = {},
     } = this.props;
 
@@ -73,8 +76,8 @@ class AppCreateFrom extends Component {
         </Form.Item>
 
         <Form.Item label="页面主题" {...formItemLayout}>
-          {getFieldDecorator('page_theme_id', {
-            initialValue: detail.page_theme_id || '',
+          {getFieldDecorator('page_theme', {
+            initialValue: detail.page_theme || 'walden',
             rules: [
               {
                 required: true,
@@ -84,8 +87,8 @@ class AppCreateFrom extends Component {
           })(
             <Select>
               {pageThemes.map(v => (
-                <Option key={v.id} value={v.id}>
-                  {v.name}
+                <Option key={v} value={v}>
+                  {v}
                 </Option>
               ))}
             </Select>
@@ -93,8 +96,8 @@ class AppCreateFrom extends Component {
         </Form.Item>
 
         <Form.Item label="组件默认主题" help="组件默认主题可以被自定义样式覆盖" {...formItemLayout}>
-          {getFieldDecorator('com_theme_id', {
-            initialValue: detail.com_theme_id || '',
+          {getFieldDecorator('com_theme', {
+            initialValue: detail.com_theme || '',
             rules: [
               {
                 required: true,
@@ -103,9 +106,9 @@ class AppCreateFrom extends Component {
             ],
           })(
             <Select>
-              {componentThemes.map(v => (
-                <Option key={v.id} value={v.id}>
-                  {v.name}
+              {echartThemes.map(v => (
+                <Option key={v} value={v}>
+                  {v}
                 </Option>
               ))}
             </Select>
@@ -126,10 +129,10 @@ class AppCreateFrom extends Component {
               <Option key={1} value={1}>
                 所有人可以访问
               </Option>
-              <Option key={2} value={1}>
+              <Option key={2} value={2} disabled>
                 密码
               </Option>
-              <Option key={3} value={1}>
+              <Option key={3} value={3} disabled>
                 登录访问
               </Option>
             </Select>

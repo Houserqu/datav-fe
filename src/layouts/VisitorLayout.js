@@ -1,24 +1,16 @@
 import React, { PureComponent } from 'react';
-import { Layout, Icon } from 'antd';
+import { Layout } from 'antd';
 import { connect } from 'dva';
 import styles from './DesignLayout.less';
 
-const { Header, Sider, Content } = Layout;
+const { Content } = Layout;
 
 @connect(({ design, loading }) => ({
   design,
   categoryLoading: loading.effects['design/fetchCategoryComponents'],
   detailLoading: loading.effects['design/fetchAppDetail'],
 }))
-class DesignLayout extends PureComponent {
-  handleAddCom = id => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'design/addCom',
-      payload: { id },
-    });
-  };
-
+class VisitorLayout extends PureComponent {
   render() {
     const { children } = this.props;
 
@@ -32,4 +24,4 @@ class DesignLayout extends PureComponent {
   }
 }
 
-export default DesignLayout;
+export default VisitorLayout;

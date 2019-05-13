@@ -54,7 +54,7 @@ class DesignTopBar extends Component {
     } = this.props;
 
     // 图表组件工具激活状态
-    const chartToolActive = activeCom && activeCom.type === 'chart';
+    const chartToolActive = activeCom && activeCom.type !== 'page';
 
     return (
       <div>

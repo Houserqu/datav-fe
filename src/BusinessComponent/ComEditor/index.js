@@ -8,6 +8,7 @@ import 'brace/theme/xcode';
 import 'brace/mode/json';
 import Com from '@/BusinessComponent/Com';
 import DataEdit from '@/BusinessComponent/PropsEditor/DataEdit';
+import ImageCom from '../ImageCom';
 
 // import styles from './index.less';
 
@@ -116,7 +117,7 @@ class DataManager extends Component {
                     tabSize={2}
                   />
                 </TabPane>
-                <TabPane tab="数据" key="2">
+                <TabPane tab="数据" key="2" disabled={data.type !== 'chart'}>
                   <DataEdit
                     userData={userDataList}
                     source={tmpDataSource}
@@ -129,19 +130,31 @@ class DataManager extends Component {
             </Col>
             <Col span={10} style={{ height: 300 }}>
               <h3>预览</h3>
-              <Com
-                echartOpt={tmpEchartOpt}
-                id={comId}
-                onClick={this.handleCurCom}
-                active
-                style={style}
-                source={tmpDataSource}
-                data={data}
-                page={page}
-                notMerge
-                // onDoubleClick={this.handleComEditor}
-                // source={this.getSourceData(data.type, dataSource)}
-              />
+              {data.type === 'chart' && (
+                <Com
+                  echartOpt={tmpEchartOpt}
+                  id={comId}
+                  onClick={this.handleCurCom}
+                  active
+                  style={style}
+                  source={tmpDataSource}
+                  data={data}
+                  page={page}
+                  notMerge
+                  // source={this.getSourceData(data.type, dataSource)}
+                />
+              )}
+              {data.type === 'image' && (
+                <ImageCom
+                  imageOpt={tmpEchartOpt}
+                  id={comId}
+                  onClick={this.handleCurCom}
+                  active
+                  style={style}
+                  data={data}
+                  page={page}
+                />
+              )}
             </Col>
           </Row>
         </Modal>

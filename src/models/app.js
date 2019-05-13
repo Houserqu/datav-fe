@@ -15,16 +15,6 @@ export default {
     total: 0,
     list: [],
     curApp: {},
-    pageThemes: [
-      { id: 1, name: '黑暗', options: { background: '#000000' } },
-      { id: 2, name: '科技', options: { background: 'blue' } },
-      { id: 3, name: '春节', options: { background: 'red' } },
-    ],
-    componentThemes: [
-      { id: 1, name: '黑暗', options: { background: '#000000' } },
-      { id: 2, name: '科技', options: { background: 'blue' } },
-      { id: 3, name: '春节', options: { background: 'red' } },
-    ],
   },
 
   effects: {
