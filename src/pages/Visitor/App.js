@@ -4,6 +4,8 @@ import GridLayout from 'react-grid-layout';
 import * as R from 'ramda';
 import styles from './index.less';
 import Com from '@/BusinessComponent/Com';
+import ImageCom from '@/BusinessComponent/ImageCom';
+import TextCom from '@/BusinessComponent/TextCom';
 
 @connect(({ visitor, loading }) => ({
   visitor,
@@ -59,17 +61,45 @@ class App extends Component {
             >
               {Object.keys(components).map(v => (
                 <div key={v}>
-                  <Com
-                    layoutOpt={componentsLayout[v]}
-                    echartOpt={components[v].echartOpt}
-                    id={v}
-                    style={components[v].style}
-                    source={components[v].source}
-                    data={components[v]}
-                    page={page}
-                    notMerge
-                    hover={false}
-                  />
+                  {components[v].type === 'chart' && (
+                    <Com
+                      layoutOpt={componentsLayout[v]}
+                      echartOpt={components[v].echartOpt}
+                      id={v}
+                      style={components[v].style}
+                      source={components[v].source}
+                      data={components[v]}
+                      page={page}
+                      notMerge
+                      hover={false}
+                    />
+                  )}
+
+                  {components[v].type === 'image' && (
+                    <ImageCom
+                      layoutOpt={componentsLayout[v]}
+                      imageOpt={components[v].echartOpt}
+                      id={v}
+                      onClick={this.handleCurCom}
+                      onDoubleClick={this.handleShowComEditor}
+                      style={components[v].style}
+                      data={components[v]}
+                      page={page}
+                    />
+                  )}
+
+                  {components[v].type === 'text' && (
+                    <TextCom
+                      layoutOpt={componentsLayout[v]}
+                      textOpt={components[v].echartOpt}
+                      id={v}
+                      onClick={this.handleCurCom}
+                      onDoubleClick={this.handleShowComEditor}
+                      style={components[v].style}
+                      data={components[v]}
+                      page={page}
+                    />
+                  )}
                 </div>
               ))}
             </GridLayout>

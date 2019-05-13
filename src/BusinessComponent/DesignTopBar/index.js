@@ -31,6 +31,16 @@ class DesignTopBar extends Component {
     router.goBack();
   };
 
+  handlePreview = () => {
+    const {
+      design: {
+        appDetail: { id },
+      },
+    } = this.props;
+
+    if (id) window.open(`/#/visitor/app/${id}`, '_blank');
+  };
+
   handleDelCom = () => {
     const {
       dispatch,
@@ -73,6 +83,9 @@ class DesignTopBar extends Component {
                 </Group>
               </div>
               <div className={styles.action}>
+                <Button style={{ marginRight: 15 }} type="primary" onClick={this.handlePreview}>
+                  预览
+                </Button>
                 <Button
                   style={{ marginRight: 15 }}
                   type="primary"

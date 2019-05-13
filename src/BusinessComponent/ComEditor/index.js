@@ -9,6 +9,7 @@ import 'brace/mode/json';
 import Com from '@/BusinessComponent/Com';
 import DataEdit from '@/BusinessComponent/PropsEditor/DataEdit';
 import ImageCom from '../ImageCom';
+import TextCom from '../TextCom';
 
 // import styles from './index.less';
 
@@ -147,6 +148,17 @@ class DataManager extends Component {
               {data.type === 'image' && (
                 <ImageCom
                   imageOpt={tmpEchartOpt}
+                  id={comId}
+                  onClick={this.handleCurCom}
+                  active
+                  style={style}
+                  data={data}
+                  page={page}
+                />
+              )}
+              {data.type === 'text' && (
+                <TextCom
+                  textOpt={tmpEchartOpt}
                   id={comId}
                   onClick={this.handleCurCom}
                   active
