@@ -1,54 +1,26 @@
-import { post } from '@/utils/http';
-import { API_DOMAIN } from '@/constant';
+import { post, get } from '@/utils/http';
 
-// 获取 员工
-export async function getAuthUserList(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authUser/loadAuthUserList`, params);
+// 获取 角色
+export async function getRoleList(params) {
+  return get('/api/auth/roles/list', params);
 }
 
-// 员工 状态设置
-export async function setUserStatus(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authUser/setUserStatus`, params);
-}
-
-// 员工 设置密码
-export async function setAuthUserPwd(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authUser/setAuthUserPwd`, params, {
-    alertSuccess: true,
-  });
-}
-
-// 租户创建员工
-export async function addTenantUser(params) {
-  return post(`${API_DOMAIN}/met/service/tenant/tenantAdmin/createTenantAdmin`, params);
+// 删除 角色
+export async function deleteRole(params) {
+  return post('/api/auth/roles/delete', params);
 }
 
 // 创建角色
-export async function addRole(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authRole/addRole`, params);
+export async function createRole(params) {
+  return post('/api/auth/roles/create', params);
 }
 
-// 删除角色
-export async function deleteRole(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authRole/deletAuthRole`, params);
+// 获取 权限
+export async function getPermissionList(params) {
+  return get('/api/auth/permission/list', params);
 }
 
-// 角色列表
-export async function getAuthRoleList(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authRole/loadAuthRoleDataSet`, params);
-}
-
-// 角色添加权限
-export async function addPermsToRole(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authRole/addPermsToRole`, params);
-}
-
-// 角色删除权限
-export async function removePermsFromRole(params) {
-  return post(`${API_DOMAIN}/auth/service/manager/authRole/removePermsFromRole`, params);
-}
-
-// 租户权限
-export async function loadPermDataSetForRoleAssign(params) {
-  return post(`${API_DOMAIN}/met/service/admin/authRole/loadPermDataSetForRoleAssign`, params);
+// 获取 权限
+export async function getUserList(params) {
+  return get('/api/auth/user/list', params);
 }

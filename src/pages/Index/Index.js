@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAppListI } from '@/services/app';
+import { getPubAppListI } from '@/services/app';
 import { Card } from 'antd';
 import Link from 'umi/link';
 
@@ -9,7 +9,7 @@ class index extends Component {
   };
 
   async componentDidMount() {
-    const res = await getAppListI();
+    const res = await getPubAppListI();
     if (res.success) {
       this.setState({ list: res.data });
     }
@@ -24,7 +24,7 @@ class index extends Component {
             key={v.id}
             title={v.name}
             extra={<Link to={`/visitor/app/${v.id}`}>查看</Link>}
-            style={{ width: 300 }}
+            style={{ width: 300, margin: '0 20px' }}
           >
             <p>{v.describe}</p>
           </Card>

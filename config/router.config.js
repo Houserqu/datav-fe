@@ -96,6 +96,36 @@ export default [
       },
     ],
   },
+  // 个人信息
+  {
+    path: '/app/account',
+    name: 'settings',
+    icon: 'setting',
+    component: './Account/Settings/Info',
+    // authority: ['user-center'],
+    routes: [
+      {
+        path: '/account/settings',
+        redirect: '/account/settings/base',
+      },
+      {
+        path: '/account/settings/base',
+        component: './Account/Settings/BaseView',
+      },
+      {
+        path: '/account/settings/security',
+        component: './Account/Settings/SecurityView',
+      },
+      {
+        path: '/account/settings/binding',
+        component: './Account/Settings/BindingView',
+      },
+      {
+        path: '/account/settings/notification',
+        component: './Account/Settings/NotificationView',
+      },
+    ],
+  },
   // 管理员
   {
     path: '/admin',
@@ -109,69 +139,60 @@ export default [
         redirect: '/admin/dashboard',
       },
       {
-        path: '/admin/monitor', // 大数据监控
-        name: 'monitor',
-        icon: 'dashboard',
-        component: './Dashboard/Index',
-      },
-      {
         path: '/admin/dashboard', // 管理员控制台
         name: 'dashboard',
         icon: 'dashboard',
         component: './Dashboard/Index',
       },
       {
+        path: '/admin/app', // 应用管理
+        name: 'app',
+        icon: 'laptop',
+        component: './AppManage',
+      },
+      {
         path: '/admin/auth', // 权限管理
-        icon: 'table',
+        icon: 'safety-certificate',
         name: 'auth',
         // authority: ['activity-tenant', 'activity-plant'],
         routes: [
           {
             path: '/admin/auth/role',
             name: 'role',
-            component: './Dashboard/Index',
+            component: './Authority/RoleManage',
             // authority: ['activity-plant', 'activity-tenant'],
           },
           {
             path: '/admin/auth/permission',
             name: 'permission',
-            component: './Dashboard/Index',
+            component: './Authority/PermissionManage',
             // authority: ['activity-plant', 'activity-tenant'],
           },
           {
             path: '/admin/auth/user',
             name: 'user',
-            component: './Dashboard/Index',
+            component: './Authority/UserManage',
             // authority: ['activity-plant', 'activity-tenant'],
           },
         ],
       },
-      // 个人信息
       {
-        path: '/admin/account',
-        name: 'settings',
-        component: './Account/Settings/Info',
-        // authority: ['user-center'],
+        path: '/admin/components',
+        icon: 'table',
+        name: 'components',
+        // authority: ['activity-tenant', 'activity-plant'],
         routes: [
           {
-            path: '/account/settings',
-            redirect: '/account/settings/base',
+            path: '/admin/components/category',
+            name: 'category',
+            component: './Components/Category',
+            // authority: ['activity-plant', 'activity-tenant'],
           },
           {
-            path: '/account/settings/base',
-            component: './Account/Settings/BaseView',
-          },
-          {
-            path: '/account/settings/security',
-            component: './Account/Settings/SecurityView',
-          },
-          {
-            path: '/account/settings/binding',
-            component: './Account/Settings/BindingView',
-          },
-          {
-            path: '/account/settings/notification',
-            component: './Account/Settings/NotificationView',
+            path: '/admin/components/list',
+            name: 'coms',
+            component: './Components/Components',
+            // authority: ['activity-plant', 'activity-tenant'],
           },
         ],
       },
@@ -183,6 +204,14 @@ export default [
         component: './UserManage/List',
         // authority: ['users'],
       },
+      // 系统设置
+      // {
+      //   path: '/admin/account',
+      //   name: 'sys-settings',
+      //   icon: 'setting',
+      //   component: './Account/Settings/Info',
+      //   // authority: ['user-center'],
+      // },
       {
         component: '404',
       },
