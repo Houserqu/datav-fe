@@ -39,3 +39,10 @@ export async function updateDataI(params) {
 export async function getCategoryWithComponent(params) {
   return get('/api/app/category/list_com', params);
 }
+
+export async function queryDataBySql(params) {
+  return post('/api/data/sql', params, {
+    alertSuccess: true,
+    alertError: true,
+  });
+}

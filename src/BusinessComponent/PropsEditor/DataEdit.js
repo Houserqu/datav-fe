@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Select, Form } from 'antd';
+import { Select, Form, Button } from 'antd';
 import * as R from 'ramda';
 import DataEditInfo from './DataEditInfo';
 
 const { Option } = Select;
+const { Group } = Button;
 
 const FormItem = ({ children, ...rest }) => (
   <Form.Item
@@ -72,17 +73,6 @@ export default class DataEdit extends Component {
             <DataEditInfo data={data} type={data.type} />
           </FormItem>
         )}
-
-        {/* <FormItem label="操作">
-          <Group style={{ marginBottom: 10, marginLeft: 10 }}>
-            <Button key="submit" type="primary" size="small" onClick={this.handleSubmit}>
-              提交
-            </Button>
-            <Button key="reset" size="small" onClick={this.resetEditor}>
-              重置
-            </Button>
-          </Group>
-        </FormItem> */}
       </div>
     );
   }

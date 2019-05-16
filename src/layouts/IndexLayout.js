@@ -44,6 +44,9 @@ class UserLayout extends React.PureComponent {
           <Button type="primary" style={{ marginRight: 10 }}>
             <Link to="/user/register">注册</Link>
           </Button>
+          <Button type="primary" style={{ marginRight: 10 }}>
+            <Link to="/admin">管理后台</Link>
+          </Button>
           <SelectLang />
         </div>
         <div className={styles.content}>

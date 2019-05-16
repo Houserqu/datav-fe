@@ -1,9 +1,9 @@
 // https://umijs.org/config/
 import os from 'os';
+import slash from 'slash2';
 import pageRoutes from './router.config';
 import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
-import slash from 'slash2';
 
 const plugins = [
   [
@@ -41,6 +41,8 @@ const plugins = [
   ],
 ];
 
+console.log(process.env.NODE_ENV);
+
 export default {
   // add for transfer to umi
   history: 'hash',
@@ -48,8 +50,8 @@ export default {
   define: {
     APP_TYPE: process.env.APP_TYPE || '',
   },
-  // base: '/admin/',
-  // publicPath: '/admin/',
+  // base: process.env.NODE_ENV === 'production' ? '/public/' : '',
+  publicPath: process.env.NODE_ENV === 'production' ? '/public/' : '',
   treeShaking: true,
   targets: {
     ie: 11,

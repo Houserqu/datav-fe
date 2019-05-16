@@ -4,7 +4,8 @@ import { Card, Form, Table, Button, Tag } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './List.less';
 import { getAppListI } from '@/services/app';
-import { appStatusColor, appStatus } from '@/constant';
+import { deleteApp } from '@/services/admin';
+import { appStatusColor, appStatus, appAccessStatus } from '@/constant';
 
 const { Group: ButtonGroup } = Button;
 
@@ -33,12 +34,14 @@ class PermissionManage extends PureComponent {
       dataIndex: 'describe',
     },
     {
-      title: '开始',
+      title: '上线时间',
       dataIndex: 'start_time',
+      render: text => text || '立即上线',
     },
     {
-      title: '结束',
+      title: '下线时间',
       dataIndex: 'end_time',
+      render: text => text || '手动下线',
     },
     {
       title: '创建时间',
@@ -51,6 +54,7 @@ class PermissionManage extends PureComponent {
     {
       title: '访问类型',
       dataIndex: 'access',
+      render: text => appAccessStatus[text],
     },
     {
       title: '状态',
@@ -61,10 +65,9 @@ class PermissionManage extends PureComponent {
       title: '操作',
       dataIndex: 'action',
       width: 200,
-      render: () => (
+      render: (text, record) => (
         <ButtonGroup>
-          <Button size="small">下线</Button>
-          <Button size="small" type="danger">
+          <Button size="small" type="danger" onClick={() => this.handleDel(record.id)}>
             删除
           </Button>
         </ButtonGroup>
@@ -75,6 +78,13 @@ class PermissionManage extends PureComponent {
   async componentDidMount() {
     this.queryList();
   }
+
+  handleDel = async id => {
+    if (id) {
+      await deleteApp({ id });
+      this.queryList();
+    }
+  };
 
   queryList = async () => {
     const res = await getAppListI();

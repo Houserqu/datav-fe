@@ -1,9 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Input, DatePicker, Select, Upload, Button, Icon, InputNumber } from 'antd';
+import { Form, Input, DatePicker, Select, Upload, Button, message, InputNumber } from 'antd';
 import { connect } from 'dva';
+import AceEditor from 'react-ace';
+import brace from 'brace';
 import { dataType } from '@/constant';
 import JSONForm from './JSONForm';
 import DatabaseForm from './DatabaseForm';
+import { queryDataBySql } from '@/services/data';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -47,6 +50,24 @@ class AppCreateFrom extends Component {
         return <JSONForm />;
       default:
         return <Fragment />;
+    }
+  };
+
+  // 请求数据
+  handleQueryData = async () => {
+    const {
+      data: { curData: detail },
+    } = this.props;
+
+    if (detail.type === 2) {
+      try {
+        const res = await queryDataBySql(JSON.parse(detail.content));
+        if (res.success) {
+          this.setState({ testData: res.data });
+        }
+      } catch (error) {
+        message.error(error.message);
+      }
     }
   };
 
