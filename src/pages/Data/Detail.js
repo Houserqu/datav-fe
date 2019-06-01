@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Row, Col, Card, List, Avatar, Table, Divider, Button, Switch, Modal } from 'antd';
+import { Row, Col, Card, Divider, Button, Modal, message } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
@@ -18,6 +18,10 @@ const { Group: ButtonGroup } = Button;
   loading: loading.effects['data/fetchDataDetail'],
 }))
 class DataDetail extends PureComponent {
+  state = {
+    testData: '',
+  };
+
   componentDidMount() {
     const {
       dispatch,
@@ -83,7 +87,7 @@ class DataDetail extends PureComponent {
     const action = (
       <Fragment>
         <ButtonGroup>
-          <Button onClick={() => router.push(`/app/data/edit${params.id}`)}>编辑</Button>
+          <Button onClick={() => router.push(`/app/data/edit/${params.id}`)}>编辑</Button>
           <Button onClick={this.showDel} type="danger">
             删除
           </Button>
@@ -95,7 +99,7 @@ class DataDetail extends PureComponent {
       <PageHeaderWrapper
         loading={loading}
         // content={pageHeaderContent}
-        title="应用详情"
+        title="数据详情"
         action={action}
       >
         {detail && (
@@ -105,6 +109,7 @@ class DataDetail extends PureComponent {
                 <DescriptionList size="large" title="基本信息" style={{ marginBottom: 32 }}>
                   <Description term="名称">{detail.name}</Description>
                   <Description term="介绍">{detail.describe}</Description>
+                  <Description term="刷新时间">{detail.refresh} 毫秒</Description>
                   <Description term="创建时间">
                     {moment(detail.create_time).format('YY-MM-DD hh:mm')}
                   </Description>

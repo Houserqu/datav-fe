@@ -31,6 +31,16 @@ class DesignTopBar extends Component {
     router.goBack();
   };
 
+  handlePreview = () => {
+    const {
+      design: {
+        appDetail: { id },
+      },
+    } = this.props;
+
+    if (id) window.open(`/#/visitor/app/${id}`, '_blank');
+  };
+
   handleDelCom = () => {
     const {
       dispatch,
@@ -54,7 +64,7 @@ class DesignTopBar extends Component {
     } = this.props;
 
     // 图表组件工具激活状态
-    const chartToolActive = activeCom && activeCom.type === 'chart';
+    const chartToolActive = activeCom && activeCom.type !== 'page';
 
     return (
       <div>
@@ -73,6 +83,9 @@ class DesignTopBar extends Component {
                 </Group>
               </div>
               <div className={styles.action}>
+                <Button style={{ marginRight: 15 }} type="primary" onClick={this.handlePreview}>
+                  预览
+                </Button>
                 <Button
                   style={{ marginRight: 15 }}
                   type="primary"

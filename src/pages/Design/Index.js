@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import * as R from 'ramda';
 import GridLayout from 'react-grid-layout';
@@ -8,6 +8,8 @@ import 'react-resizable/css/styles.css';
 import styles from './index.less';
 import Com from '@/BusinessComponent/Com';
 import DataManager from '@/BusinessComponent/DataManager';
+import ImageCom from '@/BusinessComponent/ImageCom';
+import TextCom from '@/BusinessComponent/TextCom';
 
 @connect(({ design, loading, data }) => ({
   design,
@@ -161,20 +163,50 @@ class Design extends Component {
               >
                 {Object.keys(components).map(v => (
                   <div key={v}>
-                    <Com
-                      layoutOpt={componentsLayout[v]}
-                      echartOpt={components[v].echartOpt}
-                      id={v}
-                      onClick={this.handleCurCom}
-                      onDoubleClick={this.handleShowComEditor}
-                      active={v === curComId}
-                      style={components[v].style}
-                      source={components[v].source}
-                      data={components[v]}
-                      page={page}
-                      notMerge
-                      // source={this.getSourceData(components[v].type, components[v].source)}
-                    />
+                    {components[v].type === 'chart' && (
+                      <Com
+                        layoutOpt={componentsLayout[v]}
+                        echartOpt={components[v].echartOpt}
+                        id={v}
+                        onClick={this.handleCurCom}
+                        onDoubleClick={this.handleShowComEditor}
+                        active={v === curComId}
+                        style={components[v].style}
+                        source={components[v].source}
+                        data={components[v]}
+                        page={page}
+                        notMerge
+                        // source={this.getSourceData(components[v].type, components[v].source)}
+                      />
+                    )}
+
+                    {components[v].type === 'image' && (
+                      <ImageCom
+                        layoutOpt={componentsLayout[v]}
+                        imageOpt={components[v].echartOpt}
+                        id={v}
+                        onClick={this.handleCurCom}
+                        onDoubleClick={this.handleShowComEditor}
+                        active={v === curComId}
+                        style={components[v].style}
+                        data={components[v]}
+                        page={page}
+                      />
+                    )}
+
+                    {components[v].type === 'text' && (
+                      <TextCom
+                        layoutOpt={componentsLayout[v]}
+                        textOpt={components[v].echartOpt}
+                        id={v}
+                        onClick={this.handleCurCom}
+                        onDoubleClick={this.handleShowComEditor}
+                        active={v === curComId}
+                        style={components[v].style}
+                        data={components[v]}
+                        page={page}
+                      />
+                    )}
                   </div>
                 ))}
               </GridLayout>

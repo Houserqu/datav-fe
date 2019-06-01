@@ -7,6 +7,7 @@ import * as R from 'ramda';
 import isEqual from 'lodash/isEqual';
 import styles from './index.less';
 import ComErrorBoundary from '../ComErrorBoundary';
+import { queryDataBySql } from '@/services/data';
 
 @connect(({ loading, data }) => ({
   userData: data,
@@ -20,29 +21,44 @@ class Com extends Component {
       echartOpt,
     } = this.props;
     if (source !== -1) {
-      this.setEchartDataset(source, type, echartOpt);
+      this.setEchartOption(source, type, echartOpt);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.source !== this.props.source) {
-      this.setEchartDataset(nextProps.source, nextProps.data.type, nextProps.echartOpt);
+      this.setEchartOption(nextProps.source, nextProps.data.type, nextProps.echartOpt);
     }
   }
 
-  // 设置组件数据
-  setEchartDataset = (source, type, echartOpt) => {
+  // 设置组件参数
+  setEchartOption = async (source, type, echartOpt) => {
     let newOptions = {};
     if (source === -1) {
       newOptions = echartOpt;
     } else {
+      // 获取数据源配置
       const sourceData = this.getSourceData(type, source);
 
       // 静态数据
-      if (sourceData && sourceData.type === 1) {
-        newOptions.dataset = { source: JSON.parse(sourceData.content) };
+      if (sourceData) {
+        // 静态 json 数据
+        newOptions.series = echartOpt.series.map(v => ({ ...v, data: null }));
+
+        if (sourceData.type === 1) {
+          newOptions.dataset = JSON.parse(sourceData.content);
+        }
+
+        if (sourceData.type === 2) {
+          const res = await queryDataBySql(JSON.parse(sourceData.content));
+          if (res.success) {
+            newOptions.dataset = res.data;
+          }
+        }
       }
     }
+
+    console.log('newOptions:', newOptions);
 
     // 设置 echart 数据
     const echartsInstance = this.echarts_react.getEchartsInstance();
@@ -54,8 +70,6 @@ class Com extends Component {
     const {
       userData: { list: userDataList = [] },
     } = this.props;
-
-    // debugger;
 
     return type === 'chart' ? R.find(R.propEq('id', source))(userDataList) : source;
   }, isEqual);

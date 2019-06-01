@@ -10,6 +10,10 @@ const gridStyle = {
   textAlign: 'center',
 };
 
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1190524_3e225juc93t.js',
+});
+
 class ChartSelector extends Component {
   state = {
     collapsed: false,
@@ -35,9 +39,8 @@ class ChartSelector extends Component {
           <SubMenu
             key={c.id}
             title={
-              <span>
-                <Icon type="mail" />
-                <span>{c.name}</span>
+              <span style={{ marginLeft: '-8px' }}>
+                <IconFont type={c.icon} style={{ fontSize: 30 }} />
               </span>
             }
           >

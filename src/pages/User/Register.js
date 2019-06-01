@@ -82,7 +82,6 @@ class Register extends Component {
     e.preventDefault();
     const { form, dispatch } = this.props;
     form.validateFields({ force: true }, (err, values) => {
-      console.log(values);
       if (!err) {
         dispatch({
           type: 'register/submit',
@@ -198,7 +197,7 @@ class Register extends Component {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('email', {
+            {getFieldDecorator('mail', {
               rules: [
                 {
                   required: true,
@@ -213,7 +212,7 @@ class Register extends Component {
               <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
             )}
           </FormItem>
-          <FormItem>
+          {/* <FormItem>
             {getFieldDecorator('account', {
               rules: [
                 {
@@ -222,9 +221,9 @@ class Register extends Component {
                 },
               ],
             })(<Input size="large" placeholder="登录账号" />)}
-          </FormItem>
+          </FormItem> */}
           <FormItem>
-            {getFieldDecorator('nickName', {
+            {getFieldDecorator('nickname', {
               rules: [
                 {
                   required: true,
@@ -264,7 +263,7 @@ class Register extends Component {
               )}
             </Popover>
           </FormItem>
-          <FormItem>
+          {/* <FormItem>
             <InputGroup compact>
               {getFieldDecorator('phone', {
                 rules: [
@@ -284,8 +283,8 @@ class Register extends Component {
                 />
               )}
             </InputGroup>
-          </FormItem>
-          <FormItem>
+          </FormItem> */}
+          {/* <FormItem>
             <Row gutter={8}>
               <Col span={16}>
                 {getFieldDecorator('checkCode', {
@@ -315,7 +314,7 @@ class Register extends Component {
                 </Button>
               </Col>
             </Row>
-          </FormItem>
+          </FormItem> */}
           <FormItem>
             <Button
               size="large"

@@ -3,30 +3,17 @@ import { connect } from 'dva';
 import { Card, Form, Icon, Button, Dropdown, Menu, Table, Modal, Input } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './List.less';
-import { getRoleList, deleteRole, createRole } from '@/services/auth';
-
-const { Group: ButtonGroup } = Button;
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 18 },
-  },
-};
+import { getCategory, createCategory, deleteCategory } from '@/services/app';
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ user, loading }) => ({
   user,
   loading: loading.models.user,
 }))
-class RoleManage extends PureComponent {
+class TableList extends PureComponent {
   state = {
     selectedRows: [],
-    list: [],
+    category: [],
     createVisible: false,
   };
 
@@ -40,31 +27,28 @@ class RoleManage extends PureComponent {
       dataIndex: 'name',
     },
     {
-      title: 'code',
-      dataIndex: 'code',
+      title: 'icon',
+      dataIndex: 'icon',
     },
     {
       title: '操作',
       dataIndex: 'action',
       render: (text, record) => (
-        <ButtonGroup>
-          <Button size="small">分配权限</Button>
-          <Button size="small" type="danger" onClick={() => this.handleDeleteCategory(record.id)}>
-            删除
-          </Button>
-        </ButtonGroup>
+        <Button onClick={() => this.handleDeleteCategory(record.id)} type="danger">
+          删除
+        </Button>
       ),
     },
   ];
 
   async componentDidMount() {
-    this.queryList();
+    this.queryCategoryList();
   }
 
-  queryList = async () => {
-    const res = await getRoleList();
+  queryCategoryList = async () => {
+    const res = await getCategory();
     if (res.success) {
-      this.setState({ list: res.data });
+      this.setState({ category: res.data });
     }
   };
 
@@ -73,14 +57,13 @@ class RoleManage extends PureComponent {
   };
 
   closeCreate = () => {
-    this.props.form.resetFields();
     this.setState({ createVisible: false });
   };
 
   handleDeleteCategory = async id => {
-    const res = await deleteRole({ id });
+    const res = await deleteCategory({ id });
     if (res.success) {
-      this.queryList();
+      this.queryCategoryList();
     }
   };
 
@@ -88,17 +71,18 @@ class RoleManage extends PureComponent {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        const res = await createRole(values);
+        console.log('Received values of form: ', values);
+        const res = await createCategory(values);
         if (res.success) {
           this.closeCreate();
-          this.queryList();
+          this.queryCategoryList();
         }
       }
     });
   };
 
   render() {
-    const { selectedRows, list, createVisible } = this.state;
+    const { selectedRows, category, createVisible } = this.state;
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -110,7 +94,7 @@ class RoleManage extends PureComponent {
     );
 
     return (
-      <PageHeaderWrapper title="角色管理">
+      <PageHeaderWrapper title="组件分类管理">
         <Card
           bordered={false}
           extra={
@@ -132,31 +116,24 @@ class RoleManage extends PureComponent {
                 </span>
               )}
             </div>
-            <Table rowKey="id" columns={this.columns} dataSource={list} pagination={false} />
+            <Table rowKey="id" columns={this.columns} dataSource={category} pagination={false} />
           </div>
         </Card>
 
-        <Modal
-          title="创建组件"
-          visible={createVisible}
-          footer={null}
-          onCancel={this.closeCreate}
-          maskClosable={false}
-        >
+        <Modal title="创建分类" visible={createVisible} footer={null} onCancel={this.closeCreate}>
           <Form onSubmit={this.handleSubmitCreate}>
-            <Form.Item label="名称" {...formItemLayout}>
+            <Form.Item label="名称">
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: '请输入名称' }],
-              })(<Input placeholder="名称" />)}
+                rules: [{ required: true, message: '请输入分类名称' }],
+              })(<Input placeholder="分类名称" />)}
             </Form.Item>
 
-            <Form.Item label="code" {...formItemLayout}>
-              {getFieldDecorator('code', {
-                rules: [{ required: true, message: '请输入code' }],
-              })(<Input placeholder="code" />)}
+            <Form.Item label="icon">
+              {getFieldDecorator('icon', {
+                rules: [{ required: true, message: '请输入分类 icon' }],
+              })(<Input placeholder="分类 icon" />)}
             </Form.Item>
-
-            <Form.Item label="提交" {...formItemLayout}>
+            <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button">
                 提交
               </Button>
@@ -168,4 +145,4 @@ class RoleManage extends PureComponent {
   }
 }
 
-export default Form.create()(RoleManage);
+export default Form.create()(TableList);

@@ -5,9 +5,9 @@ import Link from 'umi/link';
 import { Row, Col, Card, List, Avatar, Table, Divider, Button, Switch, Modal } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import router from 'umi/router';
 import styles from './index.less';
 import { appAccessStatus, appStatus } from '@/constant';
-import router from 'umi/router';
 
 const { Description } = DescriptionList;
 const { Group: ButtonGroup } = Button;
@@ -92,13 +92,15 @@ class AppDetail extends PureComponent {
           loading={loading}
         />
         <ButtonGroup>
-          <Button onClick={() => router.push(`/app/application/edit${params.id}`)}>编辑</Button>
+          <Button onClick={() => router.push(`/app/application/edit/${params.id}`)}>编辑</Button>
           <Button onClick={this.showDel} type="danger">
             删除
           </Button>
         </ButtonGroup>
 
-        <Button type="primary">进入设计面板</Button>
+        <Button type="primary" onClick={() => router.push(`/app/design/${params.id}`)}>
+          进入设计面板
+        </Button>
       </Fragment>
     );
 

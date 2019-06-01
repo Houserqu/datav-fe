@@ -17,7 +17,7 @@ export async function loginI(params) {
 }
 
 export async function registerI(params) {
-  return post('/api/login', params, {
+  return post('/api/user/register', params, {
     alertSuccess: true,
     alertError: true,
   });
