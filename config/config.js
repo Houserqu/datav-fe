@@ -51,7 +51,7 @@ export default {
     APP_TYPE: process.env.APP_TYPE || '',
   },
   // base: process.env.NODE_ENV === 'production' ? '/public/' : '',
-  publicPath: process.env.NODE_ENV === 'production' ? '/public/' : '',
+  // publicPath: process.env.NODE_ENV === 'production' ? '/public/' : '',
   treeShaking: true,
   targets: {
     ie: 11,
