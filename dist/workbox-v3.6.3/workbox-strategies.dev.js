@@ -1,12 +1,5 @@
 this.workbox = this.workbox || {};
-this.workbox.strategies = (function(
-  logger_mjs,
-  assert_mjs,
-  cacheNames_mjs,
-  cacheWrapper_mjs,
-  fetchWrapper_mjs,
-  getFriendlyURL_mjs
-) {
+this.workbox.strategies = (function (logger_mjs,assert_mjs,cacheNames_mjs,cacheWrapper_mjs,fetchWrapper_mjs,getFriendlyURL_mjs) {
   'use strict';
 
   try {
@@ -37,15 +30,14 @@ this.workbox.strategies = (function(
   };
 
   var messages = {
-    strategyStart: (strategyName, request) =>
-      `Using ${strategyName} to ` + `respond to '${getFriendlyURL(request.url)}'`,
+    strategyStart: (strategyName, request) => `Using ${strategyName} to ` + `respond to '${getFriendlyURL(request.url)}'`,
     printFinalResponse: response => {
       if (response) {
         logger_mjs.logger.groupCollapsed(`View the final response here.`);
         logger_mjs.logger.unprefixed.log(response);
         logger_mjs.logger.groupEnd();
       }
-    },
+    }
   };
 
   /*
@@ -106,19 +98,19 @@ this.workbox.strategies = (function(
     handle({ event }) {
       var _this = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         {
           assert_mjs.assert.isInstance(event, FetchEvent, {
             moduleName: 'workbox-strategies',
             className: 'CacheFirst',
             funcName: 'handle',
-            paramName: 'event',
+            paramName: 'event'
           });
         }
 
         return _this.makeRequest({
           event,
-          request: event.request,
+          request: event.request
         });
       })();
     }
@@ -141,7 +133,7 @@ this.workbox.strategies = (function(
     makeRequest({ event, request }) {
       var _this2 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         const logs = [];
 
         if (typeof request === 'string') {
@@ -153,7 +145,7 @@ this.workbox.strategies = (function(
             moduleName: 'workbox-strategies',
             className: 'CacheFirst',
             funcName: 'makeRequest',
-            paramName: 'request',
+            paramName: 'request'
           });
         }
 
@@ -162,16 +154,13 @@ this.workbox.strategies = (function(
           request,
           event,
           matchOptions: _this2._matchOptions,
-          plugins: _this2._plugins,
+          plugins: _this2._plugins
         });
 
         let error;
         if (!response) {
           {
-            logs.push(
-              `No response found in the '${_this2._cacheName}' cache. ` +
-                `Will respond with a network request.`
-            );
+            logs.push(`No response found in the '${_this2._cacheName}' cache. ` + `Will respond with a network request.`);
           }
           try {
             response = yield _this2._getFromNetwork(request, event);
@@ -223,12 +212,12 @@ this.workbox.strategies = (function(
     _getFromNetwork(request, event) {
       var _this3 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         const response = yield fetchWrapper_mjs.fetchWrapper.fetch({
           request,
           event,
           fetchOptions: _this3._fetchOptions,
-          plugins: _this3._plugins,
+          plugins: _this3._plugins
         });
 
         // Keep the service worker while we put the request to the cache
@@ -238,7 +227,7 @@ this.workbox.strategies = (function(
           request,
           response: responseClone,
           event,
-          plugins: _this3._plugins,
+          plugins: _this3._plugins
         });
 
         if (event) {
@@ -246,10 +235,7 @@ this.workbox.strategies = (function(
             event.waitUntil(cachePutPromise);
           } catch (error) {
             {
-              logger_mjs.logger.warn(
-                `Unable to ensure service worker stays alive when ` +
-                  `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`
-              );
+              logger_mjs.logger.warn(`Unable to ensure service worker stays alive when ` + `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`);
             }
           }
         }
@@ -312,19 +298,19 @@ this.workbox.strategies = (function(
     handle({ event }) {
       var _this = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         {
           assert_mjs.assert.isInstance(event, FetchEvent, {
             moduleName: 'workbox-strategies',
             className: 'CacheOnly',
             funcName: 'handle',
-            paramName: 'event',
+            paramName: 'event'
           });
         }
 
         return _this.makeRequest({
           event,
-          request: event.request,
+          request: event.request
         });
       })();
     }
@@ -347,7 +333,7 @@ this.workbox.strategies = (function(
     makeRequest({ event, request }) {
       var _this2 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         if (typeof request === 'string') {
           request = new Request(request);
         }
@@ -357,7 +343,7 @@ this.workbox.strategies = (function(
             moduleName: 'workbox-strategies',
             className: 'CacheOnly',
             funcName: 'makeRequest',
-            paramName: 'request',
+            paramName: 'request'
           });
         }
 
@@ -366,15 +352,13 @@ this.workbox.strategies = (function(
           request,
           event,
           matchOptions: _this2._matchOptions,
-          plugins: _this2._plugins,
+          plugins: _this2._plugins
         });
 
         {
           logger_mjs.logger.groupCollapsed(messages.strategyStart('CacheOnly', request));
           if (response) {
-            logger_mjs.logger.log(
-              `Found a cached response in the '${_this2._cacheName}'` + ` cache.`
-            );
+            logger_mjs.logger.log(`Found a cached response in the '${_this2._cacheName}'` + ` cache.`);
             messages.printFinalResponse(response);
           } else {
             logger_mjs.logger.log(`No response found in the '${_this2._cacheName}' cache.`);
@@ -418,7 +402,7 @@ this.workbox.strategies = (function(
         return response;
       }
       return null;
-    },
+    }
   };
 
   /*
@@ -472,9 +456,7 @@ this.workbox.strategies = (function(
 
       if (options.plugins) {
         let isUsingCacheWillUpdate = options.plugins.some(plugin => !!plugin.cacheWillUpdate);
-        this._plugins = isUsingCacheWillUpdate
-          ? options.plugins
-          : [cacheOkAndOpaquePlugin, ...options.plugins];
+        this._plugins = isUsingCacheWillUpdate ? options.plugins : [cacheOkAndOpaquePlugin, ...options.plugins];
       } else {
         // No plugins passed in, use the default plugin.
         this._plugins = [cacheOkAndOpaquePlugin];
@@ -487,7 +469,7 @@ this.workbox.strategies = (function(
             moduleName: 'workbox-strategies',
             className: 'NetworkFirst',
             funcName: 'constructor',
-            paramName: 'networkTimeoutSeconds',
+            paramName: 'networkTimeoutSeconds'
           });
         }
       }
@@ -509,19 +491,19 @@ this.workbox.strategies = (function(
     handle({ event }) {
       var _this = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         {
           assert_mjs.assert.isInstance(event, FetchEvent, {
             moduleName: 'workbox-strategies',
             className: 'NetworkFirst',
             funcName: 'handle',
-            paramName: 'event',
+            paramName: 'event'
           });
         }
 
         return _this.makeRequest({
           event,
-          request: event.request,
+          request: event.request
         });
       })();
     }
@@ -544,7 +526,7 @@ this.workbox.strategies = (function(
     makeRequest({ event, request }) {
       var _this2 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         const logs = [];
 
         if (typeof request === 'string') {
@@ -556,7 +538,7 @@ this.workbox.strategies = (function(
             moduleName: 'workbox-strategies',
             className: 'NetworkFirst',
             funcName: 'handle',
-            paramName: 'makeRequest',
+            paramName: 'makeRequest'
           });
         }
 
@@ -611,14 +593,12 @@ this.workbox.strategies = (function(
       let timeoutId;
       const timeoutPromise = new Promise(resolve => {
         const onNetworkTimeout = (() => {
-          var _ref = babelHelpers.asyncToGenerator(function*() {
+          var _ref = babelHelpers.asyncToGenerator(function* () {
             {
-              logs.push(
-                `Timing out the network response at ` + `${_this3._networkTimeoutSeconds} seconds.`
-              );
+              logs.push(`Timing out the network response at ` + `${_this3._networkTimeoutSeconds} seconds.`);
             }
 
-            resolve(yield _this3._respondFromCache({ request, event }));
+            resolve((yield _this3._respondFromCache({ request, event })));
           });
 
           return function onNetworkTimeout() {
@@ -631,7 +611,7 @@ this.workbox.strategies = (function(
 
       return {
         promise: timeoutPromise,
-        id: timeoutId,
+        id: timeoutId
       };
     }
 
@@ -648,7 +628,7 @@ this.workbox.strategies = (function(
     _getNetworkPromise({ timeoutId, request, logs, event }) {
       var _this4 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         let error;
         let response;
         try {
@@ -656,7 +636,7 @@ this.workbox.strategies = (function(
             request,
             event,
             fetchOptions: _this4._fetchOptions,
-            plugins: _this4._plugins,
+            plugins: _this4._plugins
           });
         } catch (err) {
           error = err;
@@ -670,9 +650,7 @@ this.workbox.strategies = (function(
           if (response) {
             logs.push(`Got response from network.`);
           } else {
-            logs.push(
-              `Unable to get a response from the network. Will respond ` + `with a cached response.`
-            );
+            logs.push(`Unable to get a response from the network. Will respond ` + `with a cached response.`);
           }
         }
 
@@ -693,7 +671,7 @@ this.workbox.strategies = (function(
             request,
             response: responseClone,
             event,
-            plugins: _this4._plugins,
+            plugins: _this4._plugins
           });
 
           if (event) {
@@ -703,10 +681,7 @@ this.workbox.strategies = (function(
               event.waitUntil(cachePut);
             } catch (err) {
               {
-                logger_mjs.logger.warn(
-                  `Unable to ensure service worker stays alive when ` +
-                    `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`
-                );
+                logger_mjs.logger.warn(`Unable to ensure service worker stays alive when ` + `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`);
               }
             }
           }
@@ -732,7 +707,7 @@ this.workbox.strategies = (function(
         request,
         event,
         matchOptions: this._matchOptions,
-        plugins: this._plugins,
+        plugins: this._plugins
       });
     }
   }
@@ -792,19 +767,19 @@ this.workbox.strategies = (function(
     handle({ event }) {
       var _this = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         {
           assert_mjs.assert.isInstance(event, FetchEvent, {
             moduleName: 'workbox-strategies',
             className: 'NetworkOnly',
             funcName: 'handle',
-            paramName: 'event',
+            paramName: 'event'
           });
         }
 
         return _this.makeRequest({
           event,
-          request: event.request,
+          request: event.request
         });
       })();
     }
@@ -827,7 +802,7 @@ this.workbox.strategies = (function(
     makeRequest({ event, request }) {
       var _this2 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         if (typeof request === 'string') {
           request = new Request(request);
         }
@@ -837,7 +812,7 @@ this.workbox.strategies = (function(
             moduleName: 'workbox-strategies',
             className: 'NetworkOnly',
             funcName: 'handle',
-            paramName: 'request',
+            paramName: 'request'
           });
         }
 
@@ -848,7 +823,7 @@ this.workbox.strategies = (function(
             request,
             event,
             fetchOptions: _this2._fetchOptions,
-            plugins: _this2._plugins,
+            plugins: _this2._plugins
           });
         } catch (err) {
           error = err;
@@ -927,9 +902,7 @@ this.workbox.strategies = (function(
 
       if (options.plugins) {
         let isUsingCacheWillUpdate = options.plugins.some(plugin => !!plugin.cacheWillUpdate);
-        this._plugins = isUsingCacheWillUpdate
-          ? options.plugins
-          : [cacheOkAndOpaquePlugin, ...options.plugins];
+        this._plugins = isUsingCacheWillUpdate ? options.plugins : [cacheOkAndOpaquePlugin, ...options.plugins];
       } else {
         // No plugins passed in, use the default plugin.
         this._plugins = [cacheOkAndOpaquePlugin];
@@ -952,19 +925,19 @@ this.workbox.strategies = (function(
     handle({ event }) {
       var _this = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         {
           assert_mjs.assert.isInstance(event, FetchEvent, {
             moduleName: 'workbox-strategies',
             className: 'StaleWhileRevalidate',
             funcName: 'handle',
-            paramName: 'event',
+            paramName: 'event'
           });
         }
 
         return _this.makeRequest({
           event,
-          request: event.request,
+          request: event.request
         });
       })();
     }
@@ -987,7 +960,7 @@ this.workbox.strategies = (function(
     makeRequest({ event, request }) {
       var _this2 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         const logs = [];
 
         if (typeof request === 'string') {
@@ -999,7 +972,7 @@ this.workbox.strategies = (function(
             moduleName: 'workbox-strategies',
             className: 'StaleWhileRevalidate',
             funcName: 'handle',
-            paramName: 'request',
+            paramName: 'request'
           });
         }
 
@@ -1010,15 +983,12 @@ this.workbox.strategies = (function(
           request,
           event,
           matchOptions: _this2._matchOptions,
-          plugins: _this2._plugins,
+          plugins: _this2._plugins
         });
 
         if (response) {
           {
-            logs.push(
-              `Found a cached response in the '${_this2._cacheName}'` +
-                ` cache. Will update with the network response in the background.`
-            );
+            logs.push(`Found a cached response in the '${_this2._cacheName}'` + ` cache. Will update with the network response in the background.`);
           }
 
           if (event) {
@@ -1026,19 +996,13 @@ this.workbox.strategies = (function(
               event.waitUntil(fetchAndCachePromise);
             } catch (error) {
               {
-                logger_mjs.logger.warn(
-                  `Unable to ensure service worker stays alive when ` +
-                    `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`
-                );
+                logger_mjs.logger.warn(`Unable to ensure service worker stays alive when ` + `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`);
               }
             }
           }
         } else {
           {
-            logs.push(
-              `No response found in the '${_this2._cacheName}' cache. ` +
-                `Will wait for the network response.`
-            );
+            logs.push(`No response found in the '${_this2._cacheName}' cache. ` + `Will wait for the network response.`);
           }
           response = yield fetchAndCachePromise;
         }
@@ -1067,12 +1031,12 @@ this.workbox.strategies = (function(
     _getFromNetwork({ request, event }) {
       var _this3 = this;
 
-      return babelHelpers.asyncToGenerator(function*() {
+      return babelHelpers.asyncToGenerator(function* () {
         const response = yield fetchWrapper_mjs.fetchWrapper.fetch({
           request,
           event,
           fetchOptions: _this3._fetchOptions,
-          plugins: _this3._plugins,
+          plugins: _this3._plugins
         });
 
         const cachePutPromise = cacheWrapper_mjs.cacheWrapper.put({
@@ -1080,7 +1044,7 @@ this.workbox.strategies = (function(
           request,
           response: response.clone(),
           event,
-          plugins: _this3._plugins,
+          plugins: _this3._plugins
         });
 
         if (event) {
@@ -1088,10 +1052,7 @@ this.workbox.strategies = (function(
             event.waitUntil(cachePutPromise);
           } catch (error) {
             {
-              logger_mjs.logger.warn(
-                `Unable to ensure service worker stays alive when ` +
-                  `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`
-              );
+              logger_mjs.logger.warn(`Unable to ensure service worker stays alive when ` + `updating cache for '${getFriendlyURL_mjs.getFriendlyURL(event.request.url)}'.`);
             }
           }
         }
@@ -1117,12 +1078,12 @@ this.workbox.strategies = (function(
     limitations under the License.
   */
 
-  var publicAPI = /*#__PURE__*/ Object.freeze({
+  var publicAPI = /*#__PURE__*/Object.freeze({
     CacheFirst: CacheFirst,
     CacheOnly: CacheOnly,
     NetworkFirst: NetworkFirst,
     NetworkOnly: NetworkOnly,
-    StaleWhileRevalidate: StaleWhileRevalidate,
+    StaleWhileRevalidate: StaleWhileRevalidate
   });
 
   /*
@@ -1175,7 +1136,7 @@ this.workbox.strategies = (function(
     cacheOnly: CacheOnly,
     networkFirst: NetworkFirst,
     networkOnly: NetworkOnly,
-    staleWhileRevalidate: StaleWhileRevalidate,
+    staleWhileRevalidate: StaleWhileRevalidate
   };
 
   const defaultExport = {};
@@ -1205,13 +1166,7 @@ this.workbox.strategies = (function(
   const finalExport = Object.assign(defaultExport, publicAPI);
 
   return finalExport;
-})(
-  workbox.core._private,
-  workbox.core._private,
-  workbox.core._private,
-  workbox.core._private,
-  workbox.core._private,
-  workbox.core._private
-);
+
+}(workbox.core._private,workbox.core._private,workbox.core._private,workbox.core._private,workbox.core._private,workbox.core._private));
 
 //# sourceMappingURL=workbox-strategies.dev.js.map

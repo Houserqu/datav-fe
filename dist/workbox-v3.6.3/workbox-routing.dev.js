@@ -1,11 +1,5 @@
 this.workbox = this.workbox || {};
-this.workbox.routing = (function(
-  assert_mjs,
-  logger_mjs,
-  WorkboxError_mjs,
-  getFriendlyURL_mjs,
-  cacheNames_mjs
-) {
+this.workbox.routing = (function (assert_mjs,logger_mjs,WorkboxError_mjs,getFriendlyURL_mjs,cacheNames_mjs) {
   'use strict';
 
   try {
@@ -68,14 +62,14 @@ this.workbox.routing = (function(
    *
    * @private
    */
-  var normalizeHandler = handler => {
+  var normalizeHandler = (handler => {
     if (handler && typeof handler === 'object') {
       {
         assert_mjs.assert.hasMethod(handler, 'handle', {
           moduleName: 'workbox-routing',
           className: 'Route',
           funcName: 'constructor',
-          paramName: 'handler',
+          paramName: 'handler'
         });
       }
       return handler;
@@ -85,12 +79,12 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: 'Route',
           funcName: 'constructor',
-          paramName: 'handler',
+          paramName: 'handler'
         });
       }
       return { handle: handler };
     }
-  };
+  });
 
   /*
    Copyright 2017 Google Inc. All Rights Reserved.
@@ -134,7 +128,7 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: 'Route',
           funcName: 'constructor',
-          paramName: 'match',
+          paramName: 'match'
         });
 
         if (method) {
@@ -198,7 +192,7 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: 'RegExpRoute',
           funcName: 'constructor',
-          paramName: 'pattern',
+          paramName: 'pattern'
         });
       }
 
@@ -216,11 +210,7 @@ this.workbox.routing = (function(
         // behind this behavior.
         if (url.origin !== location.origin && result.index !== 0) {
           {
-            logger_mjs.logger.debug(
-              `The regular expression '${regExp}' only partially matched ` +
-                `against the cross-origin URL '${url}'. RegExpRoute's will only ` +
-                `handle cross-origin requests if they match the entire URL.`
-            );
+            logger_mjs.logger.debug(`The regular expression '${regExp}' only partially matched ` + `against the cross-origin URL '${url}'. RegExpRoute's will only ` + `handle cross-origin requests if they match the entire URL.`);
           }
 
           return null;
@@ -295,7 +285,7 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: 'Router',
           funcName: 'handleRequest',
-          paramName: 'event',
+          paramName: 'event'
         });
       }
 
@@ -330,9 +320,7 @@ this.workbox.routing = (function(
       // fall back to defaultHandler if that's defined.
       if (!handler && this._defaultHandler) {
         {
-          debugMessages.push(
-            `Failed to find a matching route. Falling ` + `back to the default handler.`
-          );
+          debugMessages.push(`Failed to find a matching route. Falling ` + `back to the default handler.`);
 
           // This is used for debugging in logs in the case of an error.
           route = '[Default Handler]';
@@ -352,9 +340,7 @@ this.workbox.routing = (function(
       {
         // We have a handler, meaning Workbox is going to handle the route.
         // print the routing details to the console.
-        logger_mjs.logger.groupCollapsed(
-          `Router is responding to: ${getFriendlyURL_mjs.getFriendlyURL(url)}`
-        );
+        logger_mjs.logger.groupCollapsed(`Router is responding to: ${getFriendlyURL_mjs.getFriendlyURL(url)}`);
         debugMessages.forEach(msg => {
           if (Array.isArray(msg)) {
             logger_mjs.logger.log(...msg);
@@ -386,10 +372,7 @@ this.workbox.routing = (function(
           {
             // Still include URL here as it will be async from the console group
             // and may not make sense without the URL
-            logger_mjs.logger.groupCollapsed(
-              `Error thrown when responding to: ` +
-                ` ${getFriendlyURL_mjs.getFriendlyURL(url)}. Falling back to Catch Handler.`
-            );
+            logger_mjs.logger.groupCollapsed(`Error thrown when responding to: ` + ` ${getFriendlyURL_mjs.getFriendlyURL(url)}. Falling back to Catch Handler.`);
             logger_mjs.logger.unprefixed.error(`Error thrown by:`, route);
             logger_mjs.logger.unprefixed.error(err);
             logger_mjs.logger.groupEnd();
@@ -421,10 +404,7 @@ this.workbox.routing = (function(
           if (Array.isArray(matchResult) && matchResult.length === 0) {
             // Instead of passing an empty array in as params, use undefined.
             matchResult = undefined;
-          } else if (
-            (matchResult.constructor === Object && Object.keys(matchResult).length === 0) ||
-            matchResult === true
-          ) {
+          } else if (matchResult.constructor === Object && Object.keys(matchResult).length === 0 || matchResult === true) {
             // Instead of passing an empty object in as params, use undefined.
             matchResult = undefined;
           }
@@ -434,7 +414,7 @@ this.workbox.routing = (function(
           return {
             route,
             params: matchResult,
-            handler: route.handler,
+            handler: route.handler
           };
         }
       }
@@ -479,35 +459,35 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: 'Router',
           funcName: 'registerRoute',
-          paramName: 'route',
+          paramName: 'route'
         });
 
         assert_mjs.assert.hasMethod(route, 'match', {
           moduleName: 'workbox-routing',
           className: 'Router',
           funcName: 'registerRoute',
-          paramName: 'route',
+          paramName: 'route'
         });
 
         assert_mjs.assert.isType(route.handler, 'object', {
           moduleName: 'workbox-routing',
           className: 'Router',
           funcName: 'registerRoute',
-          paramName: 'route',
+          paramName: 'route'
         });
 
         assert_mjs.assert.hasMethod(route.handler, 'handle', {
           moduleName: 'workbox-routing',
           className: 'Router',
           funcName: 'registerRoute',
-          paramName: 'route.handler',
+          paramName: 'route.handler'
         });
 
         assert_mjs.assert.isType(route.method, 'string', {
           moduleName: 'workbox-routing',
           className: 'Router',
           funcName: 'registerRoute',
-          paramName: 'route.method',
+          paramName: 'route.method'
         });
       }
 
@@ -528,7 +508,7 @@ this.workbox.routing = (function(
     unregisterRoute(route) {
       if (!this._routes.has(route.method)) {
         throw new WorkboxError_mjs.WorkboxError('unregister-route-but-not-found-with-method', {
-          method: route.method,
+          method: route.method
         });
       }
 
@@ -597,13 +577,13 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: 'NavigationRoute',
           funcName: 'constructor',
-          paramName: 'options.whitelist',
+          paramName: 'options.whitelist'
         });
         assert_mjs.assert.isArrayOfClass(blacklist, RegExp, {
           moduleName: 'workbox-routing',
           className: 'NavigationRoute',
           funcName: 'constructor',
-          paramName: 'options.blacklist',
+          paramName: 'options.blacklist'
         });
       }
 
@@ -632,10 +612,7 @@ this.workbox.routing = (function(
 
       if (this._blacklist.some(regExp => regExp.test(pathnameAndSearch))) {
         {
-          logger_mjs.logger.debug(
-            `The navigation route is not being used, since the ` +
-              `request URL matches both the whitelist and blacklist.`
-          );
+          logger_mjs.logger.debug(`The navigation route is not being used, since the ` + `request URL matches both the whitelist and blacklist.`);
         }
         return false;
       }
@@ -647,10 +624,7 @@ this.workbox.routing = (function(
         return true;
       } else {
         {
-          logger_mjs.logger.debug(
-            `The navigation route is not being used, since the ` +
-              `URL being navigated to doesn't match the whitelist.`
-          );
+          logger_mjs.logger.debug(`The navigation route is not being used, since the ` + `URL being navigated to doesn't match the whitelist.`);
         }
       }
 
@@ -674,11 +648,11 @@ this.workbox.routing = (function(
     limitations under the License.
   */
 
-  var publicAPI = /*#__PURE__*/ Object.freeze({
+  var publicAPI = /*#__PURE__*/Object.freeze({
     RegExpRoute: RegExpRoute,
     Route: Route,
     Router: Router,
-    NavigationRoute: NavigationRoute,
+    NavigationRoute: NavigationRoute
   });
 
   /*
@@ -741,7 +715,7 @@ this.workbox.routing = (function(
               moduleName: 'workbox-routing',
               className: 'DefaultRouter',
               funcName: 'registerRoute',
-              paramName: 'capture',
+              paramName: 'capture'
             });
           }
 
@@ -751,22 +725,14 @@ this.workbox.routing = (function(
           // See https://github.com/pillarjs/path-to-regexp#parameters
           const wildcards = '[*:?+]';
           if (valueToCheck.match(new RegExp(`${wildcards}`))) {
-            logger_mjs.logger.debug(
-              `The '$capture' parameter contains an Express-style wildcard ` +
-                `character (${wildcards}). Strings are now always interpreted as ` +
-                `exact matches; use a RegExp for partial or wildcard matches.`
-            );
+            logger_mjs.logger.debug(`The '$capture' parameter contains an Express-style wildcard ` + `character (${wildcards}). Strings are now always interpreted as ` + `exact matches; use a RegExp for partial or wildcard matches.`);
           }
         }
 
         const matchCallback = ({ url }) => {
           {
             if (url.pathname === captureUrl.pathname && url.origin !== captureUrl.origin) {
-              logger_mjs.logger.debug(
-                `${capture} only partially matches the cross-origin URL ` +
-                  `${url}. This route will only handle cross-origin requests ` +
-                  `if they match the entire URL.`
-              );
+              logger_mjs.logger.debug(`${capture} only partially matches the cross-origin URL ` + `${url}. This route will only handle cross-origin requests ` + `if they match the entire URL.`);
             }
           }
 
@@ -785,7 +751,7 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: 'DefaultRouter',
           funcName: 'registerRoute',
-          paramName: 'capture',
+          paramName: 'capture'
         });
       }
 
@@ -826,43 +792,34 @@ this.workbox.routing = (function(
           moduleName: 'workbox-routing',
           className: '[default export]',
           funcName: 'registerNavigationRoute',
-          paramName: 'cachedAssetUrl',
+          paramName: 'cachedAssetUrl'
         });
       }
 
       const cacheName = cacheNames_mjs.cacheNames.getPrecacheName(options.cacheName);
-      const handler = () =>
-        caches
-          .match(cachedAssetUrl, { cacheName })
-          .then(response => {
-            if (response) {
-              return response;
-            }
-            // This shouldn't normally happen, but there are edge cases:
-            // https://github.com/GoogleChrome/workbox/issues/1441
-            throw new Error(
-              `The cache ${cacheName} did not have an entry for ` + `${cachedAssetUrl}.`
-            );
-          })
-          .catch(error => {
-            // If there's either a cache miss, or the caches.match() call threw
-            // an exception, then attempt to fulfill the navigation request with
-            // a response from the network rather than leaving the user with a
-            // failed navigation.
-            {
-              logger_mjs.logger.debug(
-                `Unable to respond to navigation request with cached ` +
-                  `response: ${error.message}. Falling back to network.`
-              );
-            }
+      const handler = () => caches.match(cachedAssetUrl, { cacheName }).then(response => {
+        if (response) {
+          return response;
+        }
+        // This shouldn't normally happen, but there are edge cases:
+        // https://github.com/GoogleChrome/workbox/issues/1441
+        throw new Error(`The cache ${cacheName} did not have an entry for ` + `${cachedAssetUrl}.`);
+      }).catch(error => {
+        // If there's either a cache miss, or the caches.match() call threw
+        // an exception, then attempt to fulfill the navigation request with
+        // a response from the network rather than leaving the user with a
+        // failed navigation.
+        {
+          logger_mjs.logger.debug(`Unable to respond to navigation request with cached ` + `response: ${error.message}. Falling back to network.`);
+        }
 
-            // This might still fail if the browser is offline...
-            return fetch(cachedAssetUrl);
-          });
+        // This might still fail if the browser is offline...
+        return fetch(cachedAssetUrl);
+      });
 
       const route = new NavigationRoute(handler, {
         whitelist: options.whitelist,
-        blacklist: options.blacklist,
+        blacklist: options.blacklist
       });
       super.registerRoute(route);
 
@@ -900,12 +857,7 @@ this.workbox.routing = (function(
   const finalExport = Object.assign(router, publicAPI);
 
   return finalExport;
-})(
-  workbox.core._private,
-  workbox.core._private,
-  workbox.core._private,
-  workbox.core._private,
-  workbox.core._private
-);
+
+}(workbox.core._private,workbox.core._private,workbox.core._private,workbox.core._private,workbox.core._private));
 
 //# sourceMappingURL=workbox-routing.dev.js.map
