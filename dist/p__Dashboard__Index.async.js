@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([[15],{"4wLU":function(e,t,a){"use strict";a.r(t);a("IzEo");var n=a("bx4M"),o=a("q1tI"),r=a.n(o),c=a("zHco");t["default"]=function(){return r.a.createElement(c["a"],{title:"\u63a7\u5236\u53f0"},r.a.createElement(n["a"],{bordered:!1},"\u6b22\u8fce\u4f7f\u7528 Datav \u63a7\u5236\u53f0"))}}}]);
