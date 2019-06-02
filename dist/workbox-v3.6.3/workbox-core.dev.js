@@ -21,11 +21,14 @@ self.babelHelpers = {
           if (info.done) {
             resolve(value);
           } else {
-            return Promise.resolve(value).then(function(value) {
-              step('next', value);
-            }, function(err) {
-              step('throw', err);
-            });
+            return Promise.resolve(value).then(
+              function(value) {
+                step('next', value);
+              },
+              function(err) {
+                step('throw', err);
+              }
+            );
           }
         }
 
@@ -36,7 +39,7 @@ self.babelHelpers = {
 };
 
 this.workbox = this.workbox || {};
-this.workbox.core = (function () {
+this.workbox.core = (function() {
   'use strict';
 
   try {
@@ -78,7 +81,7 @@ this.workbox.core = (function () {
     log: 1,
     warn: 2,
     error: 3,
-    silent: 4
+    silent: 4,
   };
 
   /*
@@ -111,24 +114,27 @@ this.workbox.core = (function () {
 
   let logLevel = getDefaultLogLevel();
   const shouldPrint = minLevel => logLevel <= minLevel;
-  const setLoggerLevel = newLogLevel => logLevel = newLogLevel;
+  const setLoggerLevel = newLogLevel => (logLevel = newLogLevel);
   const getLoggerLevel = () => logLevel;
 
   // We always want groups to be logged unless logLevel is silent.
   const groupLevel = LOG_LEVELS.error;
 
-  const _print = function (keyName, logArgs, levelColor) {
+  const _print = function(keyName, logArgs, levelColor) {
     const logLevel = keyName.indexOf('group') === 0 ? groupLevel : LOG_LEVELS[keyName];
     if (!shouldPrint(logLevel)) {
       return;
     }
 
-    if (!levelColor || keyName === 'groupCollapsed' && isSafari) {
+    if (!levelColor || (keyName === 'groupCollapsed' && isSafari)) {
       console[keyName](...logArgs);
       return;
     }
 
-    const logPrefix = ['%cworkbox', `background: ${levelColor}; color: white; padding: 2px 0.5em; ` + `border-radius: 0.5em;`];
+    const logPrefix = [
+      '%cworkbox',
+      `background: ${levelColor}; color: white; padding: 2px 0.5em; ` + `border-radius: 0.5em;`,
+    ];
     console[keyName](...logPrefix, ...logArgs);
   };
 
@@ -141,8 +147,8 @@ this.workbox.core = (function () {
   const defaultExport = {
     groupEnd,
     unprefixed: {
-      groupEnd
-    }
+      groupEnd,
+    },
   };
 
   const setupLogs = (keyName, color) => {
@@ -155,7 +161,7 @@ this.workbox.core = (function () {
     log: GREEN,
     warn: YELLOW,
     error: RED,
-    groupCollapsed: BLUE
+    groupCollapsed: BLUE,
   };
   Object.keys(levelToColor).forEach(keyName => setupLogs(keyName, levelToColor[keyName]));
 
@@ -180,7 +186,11 @@ this.workbox.core = (function () {
       if (!paramName || !validValueDescription) {
         throw new Error(`Unexpected input to 'invalid-value' error.`);
       }
-      return `The '${paramName}' parameter was given a value with an ` + `unexpected value. ${validValueDescription} Received a value of ` + `${JSON.stringify(value)}.`;
+      return (
+        `The '${paramName}' parameter was given a value with an ` +
+        `unexpected value. ${validValueDescription} Received a value of ` +
+        `${JSON.stringify(value)}.`
+      );
     },
 
     'not-in-sw': ({ moduleName }) => {
@@ -194,40 +204,68 @@ this.workbox.core = (function () {
       if (!moduleName || !className || !funcName || !paramName) {
         throw new Error(`Unexpected input to 'not-an-array' error.`);
       }
-      return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className}.${funcName}()' must be an array.`;
+      return (
+        `The parameter '${paramName}' passed into ` +
+        `'${moduleName}.${className}.${funcName}()' must be an array.`
+      );
     },
 
-    'incorrect-type': ({ expectedType, paramName, moduleName, className,
-      funcName }) => {
+    'incorrect-type': ({ expectedType, paramName, moduleName, className, funcName }) => {
       if (!expectedType || !paramName || !moduleName || !funcName) {
         throw new Error(`Unexpected input to 'incorrect-type' error.`);
       }
-      return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className ? className + '.' : ''}` + `${funcName}()' must be of type ${expectedType}.`;
+      return (
+        `The parameter '${paramName}' passed into ` +
+        `'${moduleName}.${className ? className + '.' : ''}` +
+        `${funcName}()' must be of type ${expectedType}.`
+      );
     },
 
-    'incorrect-class': ({ expectedClass, paramName, moduleName, className,
-      funcName, isReturnValueProblem }) => {
+    'incorrect-class': ({
+      expectedClass,
+      paramName,
+      moduleName,
+      className,
+      funcName,
+      isReturnValueProblem,
+    }) => {
       if (!expectedClass || !moduleName || !funcName) {
         throw new Error(`Unexpected input to 'incorrect-class' error.`);
       }
 
       if (isReturnValueProblem) {
-        return `The return value from ` + `'${moduleName}.${className ? className + '.' : ''}${funcName}()' ` + `must be an instance of class ${expectedClass.name}.`;
+        return (
+          `The return value from ` +
+          `'${moduleName}.${className ? className + '.' : ''}${funcName}()' ` +
+          `must be an instance of class ${expectedClass.name}.`
+        );
       }
 
-      return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className ? className + '.' : ''}${funcName}()' ` + `must be an instance of class ${expectedClass.name}.`;
+      return (
+        `The parameter '${paramName}' passed into ` +
+        `'${moduleName}.${className ? className + '.' : ''}${funcName}()' ` +
+        `must be an instance of class ${expectedClass.name}.`
+      );
     },
 
-    'missing-a-method': ({ expectedMethod, paramName, moduleName, className,
-      funcName }) => {
+    'missing-a-method': ({ expectedMethod, paramName, moduleName, className, funcName }) => {
       if (!expectedMethod || !paramName || !moduleName || !className || !funcName) {
         throw new Error(`Unexpected input to 'missing-a-method' error.`);
       }
-      return `${moduleName}.${className}.${funcName}() expected the ` + `'${paramName}' parameter to expose a '${expectedMethod}' method.`;
+      return (
+        `${moduleName}.${className}.${funcName}() expected the ` +
+        `'${paramName}' parameter to expose a '${expectedMethod}' method.`
+      );
     },
 
     'add-to-cache-list-unexpected-type': ({ entry }) => {
-      return `An unexpected entry was passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' The entry ` + `'${JSON.stringify(entry)}' isn't supported. You must supply an array of ` + `strings with one or more characters, objects with a url property or ` + `Request objects.`;
+      return (
+        `An unexpected entry was passed to ` +
+        `'workbox-precaching.PrecacheController.addToCacheList()' The entry ` +
+        `'${JSON.stringify(entry)}' isn't supported. You must supply an array of ` +
+        `strings with one or more characters, objects with a url property or ` +
+        `Request objects.`
+      );
     },
 
     'add-to-cache-list-conflicting-entries': ({ firstEntry, secondEntry }) => {
@@ -235,7 +273,13 @@ this.workbox.core = (function () {
         throw new Error(`Unexpected input to ` + `'add-to-cache-list-duplicate-entries' error.`);
       }
 
-      return `Two of the entries passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' had matching ` + `URLs but different revision details. This means workbox-precaching ` + `is unable to determine cache the asset correctly. Please remove one ` + `of the entries.`;
+      return (
+        `Two of the entries passed to ` +
+        `'workbox-precaching.PrecacheController.addToCacheList()' had matching ` +
+        `URLs but different revision details. This means workbox-precaching ` +
+        `is unable to determine cache the asset correctly. Please remove one ` +
+        `of the entries.`
+      );
     },
 
     'plugin-error-request-will-fetch': ({ thrownError }) => {
@@ -243,7 +287,10 @@ this.workbox.core = (function () {
         throw new Error(`Unexpected input to ` + `'plugin-error-request-will-fetch', error.`);
       }
 
-      return `An error was thrown by a plugins 'requestWillFetch()' method. ` + `The thrown error message was: '${thrownError.message}'.`;
+      return (
+        `An error was thrown by a plugins 'requestWillFetch()' method. ` +
+        `The thrown error message was: '${thrownError.message}'.`
+      );
     },
 
     'invalid-cache-name': ({ cacheNameId, value }) => {
@@ -251,15 +298,24 @@ this.workbox.core = (function () {
         throw new Error(`Expected a 'cacheNameId' for error 'invalid-cache-name'`);
       }
 
-      return `You must provide a name containing at least one character for ` + `setCacheDeatils({${cacheNameId}: '...'}). Received a value of ` + `'${JSON.stringify(value)}'`;
+      return (
+        `You must provide a name containing at least one character for ` +
+        `setCacheDeatils({${cacheNameId}: '...'}). Received a value of ` +
+        `'${JSON.stringify(value)}'`
+      );
     },
 
     'unregister-route-but-not-found-with-method': ({ method }) => {
       if (!method) {
-        throw new Error(`Unexpected input to ` + `'unregister-route-but-not-found-with-method' error.`);
+        throw new Error(
+          `Unexpected input to ` + `'unregister-route-but-not-found-with-method' error.`
+        );
       }
 
-      return `The route you're trying to unregister was not  previously ` + `registered for the method type '${method}'.`;
+      return (
+        `The route you're trying to unregister was not  previously ` +
+        `registered for the method type '${method}'.`
+      );
     },
 
     'unregister-route-route-not-registered': () => {
@@ -271,75 +327,130 @@ this.workbox.core = (function () {
     },
 
     'duplicate-queue-name': ({ name }) => {
-      return `The Queue name '${name}' is already being used. ` + `All instances of backgroundSync.Queue must be given unique names.`;
+      return (
+        `The Queue name '${name}' is already being used. ` +
+        `All instances of backgroundSync.Queue must be given unique names.`
+      );
     },
 
     'expired-test-without-max-age': ({ methodName, paramName }) => {
-      return `The '${methodName}()' method can only be used when the ` + `'${paramName}' is used in the constructor.`;
+      return (
+        `The '${methodName}()' method can only be used when the ` +
+        `'${paramName}' is used in the constructor.`
+      );
     },
 
     'unsupported-route-type': ({ moduleName, className, funcName, paramName }) => {
-      return `The supplied '${paramName}' parameter was an unsupported type. ` + `Please check the docs for ${moduleName}.${className}.${funcName} for ` + `valid input types.`;
+      return (
+        `The supplied '${paramName}' parameter was an unsupported type. ` +
+        `Please check the docs for ${moduleName}.${className}.${funcName} for ` +
+        `valid input types.`
+      );
     },
 
-    'not-array-of-class': ({ value, expectedClass,
-      moduleName, className, funcName, paramName }) => {
-      return `The supplied '${paramName}' parameter must be an array of ` + `'${expectedClass}' objects. Received '${JSON.stringify(value)},'. ` + `Please check the call to ${moduleName}.${className}.${funcName}() ` + `to fix the issue.`;
+    'not-array-of-class': ({
+      value,
+      expectedClass,
+      moduleName,
+      className,
+      funcName,
+      paramName,
+    }) => {
+      return (
+        `The supplied '${paramName}' parameter must be an array of ` +
+        `'${expectedClass}' objects. Received '${JSON.stringify(value)},'. ` +
+        `Please check the call to ${moduleName}.${className}.${funcName}() ` +
+        `to fix the issue.`
+      );
     },
 
     'max-entries-or-age-required': ({ moduleName, className, funcName }) => {
-      return `You must define either config.maxEntries or config.maxAgeSeconds` + `in ${moduleName}.${className}.${funcName}`;
+      return (
+        `You must define either config.maxEntries or config.maxAgeSeconds` +
+        `in ${moduleName}.${className}.${funcName}`
+      );
     },
 
     'statuses-or-headers-required': ({ moduleName, className, funcName }) => {
-      return `You must define either config.statuses or config.headers` + `in ${moduleName}.${className}.${funcName}`;
+      return (
+        `You must define either config.statuses or config.headers` +
+        `in ${moduleName}.${className}.${funcName}`
+      );
     },
 
     'invalid-string': ({ moduleName, className, funcName, paramName }) => {
       if (!paramName || !moduleName || !className || !funcName) {
         throw new Error(`Unexpected input to 'invalid-string' error.`);
       }
-      return `When using strings, the '${paramName}' parameter must start with ` + `'http' (for cross-origin matches) or '/' (for same-origin matches). ` + `Please see the docs for ${moduleName}.${className}.${funcName}() for ` + `more info.`;
+      return (
+        `When using strings, the '${paramName}' parameter must start with ` +
+        `'http' (for cross-origin matches) or '/' (for same-origin matches). ` +
+        `Please see the docs for ${moduleName}.${className}.${funcName}() for ` +
+        `more info.`
+      );
     },
     'channel-name-required': () => {
       return `You must provide a channelName to construct a ` + `BroadcastCacheUpdate instance.`;
     },
     'invalid-responses-are-same-args': () => {
-      return `The arguments passed into responsesAreSame() appear to be ` + `invalid. Please ensure valid Responses are used.`;
+      return (
+        `The arguments passed into responsesAreSame() appear to be ` +
+        `invalid. Please ensure valid Responses are used.`
+      );
     },
     'expire-custom-caches-only': () => {
-      return `You must provide a 'cacheName' property when using the ` + `expiration plugin with a runtime caching strategy.`;
+      return (
+        `You must provide a 'cacheName' property when using the ` +
+        `expiration plugin with a runtime caching strategy.`
+      );
     },
     'unit-must-be-bytes': ({ normalizedRangeHeader }) => {
       if (!normalizedRangeHeader) {
         throw new Error(`Unexpected input to 'unit-must-be-bytes' error.`);
       }
-      return `The 'unit' portion of the Range header must be set to 'bytes'. ` + `The Range header provided was "${normalizedRangeHeader}"`;
+      return (
+        `The 'unit' portion of the Range header must be set to 'bytes'. ` +
+        `The Range header provided was "${normalizedRangeHeader}"`
+      );
     },
     'single-range-only': ({ normalizedRangeHeader }) => {
       if (!normalizedRangeHeader) {
         throw new Error(`Unexpected input to 'single-range-only' error.`);
       }
-      return `Multiple ranges are not supported. Please use a  single start ` + `value, and optional end value. The Range header provided was ` + `"${normalizedRangeHeader}"`;
+      return (
+        `Multiple ranges are not supported. Please use a  single start ` +
+        `value, and optional end value. The Range header provided was ` +
+        `"${normalizedRangeHeader}"`
+      );
     },
     'invalid-range-values': ({ normalizedRangeHeader }) => {
       if (!normalizedRangeHeader) {
         throw new Error(`Unexpected input to 'invalid-range-values' error.`);
       }
-      return `The Range header is missing both start and end values. At least ` + `one of those values is needed. The Range header provided was ` + `"${normalizedRangeHeader}"`;
+      return (
+        `The Range header is missing both start and end values. At least ` +
+        `one of those values is needed. The Range header provided was ` +
+        `"${normalizedRangeHeader}"`
+      );
     },
     'no-range-header': () => {
       return `No Range header was found in the Request provided.`;
     },
     'range-not-satisfiable': ({ size, start, end }) => {
-      return `The start (${start}) and end (${end}) values in the Range are ` + `not satisfiable by the cached response, which is ${size} bytes.`;
+      return (
+        `The start (${start}) and end (${end}) values in the Range are ` +
+        `not satisfiable by the cached response, which is ${size} bytes.`
+      );
     },
     'attempt-to-cache-non-get-request': ({ url, method }) => {
-      return `Unable to cache '${url}' because it is a '${method}' request and ` + `only 'GET' requests can be cached.`;
+      return (
+        `Unable to cache '${url}' because it is a '${method}' request and ` +
+        `only 'GET' requests can be cached.`
+      );
     },
     'cache-put-with-no-response': ({ url }) => {
       return `There was an attempt to cache '${url}' but the response was not ` + `defined.`;
-    }
+    },
   };
 
   /*
@@ -450,7 +561,7 @@ this.workbox.core = (function () {
         moduleName,
         className,
         funcName,
-        paramName
+        paramName,
       });
     }
   };
@@ -458,23 +569,42 @@ this.workbox.core = (function () {
   const hasMethod = (object, expectedMethod, { moduleName, className, funcName, paramName }) => {
     const type = typeof object[expectedMethod];
     if (type !== 'function') {
-      throw new WorkboxError('missing-a-method', { paramName, expectedMethod,
-        moduleName, className, funcName });
+      throw new WorkboxError('missing-a-method', {
+        paramName,
+        expectedMethod,
+        moduleName,
+        className,
+        funcName,
+      });
     }
   };
 
   const isType = (object, expectedType, { moduleName, className, funcName, paramName }) => {
     if (typeof object !== expectedType) {
-      throw new WorkboxError('incorrect-type', { paramName, expectedType,
-        moduleName, className, funcName });
+      throw new WorkboxError('incorrect-type', {
+        paramName,
+        expectedType,
+        moduleName,
+        className,
+        funcName,
+      });
     }
   };
 
-  const isInstance = (object, expectedClass, { moduleName, className, funcName,
-    paramName, isReturnValueProblem }) => {
+  const isInstance = (
+    object,
+    expectedClass,
+    { moduleName, className, funcName, paramName, isReturnValueProblem }
+  ) => {
     if (!(object instanceof expectedClass)) {
-      throw new WorkboxError('incorrect-class', { paramName, expectedClass,
-        moduleName, className, funcName, isReturnValueProblem });
+      throw new WorkboxError('incorrect-class', {
+        paramName,
+        expectedClass,
+        moduleName,
+        className,
+        funcName,
+        isReturnValueProblem,
+      });
     }
   };
 
@@ -483,15 +613,19 @@ this.workbox.core = (function () {
       throw new WorkboxError('invalid-value', {
         paramName,
         value,
-        validValueDescription: `Valid values are ${JSON.stringify(validValues)}.`
+        validValueDescription: `Valid values are ${JSON.stringify(validValues)}.`,
       });
     }
   };
 
   const isArrayOfClass = (value, expectedClass, { moduleName, className, funcName, paramName }) => {
     const error = new WorkboxError('not-array-of-class', {
-      value, expectedClass,
-      moduleName, className, funcName, paramName
+      value,
+      expectedClass,
+      moduleName,
+      className,
+      funcName,
+      paramName,
     });
     if (!Array.isArray(value)) {
       throw error;
@@ -511,7 +645,7 @@ this.workbox.core = (function () {
     isOneOf,
     isSwEnv,
     isType,
-    isArrayOfClass
+    isArrayOfClass,
   };
 
   /**
@@ -522,7 +656,7 @@ this.workbox.core = (function () {
    * @private
    */
   let executeQuotaErrorCallbacks = (() => {
-    var _ref = babelHelpers.asyncToGenerator(function* () {
+    var _ref = babelHelpers.asyncToGenerator(function*() {
       {
         defaultExport.log(`About to run ${callbacks.size} callbacks to clean up caches.`);
       }
@@ -558,7 +692,7 @@ this.workbox.core = (function () {
       finalAssertExports.isType(callback, 'function', {
         moduleName: 'workbox-core',
         funcName: 'register',
-        paramName: 'callback'
+        paramName: 'callback',
       });
     }
 
@@ -601,10 +735,7 @@ this.workbox.core = (function () {
      * @param {function(this:DBWrapper, Event)} [callbacks.onversionchange]
      *     Defaults to DBWrapper.prototype._onversionchange when not specified.
      */
-    constructor(name, version, {
-      onupgradeneeded,
-      onversionchange = this._onversionchange
-    } = {}) {
+    constructor(name, version, { onupgradeneeded, onversionchange = this._onversionchange } = {}) {
       this._name = name;
       this._version = version;
       this._onupgradeneeded = onupgradeneeded;
@@ -625,26 +756,26 @@ this.workbox.core = (function () {
     open() {
       var _this = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         if (_this._db) return;
 
-        _this._db = yield new Promise(function (resolve, reject) {
+        _this._db = yield new Promise(function(resolve, reject) {
           // This flag is flipped to true if the timeout callback runs prior
           // to the request failing or succeeding. Note: we use a timeout instead
           // of an onblocked handler since there are cases where onblocked will
           // never never run. A timeout better handles all possible scenarios:
           // https://github.com/w3c/IndexedDB/issues/223
           let openRequestTimedOut = false;
-          setTimeout(function () {
+          setTimeout(function() {
             openRequestTimedOut = true;
             reject(new Error('The open request was blocked and timed out'));
           }, _this.OPEN_TIMEOUT);
 
           const openRequest = indexedDB.open(_this._name, _this._version);
-          openRequest.onerror = function (evt) {
+          openRequest.onerror = function(evt) {
             return reject(openRequest.error);
           };
-          openRequest.onupgradeneeded = function (evt) {
+          openRequest.onupgradeneeded = function(evt) {
             if (openRequestTimedOut) {
               openRequest.transaction.abort();
               evt.target.result.close();
@@ -652,7 +783,7 @@ this.workbox.core = (function () {
               _this._onupgradeneeded(evt);
             }
           };
-          openRequest.onsuccess = function (evt) {
+          openRequest.onsuccess = function(evt) {
             const db = evt.target.result;
             if (openRequestTimedOut) {
               db.close();
@@ -679,7 +810,7 @@ this.workbox.core = (function () {
     get(storeName, ...args) {
       var _this2 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         return yield _this2._call('get', storeName, 'readonly', ...args);
       })();
     }
@@ -696,7 +827,7 @@ this.workbox.core = (function () {
     add(storeName, ...args) {
       var _this3 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         return yield _this3._call('add', storeName, 'readwrite', ...args);
       })();
     }
@@ -713,7 +844,7 @@ this.workbox.core = (function () {
     put(storeName, ...args) {
       var _this4 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         return yield _this4._call('put', storeName, 'readwrite', ...args);
       })();
     }
@@ -729,7 +860,7 @@ this.workbox.core = (function () {
     delete(storeName, ...args) {
       var _this5 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         yield _this5._call('delete', storeName, 'readwrite', ...args);
       })();
     }
@@ -743,18 +874,18 @@ this.workbox.core = (function () {
     deleteDatabase() {
       var _this6 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         _this6.close();
         _this6._db = null;
-        yield new Promise(function (resolve, reject) {
+        yield new Promise(function(resolve, reject) {
           const request = indexedDB.deleteDatabase(_this6._name);
-          request.onerror = function (evt) {
+          request.onerror = function(evt) {
             return reject(evt.target.error);
           };
-          request.onblocked = function () {
+          request.onblocked = function() {
             return reject(new Error('Deletion was blocked.'));
           };
-          request.onsuccess = function () {
+          request.onsuccess = function() {
             return resolve();
           };
         });
@@ -775,7 +906,7 @@ this.workbox.core = (function () {
     getAll(storeName, query, count) {
       var _this7 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         if ('getAll' in IDBObjectStore.prototype) {
           return yield _this7._call('getAll', storeName, 'readonly', query, count);
         } else {
@@ -805,8 +936,8 @@ this.workbox.core = (function () {
     getAllMatching(storeName, opts = {}) {
       var _this8 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
-        return yield _this8.transaction([storeName], 'readonly', function (stores, done) {
+      return babelHelpers.asyncToGenerator(function*() {
+        return yield _this8.transaction([storeName], 'readonly', function(stores, done) {
           const store = stores[storeName];
           const target = opts.index ? store.index(opts.index) : store;
           const results = [];
@@ -816,7 +947,7 @@ this.workbox.core = (function () {
           // Details in issue: https://github.com/GoogleChrome/workbox/issues/1509
           const query = opts.query || null;
           const direction = opts.direction || 'next';
-          target.openCursor(query, direction).onsuccess = function (evt) {
+          target.openCursor(query, direction).onsuccess = function(evt) {
             const cursor = evt.target.result;
             if (cursor) {
               const { primaryKey, key, value } = cursor;
@@ -856,24 +987,24 @@ this.workbox.core = (function () {
     transaction(storeNames, type, callback) {
       var _this9 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         yield _this9.open();
-        const result = yield new Promise(function (resolve, reject) {
+        const result = yield new Promise(function(resolve, reject) {
           const txn = _this9._db.transaction(storeNames, type);
-          const done = function (value) {
+          const done = function(value) {
             return resolve(value);
           };
-          const abort = function () {
+          const abort = function() {
             reject(new Error('The transaction was manually aborted'));
             txn.abort();
           };
-          txn.onerror = function (evt) {
+          txn.onerror = function(evt) {
             return reject(evt.target.error);
           };
-          txn.onabort = function (evt) {
+          txn.onabort = function(evt) {
             return reject(evt.target.error);
           };
-          txn.oncomplete = function () {
+          txn.oncomplete = function() {
             return resolve();
           };
 
@@ -901,10 +1032,10 @@ this.workbox.core = (function () {
     _call(method, storeName, type, ...args) {
       var _this10 = this;
 
-      return babelHelpers.asyncToGenerator(function* () {
+      return babelHelpers.asyncToGenerator(function*() {
         yield _this10.open();
-        const callback = function (stores, done) {
-          stores[storeName][method](...args).onsuccess = function (evt) {
+        const callback = function(stores, done) {
+          stores[storeName][method](...args).onsuccess = function(evt) {
             done(evt.target.result);
           };
         };
@@ -968,11 +1099,13 @@ this.workbox.core = (function () {
     suffix: self.registration.scope,
     googleAnalytics: 'googleAnalytics',
     precache: 'precache',
-    runtime: 'runtime'
+    runtime: 'runtime',
   };
 
   const _createCacheName = cacheName => {
-    return [_cacheNameDetails.prefix, cacheName, _cacheNameDetails.suffix].filter(value => value.length > 0).join('-');
+    return [_cacheNameDetails.prefix, cacheName, _cacheNameDetails.suffix]
+      .filter(value => value.length > 0)
+      .join('-');
   };
 
   const cacheNames = {
@@ -991,7 +1124,7 @@ this.workbox.core = (function () {
     },
     getRuntimeName: userCacheName => {
       return userCacheName || _createCacheName(_cacheNameDetails.runtime);
-    }
+    },
   };
 
   /*
@@ -1015,7 +1148,7 @@ this.workbox.core = (function () {
     CACHE_WILL_UPDATE: 'cacheWillUpdate',
     CACHED_RESPONSE_WILL_BE_USED: 'cachedResponseWillBeUsed',
     FETCH_DID_FAIL: 'fetchDidFail',
-    REQUEST_WILL_FETCH: 'requestWillFetch'
+    REQUEST_WILL_FETCH: 'requestWillFetch',
   };
 
   /*
@@ -1037,7 +1170,7 @@ this.workbox.core = (function () {
   var pluginUtils = {
     filter: (plugins, callbackname) => {
       return plugins.filter(plugin => callbackname in plugin);
-    }
+    },
   };
 
   /*
@@ -1096,20 +1229,22 @@ this.workbox.core = (function () {
    * @memberof module:workbox-core
    */
   const putWrapper = (() => {
-    var _ref = babelHelpers.asyncToGenerator(function* ({
+    var _ref = babelHelpers.asyncToGenerator(function*({
       cacheName,
       request,
       response,
       event,
-      plugins = []
+      plugins = [],
     } = {}) {
       if (!response) {
         {
-          defaultExport.error(`Cannot cache non-existent response for ` + `'${getFriendlyURL(request.url)}'.`);
+          defaultExport.error(
+            `Cannot cache non-existent response for ` + `'${getFriendlyURL(request.url)}'.`
+          );
         }
 
         throw new WorkboxError('cache-put-with-no-response', {
-          url: getFriendlyURL(request.url)
+          url: getFriendlyURL(request.url),
         });
       }
 
@@ -1117,7 +1252,10 @@ this.workbox.core = (function () {
 
       if (!responseToCache) {
         {
-          defaultExport.debug(`Response '${getFriendlyURL(request.url)}' will not be ` + `cached.`, responseToCache);
+          defaultExport.debug(
+            `Response '${getFriendlyURL(request.url)}' will not be ` + `cached.`,
+            responseToCache
+          );
         }
         return;
       }
@@ -1126,7 +1264,7 @@ this.workbox.core = (function () {
         if (responseToCache.method && responseToCache.method !== 'GET') {
           throw new WorkboxError('attempt-to-cache-non-get-request', {
             url: getFriendlyURL(request.url),
-            method: responseToCache.method
+            method: responseToCache.method,
           });
         }
       }
@@ -1135,10 +1273,14 @@ this.workbox.core = (function () {
 
       const updatePlugins = pluginUtils.filter(plugins, pluginEvents.CACHE_DID_UPDATE);
 
-      let oldResponse = updatePlugins.length > 0 ? yield matchWrapper({ cacheName, request }) : null;
+      let oldResponse =
+        updatePlugins.length > 0 ? yield matchWrapper({ cacheName, request }) : null;
 
       {
-        defaultExport.debug(`Updating the '${cacheName}' cache with a new Response for ` + `${getFriendlyURL(request.url)}.`);
+        defaultExport.debug(
+          `Updating the '${cacheName}' cache with a new Response for ` +
+            `${getFriendlyURL(request.url)}.`
+        );
       }
 
       try {
@@ -1157,7 +1299,7 @@ this.workbox.core = (function () {
           request,
           event,
           oldResponse,
-          newResponse: responseToCache
+          newResponse: responseToCache,
         });
       }
     });
@@ -1183,12 +1325,13 @@ this.workbox.core = (function () {
    * @memberof module:workbox-core
    */
   const matchWrapper = (() => {
-    var _ref2 = babelHelpers.asyncToGenerator(function* ({
+    var _ref2 = babelHelpers.asyncToGenerator(function*({
       cacheName,
       request,
       event,
       matchOptions,
-      plugins = [] }) {
+      plugins = [],
+    }) {
       const cache = yield caches.open(cacheName);
       let cachedResponse = yield cache.match(request, matchOptions);
       {
@@ -1205,14 +1348,14 @@ this.workbox.core = (function () {
             request,
             event,
             matchOptions,
-            cachedResponse
+            cachedResponse,
           });
           {
             if (cachedResponse) {
               finalAssertExports.isInstance(cachedResponse, Response, {
                 moduleName: 'Plugin',
                 funcName: pluginEvents.CACHED_RESPONSE_WILL_BE_USED,
-                isReturnValueProblem: true
+                isReturnValueProblem: true,
               });
             }
           }
@@ -1241,7 +1384,7 @@ this.workbox.core = (function () {
    * @memberof module:workbox-core
    */
   const _isResponseSafeToCache = (() => {
-    var _ref3 = babelHelpers.asyncToGenerator(function* ({ request, response, event, plugins }) {
+    var _ref3 = babelHelpers.asyncToGenerator(function*({ request, response, event, plugins }) {
       let responseToCache = response;
       let pluginsUsed = false;
       for (let plugin of plugins) {
@@ -1250,7 +1393,7 @@ this.workbox.core = (function () {
           responseToCache = yield plugin[pluginEvents.CACHE_WILL_UPDATE].call(plugin, {
             request,
             response: responseToCache,
-            event
+            event,
           });
 
           {
@@ -1258,7 +1401,7 @@ this.workbox.core = (function () {
               finalAssertExports.isInstance(responseToCache, Response, {
                 moduleName: 'Plugin',
                 funcName: pluginEvents.CACHE_WILL_UPDATE,
-                isReturnValueProblem: true
+                isReturnValueProblem: true,
               });
             }
           }
@@ -1273,9 +1416,17 @@ this.workbox.core = (function () {
         {
           if (!responseToCache.ok) {
             if (responseToCache.status === 0) {
-              defaultExport.warn(`The response for '${request.url}' is an opaque ` + `response. The caching strategy that you're using will not ` + `cache opaque responses by default.`);
+              defaultExport.warn(
+                `The response for '${request.url}' is an opaque ` +
+                  `response. The caching strategy that you're using will not ` +
+                  `cache opaque responses by default.`
+              );
             } else {
-              defaultExport.debug(`The response for '${request.url}' returned ` + `a status code of '${response.status}' and won't be cached as a ` + `result.`);
+              defaultExport.debug(
+                `The response for '${request.url}' returned ` +
+                  `a status code of '${response.status}' and won't be cached as a ` +
+                  `result.`
+              );
             }
           }
         }
@@ -1292,7 +1443,7 @@ this.workbox.core = (function () {
 
   const cacheWrapper = {
     put: putWrapper,
-    match: matchWrapper
+    match: matchWrapper,
   };
 
   /*
@@ -1327,11 +1478,12 @@ this.workbox.core = (function () {
    * @memberof module:workbox-core
    */
   const wrappedFetch = (() => {
-    var _ref = babelHelpers.asyncToGenerator(function* ({
+    var _ref = babelHelpers.asyncToGenerator(function*({
       request,
       fetchOptions,
       event,
-      plugins = [] }) {
+      plugins = [],
+    }) {
       // We *should* be able to call `await event.preloadResponse` even if it's
       // undefined, but for some reason, doing so leads to errors in our Node unit
       // tests. To work around that, explicitly check preloadResponse's value first.
@@ -1339,7 +1491,9 @@ this.workbox.core = (function () {
         const possiblePreloadResponse = yield event.preloadResponse;
         if (possiblePreloadResponse) {
           {
-            defaultExport.log(`Using a preloaded navigation response for ` + `'${getFriendlyURL(request.url)}'`);
+            defaultExport.log(
+              `Using a preloaded navigation response for ` + `'${getFriendlyURL(request.url)}'`
+            );
           }
           return possiblePreloadResponse;
         }
@@ -1355,7 +1509,7 @@ this.workbox.core = (function () {
           expectedClass: 'Request',
           moduleName: 'workbox-core',
           className: 'fetchWrapper',
-          funcName: 'wrappedFetch'
+          funcName: 'wrappedFetch',
         });
       }
 
@@ -1371,7 +1525,7 @@ this.workbox.core = (function () {
           if (pluginEvents.REQUEST_WILL_FETCH in plugin) {
             request = yield plugin[pluginEvents.REQUEST_WILL_FETCH].call(plugin, {
               request: request.clone(),
-              event
+              event,
             });
 
             {
@@ -1379,7 +1533,7 @@ this.workbox.core = (function () {
                 finalAssertExports.isInstance(request, Request, {
                   moduleName: 'Plugin',
                   funcName: pluginEvents.CACHED_RESPONSE_WILL_BE_USED,
-                  isReturnValueProblem: true
+                  isReturnValueProblem: true,
                 });
               }
             }
@@ -1387,7 +1541,7 @@ this.workbox.core = (function () {
         }
       } catch (err) {
         throw new WorkboxError('plugin-error-request-will-fetch', {
-          thrownError: err
+          thrownError: err,
         });
       }
 
@@ -1399,12 +1553,19 @@ this.workbox.core = (function () {
       try {
         const fetchResponse = yield fetch(request, fetchOptions);
         {
-          defaultExport.debug(`Network request for ` + `'${getFriendlyURL(request.url)}' returned a response with ` + `status '${fetchResponse.status}'.`);
+          defaultExport.debug(
+            `Network request for ` +
+              `'${getFriendlyURL(request.url)}' returned a response with ` +
+              `status '${fetchResponse.status}'.`
+          );
         }
         return fetchResponse;
       } catch (error) {
         {
-          defaultExport.error(`Network request for ` + `'${getFriendlyURL(request.url)}' threw an error.`, error);
+          defaultExport.error(
+            `Network request for ` + `'${getFriendlyURL(request.url)}' threw an error.`,
+            error
+          );
         }
 
         for (let plugin of failedFetchPlugins) {
@@ -1412,7 +1573,7 @@ this.workbox.core = (function () {
             error,
             event,
             originalRequest: originalRequest.clone(),
-            request: pluginFilteredRequest.clone()
+            request: pluginFilteredRequest.clone(),
           });
         }
 
@@ -1426,7 +1587,7 @@ this.workbox.core = (function () {
   })();
 
   const fetchWrapper = {
-    fetch: wrappedFetch
+    fetch: wrappedFetch,
   };
 
   /*
@@ -1445,7 +1606,7 @@ this.workbox.core = (function () {
     limitations under the License.
   */
 
-  var _private = /*#__PURE__*/Object.freeze({
+  var _private = /*#__PURE__*/ Object.freeze({
     DBWrapper: DBWrapper,
     WorkboxError: WorkboxError,
     assert: finalAssertExports,
@@ -1453,7 +1614,7 @@ this.workbox.core = (function () {
     cacheWrapper: cacheWrapper,
     fetchWrapper: fetchWrapper,
     getFriendlyURL: getFriendlyURL,
-    logger: defaultExport
+    logger: defaultExport,
   });
 
   /*
@@ -1481,8 +1642,14 @@ this.workbox.core = (function () {
    * @private
    */
   function showWarning(cacheControlHeader) {
-    const docsUrl = 'https://developers.google.com/web/tools/workbox/guides/service-worker-checklist#cache-control_of_your_service_worker_file';
-    defaultExport.warn(`You are setting a 'cache-control' header of ` + `'${cacheControlHeader}' on your service worker file. This should be ` + `set to 'max-age=0' or 'no-cache' to ensure the latest service worker ` + `is served to your users. Learn more here: ${docsUrl}`);
+    const docsUrl =
+      'https://developers.google.com/web/tools/workbox/guides/service-worker-checklist#cache-control_of_your_service_worker_file';
+    defaultExport.warn(
+      `You are setting a 'cache-control' header of ` +
+        `'${cacheControlHeader}' on your service worker file. This should be ` +
+        `set to 'max-age=0' or 'no-cache' to ensure the latest service worker ` +
+        `is served to your users. Learn more here: ${docsUrl}`
+    );
   }
 
   /**
@@ -1496,7 +1663,7 @@ this.workbox.core = (function () {
   function checkSWFileCacheHeaders() {
     // This is wrapped as an iife to allow async/await while making
     //  rollup exclude it in builds.
-    return babelHelpers.asyncToGenerator(function* () {
+    return babelHelpers.asyncToGenerator(function*() {
       try {
         const swFile = self.location.href;
         const response = yield fetch(swFile);
@@ -1571,16 +1738,28 @@ this.workbox.core = (function () {
       } catch (err) {}
       // NOOP
 
-
       // A WorkboxCore instance must be exported before we can use the logger.
       // This is so it can get the current log level.
       {
         const padding = '   ';
         defaultExport.groupCollapsed('Welcome to Workbox!');
-        defaultExport.unprefixed.log(`You are currently using a development build. ` + `By default this will switch to prod builds when not on localhost. ` + `You can force this with workbox.setConfig({debug: true|false}).`);
-        defaultExport.unprefixed.log(`📖 Read the guides and documentation\n` + `${padding}https://developers.google.com/web/tools/workbox/`);
-        defaultExport.unprefixed.log(`❓ Use the [workbox] tag on Stack Overflow to ask questions\n` + `${padding}https://stackoverflow.com/questions/ask?tags=workbox`);
-        defaultExport.unprefixed.log(`🐛 Found a bug? Report it on GitHub\n` + `${padding}https://github.com/GoogleChrome/workbox/issues/new`);
+        defaultExport.unprefixed.log(
+          `You are currently using a development build. ` +
+            `By default this will switch to prod builds when not on localhost. ` +
+            `You can force this with workbox.setConfig({debug: true|false}).`
+        );
+        defaultExport.unprefixed.log(
+          `📖 Read the guides and documentation\n` +
+            `${padding}https://developers.google.com/web/tools/workbox/`
+        );
+        defaultExport.unprefixed.log(
+          `❓ Use the [workbox] tag on Stack Overflow to ask questions\n` +
+            `${padding}https://stackoverflow.com/questions/ask?tags=workbox`
+        );
+        defaultExport.unprefixed.log(
+          `🐛 Found a bug? Report it on GitHub\n` +
+            `${padding}https://github.com/GoogleChrome/workbox/issues/new`
+        );
         defaultExport.groupEnd();
 
         if (typeof finalCheckSWFileCacheHeaders === 'function') {
@@ -1605,7 +1784,7 @@ this.workbox.core = (function () {
       return {
         googleAnalytics: cacheNames.getGoogleAnalyticsName(),
         precache: cacheNames.getPrecacheName(),
-        runtime: cacheNames.getRuntimeName()
+        runtime: cacheNames.getRuntimeName(),
       };
     }
 
@@ -1635,28 +1814,28 @@ this.workbox.core = (function () {
             moduleName: 'workbox-core',
             className: 'WorkboxCore',
             funcName: 'setCacheNameDetails',
-            paramName: `details.${key}`
+            paramName: `details.${key}`,
           });
         });
 
         if ('precache' in details && details.precache.length === 0) {
           throw new WorkboxError('invalid-cache-name', {
             cacheNameId: 'precache',
-            value: details.precache
+            value: details.precache,
           });
         }
 
         if ('runtime' in details && details.runtime.length === 0) {
           throw new WorkboxError('invalid-cache-name', {
             cacheNameId: 'runtime',
-            value: details.runtime
+            value: details.runtime,
           });
         }
 
         if ('googleAnalytics' in details && details.googleAnalytics.length === 0) {
           throw new WorkboxError('invalid-cache-name', {
             cacheNameId: 'googleAnalytics',
-            value: details.googleAnalytics
+            value: details.googleAnalytics,
           });
         }
       }
@@ -1689,15 +1868,17 @@ this.workbox.core = (function () {
           moduleName: 'workbox-core',
           className: 'WorkboxCore',
           funcName: 'logLevel [setter]',
-          paramName: `logLevel`
+          paramName: `logLevel`,
         });
       }
 
       if (newLevel > LOG_LEVELS.silent || newLevel < LOG_LEVELS.debug) {
         throw new WorkboxError('invalid-value', {
           paramName: 'logLevel',
-          validValueDescription: `Please use a value from LOG_LEVELS, i.e ` + `'logLevel = workbox.core.LOG_LEVELS.debug'.`,
-          value: newLevel
+          validValueDescription:
+            `Please use a value from LOG_LEVELS, i.e ` +
+            `'logLevel = workbox.core.LOG_LEVELS.debug'.`,
+          value: newLevel,
         });
       }
 
@@ -1726,11 +1907,10 @@ this.workbox.core = (function () {
   const finalExports = Object.assign(defaultExport$1, {
     _private,
     LOG_LEVELS,
-    registerQuotaErrorCallback
+    registerQuotaErrorCallback,
   });
 
   return finalExports;
-
-}());
+})();
 
 //# sourceMappingURL=workbox-core.dev.js.map
