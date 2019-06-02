@@ -41,8 +41,6 @@ const plugins = [
   ],
 ];
 
-console.log(process.env.NODE_ENV);
-
 export default {
   // add for transfer to umi
   history: 'hash',
