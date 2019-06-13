@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Input, DatePicker, Select, Upload, Button, Icon } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import { defaultDesignJson, echartThemes, pageThemes } from '@/constant';
+import { defaultDesignJson, echartThemes, pageThemes, API_DOMAIN } from '@/constant';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -15,6 +15,13 @@ const { Option } = Select;
 class AppCreateFrom extends Component {
   normFile = e => {
     console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
+  normFile = e => {
     if (Array.isArray(e)) {
       return e;
     }
@@ -36,6 +43,7 @@ class AppCreateFrom extends Component {
           start_time: values.start_time ? values.start_time.valueOf() : '',
           end_time: values.end_time ? values.end_time.valueOf() : '',
           design_json: JSON.stringify(defaultDesignJson),
+          logo: values.logo[0].response.data,
         });
       }
     });
@@ -43,7 +51,7 @@ class AppCreateFrom extends Component {
 
   render() {
     const {
-      form: { getFieldDecorator },
+      form: { getFieldDecorator, getFieldValue },
       detail = {},
     } = this.props;
 
@@ -129,15 +137,23 @@ class AppCreateFrom extends Component {
               <Option key={1} value={1}>
                 所有人可以访问
               </Option>
-              <Option key={2} value={2} disabled>
+              <Option key={2} value={2}>
                 密码
               </Option>
-              <Option key={3} value={3} disabled>
+              <Option key={3} value={3}>
                 登录访问
               </Option>
             </Select>
           )}
         </Form.Item>
+
+        {getFieldValue('access') === 2 && (
+          <Form.Item label="访问密码" {...formItemLayout}>
+            {getFieldDecorator('password', {
+              initialValue: detail.password || '',
+            })(<Input />)}
+          </Form.Item>
+        )}
 
         <Form.Item label="Logo" {...formItemLayout}>
           {getFieldDecorator('logo', {
@@ -145,7 +161,7 @@ class AppCreateFrom extends Component {
             getValueFromEvent: this.normFile,
             // initialValue: detail.logo || '',
           })(
-            <Upload name="logo" action="/upload.do" listType="picture">
+            <Upload name="logo" action={`${API_DOMAIN}/upload/img`} listType="picture">
               <Button>
                 <Icon type="upload" /> 点击上传
               </Button>
@@ -155,13 +171,13 @@ class AppCreateFrom extends Component {
 
         <Form.Item label="自动上线时间" help="若不设置则【立即上线】" {...formItemLayout}>
           {getFieldDecorator('start_time', {
-            initialValue: detail.start_time ? moment.unix(detail.start_time) : null,
+            initialValue: detail.start_time ? moment(parseInt(detail.start_time, 10)) : null,
           })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />)}
         </Form.Item>
 
         <Form.Item label="自动下线时间" help="若不设置则【一直保持在线状态】" {...formItemLayout}>
           {getFieldDecorator('end_time', {
-            initialValue: detail.end_time ? moment.unix(detail.end_time) : null,
+            initialValue: detail.end_time ? moment(parseInt(detail.end_time, 10)) : null,
           })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />)}
         </Form.Item>
 

@@ -11,7 +11,7 @@ export default {
   },
 
   effects: {
-    *fetchAppDetail({ payload }, { call, put }) {
+    *fetchAppDetail({ payload, callback }, { call, put }) {
       const res = yield call(getAppDetailI, payload);
 
       const appDesign = JSON.parse(res.data[0].design_json);
@@ -21,6 +21,8 @@ export default {
       Object.keys(appDesign.components).forEach(v => {
         if (appDesign.components[v].source !== -1) dataIds.push(appDesign.components[v].source);
       });
+
+      if (typeof callback === 'function') callback(res.data[0]);
 
       if (dataIds.length > 0) {
         yield put({

@@ -16,11 +16,11 @@ self.__precacheManifest = [
     "url": "/pwacompat.min.js"
   },
   {
-    "revision": "c0af8730005f9d32bc95",
+    "revision": "5d92944b987745158ac6",
     "url": "/umi.js"
   },
   {
-    "revision": "c0af8730005f9d32bc95",
+    "revision": "5d92944b987745158ac6",
     "url": "/umi.css"
   },
   {
@@ -156,8 +156,8 @@ self.__precacheManifest = [
     "url": "/p__Visitor__App.async.js"
   },
   {
-    "revision": "194577a7e20bdcc7afbb718f502c134c",
-    "url": "/icons/.DS_Store"
+    "revision": "be3c34fd370c950967257bf0cc5ac04f",
+    "url": "/icons/icon-512x512.png"
   },
   {
     "revision": "b33a922548eb7c22621b",
@@ -185,15 +185,15 @@ self.__precacheManifest = [
   },
   {
     "revision": "be3c34fd370c950967257bf0cc5ac04f",
-    "url": "/icons/icon-512x512.png"
-  },
-  {
-    "revision": "be3c34fd370c950967257bf0cc5ac04f",
     "url": "/icons/icon-192x192.png"
   },
   {
     "revision": "be3c34fd370c950967257bf0cc5ac04f",
     "url": "/icons/icon-128x128.png"
+  },
+  {
+    "revision": "194577a7e20bdcc7afbb718f502c134c",
+    "url": "/icons/.DS_Store"
   },
   {
     "revision": "2834161b4519c166baa4655c04bcacbb",

@@ -43,6 +43,9 @@ class AppCreate extends PureComponent {
         params: { id },
       },
     } = this.props;
+
+    if (value && value.design_json) delete value.design_json;
+
     console.log(value);
     dispatch({
       type: 'app/updateApp',

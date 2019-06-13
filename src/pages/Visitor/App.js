@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import GridLayout from 'react-grid-layout';
 import * as R from 'ramda';
+import { Input } from 'antd';
 import styles from './index.less';
 import Com from '@/BusinessComponent/Com';
 import ImageCom from '@/BusinessComponent/ImageCom';
@@ -13,6 +14,10 @@ import TextCom from '@/BusinessComponent/TextCom';
   loadingData: loading.effects['data/fetchDataDetailList'],
 }))
 class App extends Component {
+  state = {
+    lock: false,
+  };
+
   componentDidMount() {
     const {
       dispatch,
@@ -24,10 +29,25 @@ class App extends Component {
     dispatch({
       type: 'visitor/fetchAppDetail',
       payload: { id },
+      callback: detail => {
+        if (detail.access === 2) {
+          this.setState({ lock: true });
+        }
+      },
     });
   }
 
+  handleInputPassword = v => {
+    const {
+      visitor: { appDetail },
+    } = this.props;
+    if (v.target.value === appDetail.password) {
+      this.setState({ lock: false });
+    }
+  };
+
   render() {
+    const { lock } = this.state;
     const {
       visitor: { appDetail, appDesign },
       loading,
@@ -44,10 +64,14 @@ class App extends Component {
       <div className={styles.pageContainer}>
         <div
           className={styles.page}
-          style={{ width: 1200, minHeight: 900 }}
+          style={{
+            width: 1200,
+            minHeight: 900,
+            backgroundColor: (page.style && page.style.background) || '#ffffff',
+          }}
           onClick={this.clickPage}
         >
-          {appDesign && !loading && !loadingData && (
+          {appDesign && !loading && !loadingData && !lock && (
             <GridLayout
               className="layout"
               layout={layout}
@@ -103,6 +127,23 @@ class App extends Component {
                 </div>
               ))}
             </GridLayout>
+          )}
+
+          {lock && (
+            <div
+              style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <Input
+                placeholder="请输入访问密码"
+                onChange={this.handleInputPassword}
+                style={{ width: '300px', margin: 'auto' }}
+              />
+            </div>
           )}
         </div>
       </div>
