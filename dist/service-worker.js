@@ -1,5 +1,8 @@
-importScripts("/precache-manifest.0dea109038cc1c76c3f4a6ef822b4b6f.js", "/workbox-v3.6.3/workbox-sw.js");
-workbox.setConfig({modulePathPrefix: "/workbox-v3.6.3"});
+importScripts(
+  '/precache-manifest.0dea109038cc1c76c3f4a6ef822b4b6f.js',
+  '/workbox-v3.6.3/workbox-sw.js'
+);
+workbox.setConfig({ modulePathPrefix: '/workbox-v3.6.3' });
 /* globals workbox */
 /* eslint-disable no-restricted-globals */
 workbox.core.setCacheNameDetails({
@@ -65,4 +68,3 @@ addEventListener('message', event => {
     );
   }
 });
-
