@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import moment from 'moment';
 import Link from 'umi/link';
 import { Card, Tag, Icon, Avatar } from 'antd';
-import styles from './Index.less';
+import styles from './index.less';
 import { appStatusColor, appStatus } from '@/constant';
 
 export default function AppCardList({ data = [] }) {

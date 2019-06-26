@@ -4,7 +4,7 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import { Card, Icon, Modal } from 'antd';
 import router from 'umi/router';
-import styles from './Index.less';
+import styles from './index.less';
 
 @connect(({ data }) => ({
   data,
