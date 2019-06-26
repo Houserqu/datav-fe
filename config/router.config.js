@@ -30,7 +30,7 @@ export default [
   {
     path: '/app/design',
     component: '../layouts/DesignLayout',
-    routes: [{ path: '/app/design/:id', component: './Design/index' }],
+    routes: [{ path: '/app/design/:id', component: './Design/Index' }],
   },
   {
     path: '/app',
