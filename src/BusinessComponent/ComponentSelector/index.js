@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Menu, Icon, Card, Tabs } from 'antd';
-// import styles from './index.less';
-
-const styles = {};
+import styles from './index.less';
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
