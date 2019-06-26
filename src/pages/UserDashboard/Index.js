@@ -60,6 +60,8 @@ class Workplace extends PureComponent {
       data: { list: dataList },
     } = this.props;
 
+    console.log(dataList);
+
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (
         <div className={styles.pageHeaderContent}>
@@ -80,14 +82,12 @@ class Workplace extends PureComponent {
     const extraContent = (
       <div className={styles.extraContent}>
         <div className={styles.statItem}>
-          <p>项目数</p>
-          <p>56</p>
+          <p>应用数</p>
+          <p>{appList.length}</p>
         </div>
         <div className={styles.statItem}>
-          <p>团队内排名</p>
-          <p>
-            8<span> / 24</span>
-          </p>
+          <p>数据源</p>
+          <p>{dataList.length}</p>
         </div>
         <div className={styles.statItem}>
           <p>项目访问</p>

@@ -1,8 +1,6 @@
-export const API_DOMAIN =
-  process.env.NODE_ENV === 'production' ? 'http://datav-api.houserqu.com' : 'http://localhost:7001';
+export const API_DOMAIN = 'http://localhost:7001';
 
-export const IMG_DOMAIN =
-  process.env.NODE_ENV === 'production' ? 'http://datav-api.houserqu.com' : 'http://localhost:7001';
+export const IMG_DOMAIN = 'http://localhost:7001';
 
 export const PASSWORD_SALT = 'zhtframework_94DABGioQOq2tTUO0AXYow';
 

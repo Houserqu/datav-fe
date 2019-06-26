@@ -6,6 +6,7 @@ import brace from 'brace';
 import { dataType } from '@/constant';
 import JSONForm from './JSONForm';
 import DatabaseForm from './DatabaseForm';
+import HTTPForm from './HTTPForm';
 import { queryDataBySql } from '@/services/data';
 
 const { TextArea } = Input;
@@ -45,7 +46,7 @@ class AppCreateFrom extends Component {
       case 2:
         return <DatabaseForm />;
       case 3:
-        return <JSONForm />;
+        return <HTTPForm />;
       case 4:
         return <JSONForm />;
       default:

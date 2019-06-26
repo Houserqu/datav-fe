@@ -30,7 +30,7 @@ export default [
   {
     path: '/app/design',
     component: '../layouts/DesignLayout',
-    routes: [{ path: '/app/design/:id', component: './Design' }],
+    routes: [{ path: '/app/design/:id', component: './Design/index' }],
   },
   {
     path: '/app',
@@ -197,13 +197,13 @@ export default [
         ],
       },
       // 会员管理
-      {
-        path: '/admin/member',
-        name: 'member',
-        icon: 'team',
-        component: './UserManage/List',
-        // authority: ['users'],
-      },
+      // {
+      //   path: '/admin/member',
+      //   name: 'member',
+      //   icon: 'team',
+      //   component: './UserManage/List',
+      //   // authority: ['users'],
+      // },
       // 系统设置
       // {
       //   path: '/admin/account',

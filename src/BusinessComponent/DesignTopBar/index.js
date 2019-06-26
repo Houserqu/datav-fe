@@ -86,13 +86,13 @@ class DesignTopBar extends Component {
                 <Button style={{ marginRight: 15 }} type="primary" onClick={this.handlePreview}>
                   预览
                 </Button>
-                <Button
+                {/* <Button
                   style={{ marginRight: 15 }}
                   type="primary"
                   onClick={this.handleOpenDataManager}
                 >
                   数据管理
-                </Button>
+                </Button> */}
                 <Button style={{ marginRight: 15 }} type="primary" onClick={this.handleSave}>
                   保存
                 </Button>

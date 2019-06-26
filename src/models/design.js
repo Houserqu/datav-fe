@@ -67,7 +67,7 @@ export default {
         ...state,
         appDetail: payload,
         curAppDesign: {
-          page: { type: 'page' },
+          ...state.curAppDesign,
           componentsLayout: {},
           components: {},
         },

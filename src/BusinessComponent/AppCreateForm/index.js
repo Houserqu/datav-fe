@@ -33,6 +33,7 @@ class AppCreateFrom extends Component {
     const {
       form: { validateFields },
       onSubmit,
+      detail,
     } = this.props;
     validateFields((err, values) => {
       if (!err) {
@@ -43,7 +44,7 @@ class AppCreateFrom extends Component {
           start_time: values.start_time ? values.start_time.valueOf() : '',
           end_time: values.end_time ? values.end_time.valueOf() : '',
           design_json: JSON.stringify(defaultDesignJson),
-          logo: values.logo[0].response.data,
+          logo: values.logo ? values.logo[0].response.data : detail.logo,
         });
       }
     });
