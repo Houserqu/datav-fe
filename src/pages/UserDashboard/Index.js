@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import Link from 'umi/link';
 import { Row, Col, Card, Avatar, Button, Tabs } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './Index.less';
+import styles from './index.less';
 import AppCardList from './AppCardList';
 import DataCardList from './DataCardList';
 
